@@ -18,7 +18,7 @@ app.get("/", async (req, res) => {
     res.send("Hello world!");
 })
 
-app.get("/", async (req, res) => {
+app.post("/", async (req, res) => {
     console.log(req.body);
     res.send("GOT A POST REQUEST!");
 })
