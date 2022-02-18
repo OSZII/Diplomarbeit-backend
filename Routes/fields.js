@@ -23,19 +23,18 @@ app.get("/:id", async (req, res) => {
 app.post("/", async (req, res) => {
     let body = req.body;
     console.log(body)
-    // if(typeof body == "object"){
+    if(typeof body == "object"){
         if(req.body.hasOwnProperty("fields")){
             res.status(200).send(await field.createMultipleFields(req.body));
         }else{
             res.status(200).send(JSON.stringify(await field.createField(req.body)) + JSON.stringify(req.body), null, "\t");
         }
-    // }else res.status(400).send("Request Body not right format");  
+    }else res.status(400).send("Request Body not right format");  
 })
 
 app.delete("/:id", async (req, res) => {
     res.status(200).send(await field.deleteById(req.params.id))
 })
-
 
 app.delete("/",async (req, res) => {
     // console.log("delete all")
