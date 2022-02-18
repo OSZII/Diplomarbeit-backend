@@ -4,4 +4,4 @@ docker volume prune -f
 docker compose up -d
 
 
-npm run test
+@REM npm run test

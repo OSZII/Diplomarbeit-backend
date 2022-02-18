@@ -1,8 +1,8 @@
--- DROP DATABASE IF EXISTS floweraufdauer;
+DROP DATABASE IF EXISTS floweraufdauer;
 
--- CREATE DATABASE IF NOT EXISTS floweraufdauer;
+CREATE DATABASE IF NOT EXISTS floweraufdauer;
 
--- USE floweraufdauer;
+USE floweraufdauer;
 
 -- USERS
 CREATE TABLE IF NOT EXISTS users(  
