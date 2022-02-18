@@ -1,0 +1,53 @@
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mTest/Objects/[22m[1mSensor.test.js[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mTest/Objects/[22m[1mField.test.js[22m
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mTest/Objects/[22m[1mUser.test.js[22m
+[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mTest/Objects/[22m[1mSensorValue.test.js[22m
+[1m[31m  [1m● [22m[1mPost SensorValue › Erstellt einen SensorValue und testet ob die affectedRows = 1[39m[22m
+
+    ReferenceError: sensor is not defined
+[2m[22m
+[2m    [0m [90m 18 |[39m[0m[22m
+[2m    [0m [90m 19 |[39m     test([32m"Erstellt einen SensorValue und testet ob die affectedRows = 1"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m[22m
+[2m    [0m[31m[1m>[22m[2m[39m[90m 20 |[39m         [36mlet[39m result [33m=[39m [36mawait[39m sensor[33m.[39mcreateSensorValue({[0m[22m
+[2m    [0m [90m    |[39m                      [31m[1m^[22m[2m[39m[0m[22m
+[2m    [0m [90m 21 |[39m             [32m"sensorId"[39m[33m:[39m [35m1[39m[33m,[39m[0m[22m
+[2m    [0m [90m 22 |[39m             [32m"value"[39m[33m:[39m [32m"19,3"[39m[33m,[39m[0m[22m
+[2m    [0m [90m 23 |[39m             [32m"timestamp"[39m[33m:[39m [32m"2022-02-17 17:08:00"[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mTest/Objects/SensorValue.test.js[39m[0m[2m:20:22)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mPost SensorValue › Erstellt zwei SensorsValue und schaut in den zurückgegebenen Objekten nach, ob die affected rows in summe 2 ergeben, da 2 SensorValues erstellt werden[39m[22m
+
+    TypeError: Cannot read properties of undefined (reading 'length')
+[2m[22m
+[2m    [0m [90m 22 |[39m         [36mlet[39m sensorValues [33m=[39m sensorValuesBody[33m.[39msensorValues[33m;[39m[0m[22m
+[2m    [0m [90m 23 |[39m         [36mlet[39m results [33m=[39m [][33m;[39m[0m[22m
+[2m    [0m[31m[1m>[22m[2m[39m[90m 24 |[39m         [36mfor[39m([36mlet[39m i [33m=[39m [35m0[39m[33m;[39m i [33m<[39m sensorValues[33m.[39mlength[33m;[39m i[33m++[39m){[0m[22m
+[2m    [0m [90m    |[39m                                         [31m[1m^[22m[2m[39m[0m[22m
+[2m    [0m [90m 25 |[39m             results[33m.[39mpush([36mawait[39m [36mthis[39m[33m.[39mcreateSensorValue(sensorValues[i]))[33m;[39m[0m[22m
+[2m    [0m [90m 26 |[39m         }[0m[22m
+[2m    [0m [90m 27 |[39m         [36mreturn[39m results[0m[22m
+[2m[22m
+[2m      [2mat Function.createMultipleSensorValues ([22m[2mObjects/SensorValue.js[2m:24:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mTest/Objects/SensorValue.test.js[39m[0m[2m:29:40)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mDelete SensorValue › deleteById(4) und schaut beim rückgabewert auf affectedRows und schaut ob 1[39m[22m
+
+    ReferenceError: sensor is not defined
+[2m[22m
+[2m    [0m [90m 59 |[39m     [0m[22m
+[2m    [0m [90m 60 |[39m     test([32m"deleteById(4) und schaut beim rückgabewert auf affectedRows und schaut ob 1"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m[22m
+[2m    [0m[31m[1m>[22m[2m[39m[90m 61 |[39m         [36mlet[39m result [33m=[39m [36mawait[39m sensor[33m.[39mdeleteById([35m10[39m)[33m;[39m[0m[22m
+[2m    [0m [90m    |[39m                      [31m[1m^[22m[2m[39m[0m[22m
+[2m    [0m [90m 62 |[39m         expect(result[33m.[39maffectedRows)[33m.[39mtoBe([35m1[39m)[0m[22m
+[2m    [0m [90m 63 |[39m     })[0m[22m
+[2m    [0m [90m 64 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mTest/Objects/SensorValue.test.js[39m[0m[2m:61:22)[22m[2m[22m
+
+[33mA worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.[39m
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, [1m[32m3 passed[39m[22m, 4 total
+[1mTests:       [22m[1m[31m3 failed[39m[22m, [1m[32m26 passed[39m[22m, 29 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        5.266 s
+[2mRan all test suites[22m[2m matching [22m/.\\Test/i[2m.[22m

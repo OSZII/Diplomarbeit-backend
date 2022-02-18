@@ -1,0 +1,22 @@
+version: "3"
+services: 
+  # node:
+  #   build: .
+  #   container_name: express-api
+  #   ports:
+  #     - "80:8000"
+  #   depends_on: 
+  #     - mysql
+
+  mysql:
+    container_name: db
+    image: mariadb:latest
+    ports:
+      - "3306:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD: "password"
+    volumes:
+      - mysqldata:/var/lib/mysql
+      - ./mysql-dump:/docker-entrypoint-initdb.d
+volumes:
+    mysqldata: {}

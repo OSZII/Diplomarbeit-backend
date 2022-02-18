@@ -1,0 +1,50 @@
+#Get sensoren
+GET http://localhost:3000/sensors
+
+###
+#Get sensors with type
+GET http://localhost:3000/sensors/type/feuchtigkeitssensor
+
+###
+#Get sensor by ID
+GET http://localhost:3000/sensors/13
+
+
+###
+#einen sensor anlegen
+POST http://localhost:3000/sensors
+content-type: application/json
+
+{
+    "fieldID": 1,
+    "type": "temperatur",
+    "locationOnField": "bottom"
+}
+
+###
+#Mehrere sensoren gleichzeitig anlegen
+POST http://localhost:3000/sensors
+content-type: application/json
+
+{
+    "sensors": [
+        {
+            "fieldID": 3,
+            "type": "temperatur",
+            "locationOnField": "top left"
+        },
+        {
+            "fieldID": 3,
+            "type": "temperatur",
+            "locationOnField": "middle left"
+        },
+        {
+            "fieldID": 3,
+            "type": "temperatur",
+            "locationOnField": "middle right"
+        }
+    ]
+}
+###
+#delete sensor by id
+DELETE http://localhost:3000/sensors/13

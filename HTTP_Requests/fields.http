@@ -1,0 +1,113 @@
+#Get fields
+GET http://localhost:80/fields
+
+###
+#Get fields with name
+GET http://localhost:80/fields/name/2
+
+###
+#Get field by ID
+GET http://localhost:80/fields/1
+
+###
+#ein Feld anlegen
+POST http://localhost:80/fields
+content-type: application/json
+
+{
+    "name": "Schwarzwaelder Feld",
+    "area": "200",
+    "unit": "square meter",
+    "country": "Austria",
+    "federalState": "Tirol",
+    "latitude": -1,
+    "longitude": -1,
+    "description": "Feld in Hall in Tirol"
+}
+
+###
+#mehrere Felder anlegen
+POST http://localhost:80/fields
+content-type: application/json
+
+{
+    "fields": [
+        {
+            "name": "Feld22",
+            "area": "200",
+            "unit": "square meter",
+            "latitude": -1,
+            "longitude": -1,
+            "country": "Austria",
+            "federalState": "Tirol",
+            "description": "Feld in Hall in Tirol"
+        },
+        {
+            "name": "Feld22",
+            "area": "200",
+            "unit": "square meter",
+            "latitude": -1,
+            "longitude": -1,
+            "country": "Austria",
+            "federalState": "Tirol",
+            "description": "Feld in Hall in Tirol"
+        },
+        {
+            "name": "Feld22",
+            "area": "200",
+            "unit": "square meter",
+            "latitude": -1,
+            "longitude": -1,
+            "country": "Austria",
+            "federalState": "Tirol",
+            "description": "Feld in Hall in Tirol"
+        },
+        {
+            "name": "Feld22",
+            "area": "200",
+            "unit": "square meter",
+            "latitude": -1,
+            "longitude": -1,
+            "country": "Austria",
+            "federalState": "Tirol",
+            "description": "Feld in Hall in Tirol"
+        },
+        {
+            "name": "Feld22",
+            "area": "200",
+            "unit": "square meter",
+            "latitude": -1,
+            "longitude": -1,
+            "country": "Austria",
+            "federalState": "Tirol",
+            "description": "Feld in Hall in Tirol"
+        },
+        {
+            "name": "Feld22",
+            "area": "200",
+            "unit": "square meter",
+            "latitude": -1,
+            "longitude": -1,
+            "country": "Austria",
+            "federalState": "Tirol",
+            "description": "Feld in Hall in Tirol"
+        },
+        {
+            "name": "Feld22",
+            "area": "200",
+            "unit": "square meter",
+            "latitude": -1,
+            "longitude": -1,
+            "country": "Austria",
+            "federalState": "Tirol",
+            "description": "Feld in Hall in Tirol"
+        }
+    ]
+}
+
+###
+#Delete Field by ID
+DELETE http://localhost:80/fields/13
+###
+#Deletes all fields
+DELETE http://localhost:80/fields/

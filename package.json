@@ -1,0 +1,36 @@
+{
+  "name": "floweraufdauer",
+  "version": "0.0.1",
+  "description": "Diplomarbeit Flower auf Dauer",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest ./Test",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OSZII/Diplomarbeite-Repository.git"
+  },
+  "author": "Ostojic Stefan, Tusch Alexander",
+  "license": "ISC",
+  "engines": {
+    "node": "16.x"
+  },
+  "bugs": {
+    "url": "https://github.com/OSZII/Diplomarbeite-Repository/issues"
+  },
+  "homepage": "https://github.com/OSZII/Diplomarbeite-Repository#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "mariadb": "^2.5.5",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
+  }
+}

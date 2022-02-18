@@ -1,0 +1,100 @@
+#Get users
+GET http://localhost:3000/users
+
+###
+#Get users with String contained in username, firstname, lastname, email
+GET http://localhost:3000/users/name/testfdg
+
+###
+#Get user by ID
+GET http://localhost:3000/users/70
+
+###
+#Einen user anlegen
+POST http://localhost:3000/users
+content-type: application/json
+
+{
+    "username": "Kimm",
+    "firstname": "Karl",
+    "lastname": "Hennington",
+    "password": "test123",
+    "email": "rwen@gmail.com",
+    "role": "user"
+}
+
+###
+#mehrere user anlegen
+POST http://localhost:3000/users
+content-type: application/json
+
+{
+    "users": [
+            {
+               "username": "Walti",
+                "firstname": "Walter",
+                "lastname": "Kimmy",
+                "password": "$2b$10$R5c0i9xb8Pq06GZUksulNuVNXC1/1S1sLjoKdIX454wrS50nnCvpi",
+                "email": "testemail@gmail.com",
+                "role": "user" 
+            },
+            {
+               "username": "Walti",
+                "firstname": "Walter",
+                "lastname": "Kimmy",
+                "password": "$2b$10$R5c0i9xb8Pq06GZUksulNuVNXC1/1S1sLjoKdIX454wrS50nnCvpi",
+                "email": "testemail@gmail.com",
+                "role": "user" 
+            },
+            {
+               "username": "Walti",
+                "firstname": "Walter",
+                "lastname": "Kimmy",
+                "password": "$2b$10$R5c0i9xb8Pq06GZUksulNuVNXC1/1S1sLjoKdIX454wrS50nnCvpi",
+                "email": "testemail@gmail.com",
+                "role": "user" 
+            },
+            {
+               "username": "Walti",
+                "firstname": "Walter",
+                "lastname": "Kimmy",
+                "password": "$2b$10$R5c0i9xb8Pq06GZUksulNuVNXC1/1S1sLjoKdIX454wrS50nnCvpi",
+                "email": "testemail@gmail.com",
+                "role": "user" 
+            },
+            {
+               "username": "Walti",
+                "firstname": "Walter",
+                "lastname": "Kimmy",
+                "password": "$2b$10$R5c0i9xb8Pq06GZUksulNuVNXC1/1S1sLjoKdIX454wrS50nnCvpi",
+                "email": "testemail@gmail.com",
+                "role": "user" 
+            },
+            {
+               "username": "Walti",
+                "firstname": "Walter",
+                "lastname": "Kimmy",
+                "password": "$2b$10$R5c0i9xb8Pq06GZUksulNuVNXC1/1S1sLjoKdIX454wrS50nnCvpi",
+                "email": "testemail@gmail.com",
+                "role": "user" 
+            },
+            {
+               "username": "Waalti",
+                "firstname": "Walter",
+                "lastname": "Kimmy",
+                "password": "$2b$10$R5c0i9xb8Pq06GZUksulNuVNXC1/1S1sLjoKdIX454wrS50nnCvpi",
+                "email": "testemail@gmail.com",
+                "role": "user" 
+            }
+            
+        
+    ]
+    
+}
+
+###
+#Delete user by id
+DELETE http://localhost:3000/users/7
+# token: "abrakadabra"
+
+###
