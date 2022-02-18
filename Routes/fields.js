@@ -22,13 +22,14 @@ app.get("/:id", async (req, res) => {
 // Creates field or multiple fields
 app.post("/", async (req, res) => {
     let body = req.body;
-    if(typeof body == "object"){
+    console.log(body)
+    // if(typeof body == "object"){
         if(req.body.hasOwnProperty("fields")){
             res.status(200).send(await field.createMultipleFields(req.body));
         }else{
             res.status(200).send(JSON.stringify(await field.createField(req.body)) + JSON.stringify(req.body), null, "\t");
         }
-    }else res.status(400).send("Request Body not right format");  
+    // }else res.status(400).send("Request Body not right format");  
 })
 
 app.delete("/:id", async (req, res) => {
