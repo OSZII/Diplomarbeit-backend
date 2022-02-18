@@ -18,6 +18,11 @@ app.get("/", async (req, res) => {
     res.send("Hello world!");
 })
 
+app.get("/", async (req, res) => {
+    console.log(req.body);
+    res.send("GOT A POST REQUEST!");
+})
+
 // console.log(connection.state)
 
 // Erlaubt es URL encoded Data zu verwenden, weil ansonsten ist req bei post immer undefined
