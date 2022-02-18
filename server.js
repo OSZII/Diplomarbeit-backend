@@ -1,7 +1,6 @@
 // Database
 // Mit dieser Methode muss man keinen Namespace verwenden
 // also anstatt database.connection kann man hier ganz einfach connection verwenden
-const db = require("./Database/database");
 
 // testen ob das geht
 // db.query("INSERT INTO users (username, role) values ('testuser', 'user');", "Füge User Hinzu!");
@@ -13,15 +12,6 @@ const users = require("./Routes/users");
 const fields = require("./Routes/fields");
 const sensors = require("./Routes/sensors");
 const sensorValues = require("./Routes/sensorValues");
-
-app.get("/", async (req, res) => {
-    res.send("Hello world!");
-})
-
-app.post("/", async (req, res) => {
-    console.log(req.body);
-    res.send("GOT A POST REQUEST!");
-})
 
 // console.log(connection.state)
 
@@ -35,6 +25,15 @@ app.use("/users", users);
 app.use("/fields", fields);
 app.use("/sensors", sensors);
 app.use("/sensorvalues", sensorValues);
+
+app.get("/", (req, res) => {
+    res.send("Hello world!");
+})
+
+app.post("/", (req, res) => {
+    console.log(req.body);
+    res.send("GOT A POST REQUEST!");
+})
 
 const PORT = process.env.PORT || 3000;
 
