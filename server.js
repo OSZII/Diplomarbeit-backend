@@ -36,8 +36,8 @@ app.use("/fields", fields);
 app.use("/sensors", sensors);
 app.use("/sensorvalues", sensorValues);
 
-let PORT = process.env.PORT | 5000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Server is running on psort ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
