@@ -17,6 +17,11 @@ describe('Get User', () => {
         expect(returnedUser[0].username).toBe("oszi");
     })
 
+    test("getUserByEmail('admin@gmail.com') Checkt ob er den user mit der email admin@gmail.com findet", async () => {
+        let returnedUser = await user.getByEmail("admin@gmail.com");
+        expect(returnedUser[0].id).toBe(1);
+    })
+
 });
 
 describe('Post User', () => { 
@@ -35,8 +40,8 @@ describe('Post User', () => {
     });
 
     test("Erstellt zwei User und schaut in den zurückgegebenen Objekten nach, ob die affected rows in summe 2 ergeben, da 2 user erstellt werden", async () => {
-        let result = await user.createMultipleUsers({
-            "users" : [{
+        let result = await user.createMultipleUsers(
+            [{
                 "username": "TestUser",
                 "firstname": "Test3",
                 "lastname": "User3",
@@ -55,7 +60,7 @@ describe('Post User', () => {
                 "authToken": "null"
             }   
         ]
-    })
+    )
         expect(result[0].affectedRows + result[1].affectedRows).toBe(2);
     });
 

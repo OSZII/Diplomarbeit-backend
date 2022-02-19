@@ -25,10 +25,9 @@ class Field{
         return result;
     }
 
-    static async createMultipleFields(fieldsBody){
+    static async createMultipleFields(fields){
         // TODO: authentifizieren
         // TODO: validieren
-        let fields = fieldsBody.fields
         let results = [];
         for(let i = 0; i < fields.length; i++){
             results.push(await this.createField(fields[i]));

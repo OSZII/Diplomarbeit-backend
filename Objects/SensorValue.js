@@ -17,10 +17,9 @@ class SensorValue {
         return result;
     }
 
-    static async createMultipleSensorValues(sensorValuesBody){
+    static async createMultipleSensorValues(sensorValues){
         // TODO: authentifizieren
         // TODO: validieren
-        let sensorValues = sensorValuesBody.sensorValues;
         let results = [];
         for(let i = 0; i < sensorValues.length; i++){
             results.push(await this.createSensorValue(sensorValues[i]));

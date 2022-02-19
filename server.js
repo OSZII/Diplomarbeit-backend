@@ -35,6 +35,16 @@ app.post("/", (req, res) => {
     res.send("GOT A POST REQUEST!");
 })
 
+async function testuser()
+{
+    const user = require("./Objects/User");
+    let receivedUser = await user.getByEmail("admin@gmail.com");
+    // console.log( receivedUser[0]);
+}
+
+testuser();
+console.log(process.env.GEO_API)
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {

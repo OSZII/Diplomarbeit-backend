@@ -21,10 +21,9 @@ class Sensor{
     }
 
     //standard
-    static async createMultipleSensors(sensorsBody){
+    static async createMultipleSensors(sensors){
         // TODO: authentifizieren
         // TODO: validieren
-        let sensors = sensorsBody.sensors;
         let results = [];
         for(let i = 0; i < sensors.length; i++){
             results.push(await this.createSensor(sensors[i]));
@@ -56,7 +55,7 @@ class Sensor{
     static async getByType(type){
         // TODO: authentifizieren
         let conn = await pool.getConnection();
-        let sql = "SELECT * FROM sensors WHERE type = ?;";
+        let sql = "SELECT * FROM sensors WHERE type LIKE CONCAT('%', ?, '%');";
         let result = await conn.query(sql, [type]);
         conn.end();
         return result;

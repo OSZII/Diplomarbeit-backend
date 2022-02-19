@@ -23,10 +23,9 @@ class User{
         return result;
     }
 
-    static async createMultipleUsers(usersBody){
+    static async createMultipleUsers(users){
         // TODO: authentifizieren
         // TODO: validieren
-        let users = usersBody.users;
         let results = [];
         for(let i = 0; i < users.length; i++){
             results.push(await this.createUser(users[i]));
@@ -62,6 +61,16 @@ class User{
         conn.end();
         return results;
     }
+
+    static async getByEmail(email){
+        // TODO: authentifizieren
+        let conn = await pool.getConnection();
+        let sql = `SELECT * FROM users WHERE email = ? ;`;
+        let results = await conn.query(sql, [email]);
+        conn.end();
+        return results;
+    }
+
     // Update
     static async update(user){
         let conn = await pool.getConnection();
