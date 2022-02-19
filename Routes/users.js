@@ -44,7 +44,7 @@ app.post("/", async (req, res) => {
         if(hasOwnProperties(users,["username", "firstname", "lastname", "email", "password", "role", "authToken"])){
             if(isNaN(users.username) & isNaN(users.firstname) & isNaN(users.lastname) & isNaN(users.email) & isNaN(users.password) & isNaN(users.role) & isNaN(users.authToken))
             res.status(200).send(await user.createUser(users));
-        }else res.status(400).send("Not all Properties given")
+        }else res.status(400).send("Not all Prosperties given")
     }
 })
 
