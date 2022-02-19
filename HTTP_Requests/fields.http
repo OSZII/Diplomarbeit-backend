@@ -18,11 +18,11 @@ content-type: application/json
     "name": "Schwarzwaelder Feld",
     "area": "200",
     "unit": "square meter",
-    "country": "AT",
-    "federalState": "Tirol",
+    "country": "DE",
+    "federalState": "Bayern",
     "latitude": -1,
     "longitude": -1,
-    "description": "Feld in Hall in Tirol"
+    "description": "Feld in Bayern"
 }
 
 ###

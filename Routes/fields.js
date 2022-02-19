@@ -1,7 +1,10 @@
 const express = require("express");
-const field = require("../Objects/Field");
 const app = express.Router();
+
 const Help = require("../Helper/Helper");
+const field = require("../Objects/Field");
+
+const axios = require('axios').default;
 
 let objectProperties = [
   "name",
@@ -14,8 +17,15 @@ let objectProperties = [
   "description"
 ];
 
-// let API_KEY = process.env.GEO_API_KEY;
+let GEO_API_KEY = process.env.GEO_API_KEY;
 
+async function getGeoData(countryCode, federalState/* , postalCode, street */){
+    let url = `https://open.mapquestapi.com/geocoding/v1/address?key=${GEO_API_KEY}&location=${countryCode}+${federalState}`;
+    const response = await axios.get(url);
+    let latitude = response.data.results[0].locations[0].latLng.lat;
+    let longitude = response.data.results[0].locations[0].latLng.lng;
+    return [latitude, longitude];
+}
 
 // Get all fields
 app.get("/", async (req, res) => {
@@ -54,21 +64,20 @@ app.post("/", async (req, res) => {
     // validate if each object in array has all properties
     let result = true;
     for (let i = 0; i < fields.length; i++) {
-      result &=
-        (
-        Help.hasOwnProperties(fields[i], objectProperties) &
+      result &= ( Help.hasOwnProperties(fields[i], objectProperties) &
         Help.isNanArray([
           fields[i].name,
-          //   fields[i].area,
           fields[i].unit,
           fields[i].country,
           fields[i].federalState,
-          //   fields[i].latitude,
-          //   fields[i].longitude,
           fields[i].description,
             ]) &
         fields[i].country.length == 2);
+        let geoData = (await getGeoData(fields[i].country, fields[i].federalState));
+        fields[i].latitude = geoData[0];
+        fields[i].longitude = geoData[1];
     }
+    console.log((await getGeoData("AT","Tirol"))[0])
 
     if (result) res.status(200).send(await field.createMultipleFields(fields));
     else res.status(400).send(Help.notAllProperties + " and country length max 2");
@@ -88,6 +97,9 @@ app.post("/", async (req, res) => {
         ])
       ) {
         if (fields.country.length == 2) {
+          let geoData = (await getGeoData(fields.country, fields.federalState));
+          fields.latitude = geoData[0];
+          fields.longitude = geoData[1];
           res.status(200).send(await field.createField(fields));
         } else res.status(400).send("Countrycode length maximum 2");
       } else

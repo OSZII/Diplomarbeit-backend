@@ -43,7 +43,7 @@ async function testuser()
 }
 
 testuser();
-console.log(process.env.GEO_API)
+// console.log(process.env.GEO_API)
 
 const PORT = process.env.PORT || 3000;
 
