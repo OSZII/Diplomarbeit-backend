@@ -18,6 +18,7 @@ let objectProperties = [
 ];
 
 let GEO_API_KEY = process.env.GEO_API_KEY;
+    // console.log((await getGeoData("AT","Tirol"))[0])
 
 async function getGeoData(countryCode, federalState/* , postalCode, street */){
     let url = `https://open.mapquestapi.com/geocoding/v1/address?key=${GEO_API_KEY}&location=${countryCode}+${federalState}`;
@@ -77,7 +78,6 @@ app.post("/", async (req, res) => {
         fields[i].latitude = geoData[0];
         fields[i].longitude = geoData[1];
     }
-    console.log((await getGeoData("AT","Tirol"))[0])
 
     if (result) res.status(200).send(await field.createMultipleFields(fields));
     else res.status(400).send(Help.notAllProperties + " and country length max 2");
