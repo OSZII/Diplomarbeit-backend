@@ -118,7 +118,7 @@ app.delete("/:id", async (req, res) => {
     if (id > 0) {
       let receivedField = await field.deleteById(id);
       if(receivedField.length != 0){
-        res.status(200).send();
+        res.status(200).send(receivedField);
       } else res.status(404).send(Help.notFound);
     } else res.status(400).send(Help.largerThanZero);
   } else res.status(400).send(Help.notANumber);
