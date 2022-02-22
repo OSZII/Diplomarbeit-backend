@@ -27,7 +27,7 @@ app.use("/sensors", sensors);
 app.use("/sensorvalues", sensorValues);
 
 app.get("/", (req, res) => {
-    res.sendFile(join.path(__dirname, "./index.html"));
+    res.sendFile(path.join(__dirname, "./index.html"));
 })
 
 app.post("/", (req, res) => {
