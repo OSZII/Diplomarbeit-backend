@@ -27,7 +27,7 @@ app.use("/sensors", sensors);
 app.use("/sensorvalues", sensorValues);
 
 app.get("/", (req, res) => {
-    res.send("Helloooo world!");
+    res.sendFile(join.path(__dirname, "./index.html"));
 })
 
 app.post("/", (req, res) => {
@@ -43,6 +43,8 @@ async function testuser()
 }
 
 testuser();
+
+// console.log(process.env.NODE_ENV)
 // console.log(process.env.GEO_API)
 
 const PORT = process.env.PORT || 3000;
