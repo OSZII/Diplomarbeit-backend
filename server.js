@@ -4,7 +4,7 @@
 
 // testen ob das geht
 // db.query("INSERT INTO users (username, role) values ('testuser', 'user');", "Füge User Hinzu!");
-
+const path = require("path")
 const express = require('express');
 const app = express();
 
