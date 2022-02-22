@@ -34,7 +34,7 @@ app.get("/", async (req, res) => {
 });
 
 // Get fields by name or id
-app.get("/idOrName", async (req, res) => {
+app.get("/:idOrName", async (req, res) => {
   let idOrName = req.params.idOrName;
   if (!isNaN(idOrName)) {
     if (idOrName > 0) {
