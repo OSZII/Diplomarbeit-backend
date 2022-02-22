@@ -21,13 +21,15 @@ app.use(express.urlencoded({ extended: false }));
 // Mit dieser Zeile geht dann auch json
 app.use(express.json());
 
+app.use(express.static("public"))
+
 app.use("/users", users);
 app.use("/fields", fields);
 app.use("/sensors", sensors);
 app.use("/sensorvalues", sensorValues);
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "./index.html"));
+    res.sendFile(path.join(__dirname, "/public/html/index.html"));
 })
 
 app.post("/", (req, res) => {
