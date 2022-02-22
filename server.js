@@ -27,7 +27,7 @@ app.use("/sensors", sensors);
 app.use("/sensorvalues", sensorValues);
 
 app.get("/", (req, res) => {
-    res.send("Hello world!");
+    res.send("Helloooo world!");
 })
 
 app.post("/", (req, res) => {
