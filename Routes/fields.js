@@ -12,6 +12,8 @@ let objectProperties = [
   "unit",
   "country",
   "federalState",
+  "postalCode",
+  "street",
   "latitude",
   "longitude",
   "description"
@@ -20,8 +22,8 @@ let objectProperties = [
 let GEO_API_KEY = process.env.GEO_API_KEY;
     // console.log((await getGeoData("AT","Tirol"))[0])
 
-async function getGeoData(countryCode, federalState/* , postalCode, street */){
-    let url = `https://open.mapquestapi.com/geocoding/v1/address?key=${GEO_API_KEY}&location=${countryCode}+${federalState}`;
+async function getGeoData(countryCode, federalState, postalCode, street){
+    let url = `https://open.mapquestapi.com/geocoding/v1/address?key=${GEO_API_KEY}&location=${countryCode}+${federalState}+${postalCode}+${street}`;
     const response = await axios.get(url);
     let latitude = response.data.results[0].locations[0].latLng.lat;
     let longitude = response.data.results[0].locations[0].latLng.lng;
@@ -72,9 +74,11 @@ app.post("/", async (req, res) => {
           fields[i].country,
           fields[i].federalState,
           fields[i].description,
+          fields[i].postalCode,
+          fields[i].street          
             ]) &
         fields[i].country.length == 2);
-        let geoData = (await getGeoData(fields[i].country, fields[i].federalState));
+        let geoData = (await getGeoData(fields[i].country, fields[i].federalState, fields[i].postalCode, fields[i].street));
         fields[i].latitude = geoData[0];
         fields[i].longitude = geoData[1];
     }
@@ -90,21 +94,19 @@ app.post("/", async (req, res) => {
           fields.unit,
           fields.country,
           fields.federalState,
-          fields.description,
+          fields.postalCode,
+          fields.street,
+          fields.description
         ])
       ) {
         if (fields.country.length == 2) {
-          let geoData = (await getGeoData(fields.country, fields.federalState));
+          let geoData = (await getGeoData(fields.country, fields.federalState, fields.postalCode, fields.street));
           fields.latitude = geoData[0];
           fields.longitude = geoData[1];
           res.status(200).send(await field.createField(fields));
         } else res.status(400).send("Countrycode length maximum 2");
       } else
-        res
-          .status(400)
-          .send(
-            "Properties must be string(name, unit, country, federalState, description)"
-          );
+        res.status(400).send("Properties must be string(name, unit, country, federalState, description)");
     } else res.status(400).send(Help.notAllProperties);
   }
 });

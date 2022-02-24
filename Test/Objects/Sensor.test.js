@@ -26,8 +26,8 @@ describe('Post Sensor', () => {
     });
 
     test("Erstellt zwei Sensors und schaut in den zurückgegebenen Objekten nach, ob die affected rows in summe 2 ergeben, da 2 Sensors erstellt werden", async () => {
-        let result = await sensor.createMultipleSensors({
-            "sensors" : [{
+        let result = await sensor.createMultipleSensors(
+            [{
                 "fieldID": 3,
                 "type": "Helligkeit",
                 "locationOnField": "right"
@@ -38,7 +38,7 @@ describe('Post Sensor', () => {
                 "locationOnField": "top middle"
             }   
         ]
-    })
+    )
         expect(result[0].affectedRows + result[1].affectedRows).toBe(2);
     });
 

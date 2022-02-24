@@ -1,5 +1,5 @@
 cls
-docker rm -v db -f
+docker rm -v db_diplomarbeit -f
 docker volume prune -f
 docker compose up -d
 

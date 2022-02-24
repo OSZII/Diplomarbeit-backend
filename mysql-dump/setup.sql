@@ -32,19 +32,21 @@ INSERT IGNORE INTO users (id, username, firstname, lastname, password, role, ema
 CREATE TABLE IF NOT EXISTS fields(  
         id int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
         name varchar(255) NOT NULL, 
-        area int NULL,
-        unit ENUM("square meter", "hectar", "square kilometer", "square feet", "square yard", "acre") NULL,
-        country varchar(2) NULL,
-        federalState varchar(255) NULL,
+        area int NOT NULL,
+        unit ENUM("square meter", "hectar", "square kilometer", "square feet", "square yard", "acre") NOT NULL,
+        country varchar(2) NOT NULL,
+        federalState varchar(255) NOT NULL,
+        postalCode varchar(10) NOT NULL,
+        street varchar(255) NOT NULL,
         latitude DOUBLE NULL,
         longitude DOUBLE NULL,
-        description varchar(255) NULL
+        description varchar(255) NOT NULL
     );
 CREATE INDEX IF NOT EXISTS fieldsIndex ON fields(country, federalState);
 
-INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, latitude, longitude, description) values (1, "Feld1", "200", "hectar", "AT", "Tirol", 47.26543, 11.392769, "Feld in Innsbruck"); 
-INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, latitude, longitude, description) values (2, "Feld2", "400", "square meter", "AT", "Salzburg", 47.7981346, 13.0464806, "Feld in Salzburg"); 
-INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, latitude, longitude, description) values (3, "Landteil", "15", "square kilometer", "AT", "Burgenland", 47.8387577, 16.5362159, "Feld in Eisenstadt"); 
+INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (1, "Feld1", "200", "hectar", "AT", "Tirol", "6020", "Olympiastraße 9", 47.258006, 11.405026, "Feld in Innsbruck"); 
+INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (2, "Feld2", "400", "square meter", "AT", "Salzburg", "5020", "Karl-Höller-Straße 8", 47.789757, 13.045045, "Feld in Salzburg"); 
+INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (3, "Landteil", "15", "square kilometer", "AT", "Vorarlberg", "6700", "Ferdinand-Gassnerstraße 5", 47.159558, 9.814118, "Feld in Eisenstadt"); 
 
 
 -- SENSORS
