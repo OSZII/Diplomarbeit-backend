@@ -4,7 +4,7 @@
   "description": "Diplomarbeit Flower auf Dauer",
   "main": "server.js",
   "scripts": {
-    "test": "restartdb.bat&&jest ./Test",
+    "test": "restartdb.bat&&set NODE_ENV=development&&jest ./Test",
     "start": "set NODE_ENV=production&&node server.js",
     "dev": "set NODE_ENV=development&&nodemon server.js"
   },
