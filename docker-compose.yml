@@ -9,7 +9,7 @@ services:
   #     - mysql
 
   mysql:
-    container_name: db
+    container_name: db_diplomarbeit
     image: mariadb:latest
     ports:
       - "3306:3306"

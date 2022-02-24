@@ -1,3 +1,4 @@
+const Help = require("../Helper/Helper");
 
 class Validator{
 
@@ -37,10 +38,13 @@ class Validator{
     }
 
     static validateNumber(value){
-        if(isNaN(value)){
-            return false;
-        }
-        return true;
+        if(!isNaN(value)){
+            if(value > 0){
+                return true;
+            }else return Help.largerThanZero;
+            // return false;
+        }else return Help.notANumber;
+        // return true;
     }
 
 }

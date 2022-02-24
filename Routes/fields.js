@@ -87,12 +87,9 @@ app.post("/", async (req, res) => {
       if (
         Help.isNanArray([
           fields.name,
-          //   fields.area,
           fields.unit,
           fields.country,
           fields.federalState,
-          //   fields.latitude,
-          //   fields.longitude,
           fields.description,
         ])
       ) {

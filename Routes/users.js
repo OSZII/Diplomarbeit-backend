@@ -1,6 +1,7 @@
 const express = require("express");
 const user = require("../Objects/User");
 const Help = require("../Helper/Helper");
+const { validateNumber } = require("../Objects/Validator");
 const app = express.Router();
 
 let objectProperties = [
@@ -12,22 +13,6 @@ let objectProperties = [
   "role",
   "authToken",
 ];
-
-// function hasOwnProperties(object, properties){
-//     let result = true;
-//     for(let i = 0; i < properties.length; i++){
-//         if(!object.hasOwnProperty(properties[i])) result = false;
-//     }
-//     return result;
-// }
-
-// function isNanArray(values){
-//     let result = true;
-//     for(let i = 0; i < values.length; i++){
-//         result &= (isNaN(values[i]) | values[i] == null)
-//     }
-//     return result
-// }
 
 app.get("/", async (req, res) => {
   res.status(200).send(await user.getAll());
@@ -97,14 +82,20 @@ app.post("/", async (req, res) => {
 
 app.delete("/:id", async (req, res) => {
   let id = req.params.id;
-  if (!isNaN(id)) {
-    if (id > 0) {
-      let receivedUser = await user.deleteById(id);
-      if(receivedUser.length != 0){
-        res.status(200).send(receivedUser);
-      }else res.status(404).send(Help.notFound);
-    }else res.status(400).send(Help.largerThanZero);
-  }else res.status(400).send(Help.notANumber);
+  let message = validateNumber(id);
+  if(message == true){
+    let receivedUser = await user.deleteById(id);
+    receivedUser.length != 0 ? res.status(200).send(receivedUser) : res.status(404).send(Help.notFound);
+  } else res.status(400).send(message);
+
+  // if (!isNaN(id)) {
+  //   if (id > 0) {
+  //     let receivedUser = await user.deleteById(id);
+  //     if(receivedUser.length != 0){
+  //       res.status(200).send(receivedUser);
+  //     }else res.status(404).send(Help.notFound);
+  //   }else res.status(400).send(Help.largerThanZero);
+  // }else res.status(400).send(Help.notANumber);
 });
 
 module.exports = app;
