@@ -1,8 +1,13 @@
-DROP DATABASE IF EXISTS floweraufdauer;
+-- DROP DATABASE IF EXISTS floweraufdauer;
 
-CREATE DATABASE IF NOT EXISTS floweraufdauer;
+-- CREATE DATABASE IF NOT EXISTS floweraufdauer;
 
-USE floweraufdauer;
+-- for docker Database;
+-- USE floweraufdauer;
+
+-- For onlinedatabase
+-- USE d038e858;
+
 
 -- USERS
 CREATE TABLE IF NOT EXISTS users(  
