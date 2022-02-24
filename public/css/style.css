@@ -27,16 +27,35 @@ body{
 .useLinks{
     background-color: rgb(236, 236, 236);
     border-radius: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    margin-top: 20px;
     gap: 40px;
+    box-shadow: 10px 10px 10px lightgrey;
+    border: 1px solid rgba(211, 211, 211, 0.404);
 }
 
-.useLinks > div > a{
-    text-decoration: none;
+.routeLink{
+    text-decoration: underline;
     color: black;
+    letter-spacing: 1px;
+}
+
+.row{
+    flex-direction: row;
+}
+
+.left{
+    justify-content: left;
+}
+
+.right{
+    justify-content: right;
 }
 
 .useLinks > a:hover{
     color: gray;
+}
+
+.betweenLinkText{
+    padding-left: 5px;
+    padding-right: 5px;
 }
