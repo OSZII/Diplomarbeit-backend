@@ -89,10 +89,10 @@ describe('Delete User', () => {
         expect(result.affectedRows).toBe(1)
     })
 
-    test("deleteAll() schaut danach ob die getAll() länge 0 ist", async () => {
-        await user.deleteAll();
-        let result = await user.getAll();
-        expect(result.length).toBe(0);
-    })
+    // test("deleteAll() schaut danach ob die getAll() länge 0 ist", async () => {
+    //     await user.deleteAll();
+    //     let result = await user.getAll();
+    //     expect(result.length).toBe(0);
+    // })
 
 });

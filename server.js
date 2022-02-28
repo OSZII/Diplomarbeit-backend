@@ -37,6 +37,10 @@ app.post("/", (req, res) => {
     res.send("GOT A POST REQUEST!");
 })
 
+app.get('*', function(req, res){
+    res.status(404).send('No such route found???');
+  });
+
 async function testuser()
 {
     const user = require("./Objects/User");

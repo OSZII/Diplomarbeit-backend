@@ -27,7 +27,7 @@ class Field{
         let sql = "SELECT * FROM fields;";
         // zu Field Objecten mappen mit ORM
         let results = await conn.query(sql);
-        conn.end();
+        // conn.end();
         return results;
     }
 

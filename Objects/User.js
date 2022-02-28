@@ -98,13 +98,13 @@ class User{
         return result;
     }
 
-    static async deleteAll(){
-        let conn = await pool.getConnection();
-        let sql = "DELETE FROM users WHERE id;";
-        let result = await conn.query(sql);
-        conn.end();
-        return result;
-    }
+    // static async deleteAll(){
+    //     let conn = await pool.getConnection();
+    //     let sql = "DELETE FROM users WHERE id;";
+    //     let result = await conn.query(sql);
+    //     conn.end();
+    //     return result;
+    // }
 
     //#region Getter & Setter
     getId(){
