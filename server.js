@@ -41,15 +41,6 @@ app.get('*', function(req, res){
     res.status(404).send('No such route found???');
   });
 
-async function testuser()
-{
-    const user = require("./Objects/User");
-    let receivedUser = await user.getByEmail("admin@gmail.com");
-    // console.log( receivedUser[0]);
-}
-
-testuser();
-
 // console.log(process.env.NODE_ENV)
 // console.log(process.env.GEO_API)
 

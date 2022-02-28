@@ -1,0 +1,7 @@
+id,username,firstname,lastname,email,password,role,authToken
+1,admin,,,admin@gmail.com,password,admin,
+2,oszi,Stefan,Ostojic,oszi@gmail.com,$2b$10$mduoe4DF8LxNr4K6y/lsmO2BsmeM2yMolxQIgffJvpySRCsRmSNy6,admin,
+3,klausi,Klaus,Musterman,klausi@gmail.com,$2b$10$BYKsVvi1JVnMkI.Lmvc/XeriqNtCog2Qn9r8FwD.6VtNReZtFiY9y,user,
+4,Matzi,Matthias,Schwenniger,matzi@gmail.com,$2b$10$DxTsp/vdCILc6JSJ8QMlfOHiry1bUpVQl9lZ1Y5q8JBYCL8tRb7am,manager,
+5,Lexi,Alexander,Tusch,lexi@gmail.com,$2b$10$bTiyZLpRwn358.6u9fuqb.INMK9CdXO9XKy7Wxh8zE6T4WOms6BcG,admin,
+6,Gamper,Michael,Gamper,gamper@gmail.com,$2b$10$T5FJ1k/j3uvKxB5lPd9B1ehdtXOWDwdI7AMoEz0MS7qJlIR.DsRNK,betreuer,

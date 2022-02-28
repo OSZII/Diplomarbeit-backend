@@ -15,7 +15,33 @@ let objectProperties = [
 ];
 
 app.get("/", async (req, res) => {
-  res.status(200).send(await user.getAll());
+  let users = await user.getAll();
+  let userArray = [];
+  for(let i = 0; i < users.length; i++){
+    userArray.push(users[i]);
+  }
+  // console.log((await user.getAll())[10]);
+  res.status(200).send(userArray);
+});
+
+app.get("/download", async (req, res) => {
+  let users = await user.getAll();
+  let userArray = [];
+  for(let i = 0; i < users.length; i++){
+    userArray.push(users[i]);
+  }
+  const fastcsv = require("fast-csv");
+const fs = require("fs");
+const ws = fs.createWriteStream("users.csv");
+
+fastcsv
+  .write(userArray, { headers: true })
+  .on("finish", function() {
+    console.log("Write to CSV successfully!");
+  })
+  .pipe(ws);
+
+  res.status(200).sendFile("C:/Users/Stefan/Desktop/Git Repos/Diplomarbeit-backend/users.csv");
 });
 
 // statt 2 endpoints mit name kann man hier entweder eine Zahl oder einen String übergeben
