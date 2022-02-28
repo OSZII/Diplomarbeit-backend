@@ -1,0 +1,2 @@
+id,username,firstname,lastname,email,password,role,authToken
+4,Matzi,Matthias,Schwenniger,matzi@gmail.com,$2b$10$DxTsp/vdCILc6JSJ8QMlfOHiry1bUpVQl9lZ1Y5q8JBYCL8tRb7am,manager,

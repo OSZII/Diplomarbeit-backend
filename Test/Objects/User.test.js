@@ -4,12 +4,12 @@ describe('Get User', () => {
 
     test("getAll() und checkt die länge", async () => {
         let returnedUser = await user.getAll();
-        expect(returnedUser.length).toBe(6);
+        expect(returnedUser.length).toBe(105);
     });
 
-    test("getUserById(1) und schaut ob die ID 1 ist", async () => {
-        let returnedUser = await user.getById(1);
-        expect(returnedUser[0].id).toBe(1);
+    test("getUserById(2) und schaut ob die ID 2 ist", async () => {
+        let returnedUser = await user.getById(2);
+        expect(returnedUser[0].id).toBe(2);
     });
 
     test("getUserByName('oszi') Checkt ob er den user mit dem namen oszi findet", async () => {
@@ -17,9 +17,9 @@ describe('Get User', () => {
         expect(returnedUser[0].username).toBe("oszi");
     })
 
-    test("getUserByEmail('admin@gmail.com') Checkt ob er den user mit der email admin@gmail.com findet", async () => {
-        let returnedUser = await user.getByEmail("admin@gmail.com");
-        expect(returnedUser[0].id).toBe(1);
+    test("getUserByEmail('klausi@gmail.com') Checkt ob er den user mit der email klausi@gmail.com findet", async () => {
+        let returnedUser = await user.getByEmail("klausi@gmail.com");
+        expect(returnedUser[0].id).toBe(3);
     })
 
 });
@@ -79,13 +79,13 @@ describe("Update User", () => {
 
 describe('Delete User', () => {
     
-    test("deleteUserById(1) und schaut beim rückgabewert auf affectedRows und schaut ob 1", async () => {
-        let result =await user.deleteById(1);
+    test("deleteUserById(7) und schaut beim rückgabewert auf affectedRows und schaut ob 1", async () => {
+        let result = await user.deleteById(7);
         expect(result.affectedRows).toBe(1)
     })
 
-    test("deleteByEmail('klausi@gmail.com') schaut bei Rückgabewert ob affectedRows = 1", async () => {
-        let result =await user.deleteByEmail("klausi@gmail.com");
+    test("deleteByEmail('ipsum.dolor.sit@yahoo.us') schaut bei Rückgabewert ob affectedRows = 1", async () => {
+        let result = await user.deleteByEmail("ipsum.dolor.sit@yahoo.us");
         expect(result.affectedRows).toBe(1)
     })
 

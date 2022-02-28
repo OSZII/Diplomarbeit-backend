@@ -4,7 +4,7 @@
   "description": "Diplomarbeit Flower auf Dauer",
   "main": "server.js",
   "scripts": {
-    "test": "set NODE_ENV=development&&jest ./Test --verbose",
+    "test": "restartdb.bat&&set NODE_ENV=development&&jest ./Test --verbose",
     "start": "set NODE_ENV=production&&node server.js",
     "dev": "set NODE_ENV=development&&nodemon server.js"
   },
@@ -28,7 +28,6 @@
     "fast-csv": "^4.3.6",
     "jsonwebtoken": "^8.5.1",
     "mariadb": "^2.5.5",
-    "mysql": "^2.18.1",
     "nodemon": "^2.0.15",
     "supertest": "^6.2.2"
   },
