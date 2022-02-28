@@ -2,6 +2,7 @@ const express = require("express");
 const user = require("../Objects/User");
 const Help = require("../Helper/Helper");
 const { validateNumber } = require("../Objects/Validator");
+const path = require("path");
 const app = express.Router();
 
 let objectProperties = [
@@ -15,33 +16,16 @@ let objectProperties = [
 ];
 
 app.get("/", async (req, res) => {
-  let users = await user.getAll();
-  let userArray = [];
-  for(let i = 0; i < users.length; i++){
-    userArray.push(users[i]);
-  }
-  // console.log((await user.getAll())[10]);
-  res.status(200).send(userArray);
+  res.status(200).send(await user.getAll());
 });
 
 app.get("/download", async (req, res) => {
   let users = await user.getAll();
-  let userArray = [];
-  for(let i = 0; i < users.length; i++){
-    userArray.push(users[i]);
-  }
-  const fastcsv = require("fast-csv");
-const fs = require("fs");
-const ws = fs.createWriteStream("users.csv");
-
-fastcsv
-  .write(userArray, { headers: true })
-  .on("finish", function() {
-    console.log("Write to CSV successfully!");
-  })
-  .pipe(ws);
-
-  res.status(200).sendFile("C:/Users/Stefan/Desktop/Git Repos/Diplomarbeit-backend/users.csv");
+  Help.writeToCSV(users, "users.csv");
+  setTimeout(function(){ 
+    console.log("Ready")
+}, 1000);
+  res.status(200).sendFile(path.join(__dirname, "..", "users.csv"));
 });
 
 // statt 2 endpoints mit name kann man hier entweder eine Zahl oder einen String übergeben
@@ -59,6 +43,29 @@ app.get("/:idOrName", async (req, res) => {
       let receivedUser = await user.getByName(idOrName);
       if(receivedUser.length != 0){
         res.status(200).send(receivedUser);
+      } else res.status(404).send(Help.notFound);
+    } else res.status(400).send(Help.longerThan + " 3");
+  }
+});
+
+app.get("/:idOrName/download", async (req, res) => {
+  let idOrName = req.params.idOrName;
+  if (!isNaN(idOrName)) {
+    if (idOrName > 0) {
+      let receivedUser = await user.getById(idOrName);
+      if(receivedUser.length != 0){
+        let fileName = "user_"+ idOrName + ".csv";
+        Help.writeToCSV(receivedUser, fileName);
+        res.status(200).sendFile(path.join(__dirname, "..", fileName));
+      } else res.status(404).send(Help.notFound);
+    } else res.status(400).send(Help.largerThanZero);
+  } else {
+    if (idOrName.length >= 3) {
+      let receivedUser = await user.getByName(idOrName);
+      if(receivedUser.length != 0){
+        let fileName2 = "user_s_with_"+ idOrName + ".csv";
+        Help.writeToCSV(receivedUser, fileName2);
+        res.status(200).sendFile(path.join(__dirname, "..", fileName2));
       } else res.status(404).send(Help.notFound);
     } else res.status(400).send(Help.longerThan + " 3");
   }

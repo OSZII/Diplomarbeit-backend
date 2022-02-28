@@ -1,6 +1,7 @@
 // CRUD fieldjs
 const validator = require("./Validator");
 const pool = require("../Database/database");
+const Help = require("../Helper/Helper");
 
 class Field{
 
@@ -27,7 +28,7 @@ class Field{
         let sql = "SELECT * FROM fields;";
         // zu Field Objecten mappen mit ORM
         let results = await conn.query(sql);
-        // conn.end();
+        conn.end();
         return results;
     }
 
