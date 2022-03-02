@@ -3,6 +3,7 @@ const user = require("../Objects/User");
 const Help = require("../Helper/Helper");
 const { validateNumber } = require("../Objects/Validator");
 const path = require("path");
+const fs = require("fs");
 const app = express.Router();
 
 let objectProperties = [
@@ -19,12 +20,20 @@ app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
   let parameters = req.params.parameters;
   let downloadSpecific = req.params.downloadSpecific;
   let fileName = "";
+  let filePath = "";
   let users = await user.getAll();
   if (parameters == "download") {
-    Help.writeToCSV(users, "users.csv");
+    fileName = "users.csv";
+    filePath = path.join(__dirname, "..", fileName);
+    Help.writeToCSV(users, fileName);
     setTimeout(function () {
-      res.status(200).sendFile(path.join(__dirname, "..", "users.csv"));
+      res.status(200).sendFile(filePath);
     }, 100);
+    setTimeout(() => {
+      fs.unlink(filePath, () => {
+        console.log("File:", filePath, "has been deleted")
+      });
+    }, 200);
   } else if (parameters == undefined) {
     res.status(200).send(users);
   } else {
@@ -38,10 +47,16 @@ app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
           // Gibt user mit ID als csv zurück
           if (downloadSpecific == "download") {
             fileName = "users_with_id_" + parameters + ".csv";
+            filePath = path.join(__dirname, "..", fileName);
             Help.writeToCSV(receivedUser, fileName);
             setTimeout(function () {
-              res.status(200).sendFile(path.join(__dirname, "..", fileName));
+              res.status(200).sendFile(filePath);
             }, 100);
+            setTimeout(() => {
+              fs.unlink(filePath, () => {
+                console.log("File:", filePath, "has been deleted")
+              });
+            }, 200);
             // Gibt user mit ID zurück
           } else res.status(200).send(receivedUser);
         } else res.status(404).send(Help.notFound);
@@ -53,10 +68,16 @@ app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
         if (receivedUser.length != 0) {
           if (downloadSpecific == "download") {
             fileName = "users_with_" + parameters + ".csv";
+            let filePath = path.join(__dirname, "..", fileName);
             Help.writeToCSV(receivedUser, fileName);
             setTimeout(function () {
-              res.status(200).sendFile(path.join(__dirname, "..", fileName));
+              res.status(200).sendFile(filePath);
             }, 100);
+            setTimeout(() => {
+              fs.unlink(filePath, () => {
+                console.log("File:", filePath, "has been deleted")
+              });
+            }, 200);
           } else res.status(200).send(receivedUser);
         } else res.status(404).send(Help.notFound);
       } else res.status(400).send(Help.longerThan + " 3");
