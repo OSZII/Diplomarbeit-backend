@@ -37,15 +37,13 @@ async function searchByString(parameters) {
     let receivedUser = await user.getByName(parameters);
     if (receivedUser.length != 0) {
       return receivedUser;
-    } else return {status:404, message:Help.notFound};
-  } else return {status:400, message:Help.longerThan3};
+    } else return [404, Help.notFound];
+  } else return [400, Help.longerThan3];
 }
 
 app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
   let parameters = req.params.parameters;
-  console.log(parameters)
   let downloadSpecific = req.params.downloadSpecific;
-  let filePath = "";
   let users = await user.getAll();
   
   // create users.csv
@@ -77,7 +75,9 @@ app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
       // #region suche mit String
       // Parameter ist string suche nach user der String enthält
       let result = await searchByString(parameters);
-      if (!Array.isArray(result)) {
+      console.log(result[0])
+      if (result[0].hasOwnProperty("id")) {
+        console.log("true")
         if (downloadSpecific == "download") {
           handler.createAndSendFile("users_with_" + parameters, "csv", result, res);
         } else res.status(200).send(result);

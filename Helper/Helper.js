@@ -26,8 +26,8 @@ class Helper {
         let receivedObject = await object.getById(parameters);
         if (receivedObject.length != 0) {
           return receivedObject;
-        } else return [404, Help.notFound];
-      } else return [400, Help.largerThanZero];
+        } else return [404, this.notFound];
+      } else return [400, this.largerThanZero];
     }
 
     static async writeToCSV(data, fileName) {
