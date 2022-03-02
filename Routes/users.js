@@ -1,9 +1,11 @@
 const express = require("express");
 const user = require("../Objects/User");
 const Help = require("../Helper/Helper");
+const handler = require("../Objects/FileHandler");
 const { validateNumber } = require("../Objects/Validator");
 const path = require("path");
 const fs = require("fs");
+const { createInflate } = require("zlib");
 const app = express.Router();
 
 let objectProperties = [
@@ -16,77 +18,73 @@ let objectProperties = [
   "authToken",
 ];
 
+// function createAndSendFile(fileName, format, data, res) {
+//     fileName = fileName + "." + format;
+//     let filePath = path.join(__dirname, "..", fileName);
+//     if (format == "csv") {
+//       Help.writeToCSV(data, fileName);
+//     }
+//     // return filePath;
+//     setTimeout(() => {
+//       res.status(200).download(filePath);
+//     }, Help.sendFileTimeout);
+    
+//     deleteFile(filePath);  
+// }
+
+async function searchByString(parameters) {
+  if (parameters.length >= 3) {
+    let receivedUser = await user.getByName(parameters);
+    if (receivedUser.length != 0) {
+      return receivedUser;
+    } else return {status:404, message:Help.notFound};
+  } else return {status:400, message:Help.longerThan3};
+}
+
 app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
   let parameters = req.params.parameters;
+  console.log(parameters)
   let downloadSpecific = req.params.downloadSpecific;
-  let fileName = "";
   let filePath = "";
   let users = await user.getAll();
+  
+  // create users.csv
   if (parameters == "download") {
-    // download
-    fileName = "users.csv";
-    filePath = path.join(__dirname, "..", fileName);
-    Help.writeToCSV(users, fileName);
-    setTimeout(function () {
-      res.status(200).sendFile(filePath);
-    }, 100);
-    setTimeout(() => {
-      fs.unlink(filePath, () => {
-        console.log("File:", filePath, "has been deleted")
-      });
-    }, 200);
-    // download ende
+    
+    handler.createAndSendFile("users", "csv", users, res);
+
   } else if (parameters == undefined) {
+    // userausgabe
     res.status(200).send(users);
   } else {
-    // Spezifische parameter Pfad
-    // hier kommt man hin wenn parameters != download oder parameters != leer ist 
     if (!isNaN(parameters)) {
-      // Parameter ist Zahl
+      // #region Suche nach user mit id
+      let result = await Help.searchById(parameters, user);
       if (parameters > 0) {
         let receivedUser = await user.getById(parameters);
         if (receivedUser.length != 0) {
           // Gibt user mit ID als csv zurück
           if (downloadSpecific == "download") {
-            // download
-            fileName = "users_with_id_" + parameters + ".csv";
-            filePath = path.join(__dirname, "..", fileName);
-            Help.writeToCSV(receivedUser, fileName);
-            setTimeout(function () {
-              res.status(200).sendFile(filePath);
-            }, 100);
-            setTimeout(() => {
-              fs.unlink(filePath, () => {
-                console.log("File:", filePath, "has been deleted")
-              });
-            }, 200);
-            // Download ende
+
+            handler.createAndSendFile("user_with_id_" + parameters, "csv", receivedUser, res);
+
             // Gibt user mit ID zurück
           } else res.status(200).send(receivedUser);
         } else res.status(404).send(Help.notFound);
       } else res.status(400).send(Help.largerThanZero);
+      // #endregion
     } else {
+      // #region suche mit String
       // Parameter ist string suche nach user der String enthält
-      if (parameters.length >= 3) {
-        let receivedUser = await user.getByName(parameters);
-        if (receivedUser.length != 0) {
-          if (downloadSpecific == "download") {
-            // Download
-            fileName = "users_with_" + parameters + ".csv";
-            let filePath = path.join(__dirname, "..", fileName);
-            Help.writeToCSV(receivedUser, fileName);
-            setTimeout(function () {
-              res.status(200).sendFile(filePath);
-            }, 100);
-            setTimeout(() => {
-              fs.unlink(filePath, () => {
-                console.log("File:", filePath, "has been deleted")
-              });
-            }, 200);
-            // Download ende
-          } else res.status(200).send(receivedUser);
-        } else res.status(404).send(Help.notFound);
-      } else res.status(400).send(Help.longerThan + " 3");
+      let result = await searchByString(parameters);
+      if (!Array.isArray(result)) {
+        if (downloadSpecific == "download") {
+          handler.createAndSendFile("users_with_" + parameters, "csv", result, res);
+        } else res.status(200).send(result);
+      } else {
+        res.status(result[0]).send(result[1]);
+      }
+      // #endregion
     }
   }
 });
@@ -183,16 +181,15 @@ app.post("/", async (req, res) => {
 app.delete("/:id", async (req, res) => {
   let responseArray = [];
   let id = req.params.id;
-  console.log(id)
   let message = validateNumber(id);
   if (message == true) {
-    let returnedUser = await user.getById(id)
+    let returnedUser = await user.getById(id);
     let receivedUser = await user.deleteById(id);
-    if(receivedUser.affectedRows != 0) {
+    if (receivedUser.affectedRows != 0) {
       responseArray.push(receivedUser, returnedUser[0]);
-      res.status(200).send(responseArray) 
-    } else { 
-      res.status(404).send(Help.notFound); 
+      res.status(200).send(responseArray);
+    } else {
+      res.status(404).send(Help.notFound);
     }
   } else res.status(400).send(message);
 

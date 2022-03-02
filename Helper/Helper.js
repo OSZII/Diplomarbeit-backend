@@ -6,16 +6,28 @@ class Helper {
 
     static notANumber = "Parameter must be a number";
     static largerThanZero = "Parameter must be larger than 0";
-    static longerThan = "Parameter must be longer than:";
+    static longerThan = "Parameter must be longer than: 3";
     static notFound = "No results matching to given Parameters could be found";
     static notAllProperties = "Not all properties given";
     static mustBeString = "Parameter must be String";
+
+    static sendFileTimeout = 100;
+    static deleteFileTimeout = 200;
 
     static createCSV(fileName){
       fs.writeFile(fileName, 'Learn Node FS module', function (err) {
         if (err) throw err;
         console.log('File is created successfully.');
       });
+    }
+
+    static async searchById(parameters, object) {
+      if (parameters > 0) {
+        let receivedObject = await object.getById(parameters);
+        if (receivedObject.length != 0) {
+          return receivedObject;
+        } else return [404, Help.notFound];
+      } else return [400, Help.largerThanZero];
     }
 
     static async writeToCSV(data, fileName) {
