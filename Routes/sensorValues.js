@@ -1,7 +1,10 @@
 const express = require("express");
+const app = express.Router();
+
 const sensorValue = require("../Objects/SensorValue");
 const Help = require("../Helper/Helper");
-const app = express.Router();
+const handler = require("../Objects/FileHandler");
+
 
 let objectProperties = [
     "sensorId",
@@ -10,21 +13,43 @@ let objectProperties = [
 ]
 
 // Gibt alle Sensoren zurück
-app.get("/",async (req, res) => {
-    res.status(200).send(await sensorValue.getAll())
-})
+app.get("/:parameters?/:downloadSpecific?",async (req, res) => {
+  let parameters = req.params.parameters;
+  let downloadSpecific = req.params.downloadSpecific;
+  let sensorValues = await sensorValue.getAll();
+  
+  // create users.csv
+  if (parameters == "download") {
+    handler.createAndSendFile("sensorValues", "csv", sensorValues, res);
+  } else if (parameters == undefined) {
+    // userausgabe
+    res.status(200).send(sensorValues);
+  } else {
+    if (!isNaN(parameters)) {
+      // #region Suche nach user mit id
+      let result = await Help.searchById(parameters, sensorValue);
+        if(result[0].hasOwnProperty("id")){
+          if (downloadSpecific == "download") {
 
-// get sensorValue by id
-app.get("/:id",async (req, res) => {
-    let id = req.params.id;
-    if(!isNaN(id)){
-        if(id > 0){
-            let receivedSensorValue = await sensorValue.getById(id);
-            if(receivedSensorValue.length != 0){
-                res.status(200).send(receivedSensorValue);
-            }else res.status(404).send(Help.notFound);
-        }else res.status(400).send(Help.largerThanZero);
-    }else res.status(400).send(Help.mustBeString);
+            handler.createAndSendFile("sensorValue_with_id_" + parameters, "csv", result, res);
+
+          } else res.status(200).send(result);
+        } else res.status(result[0]).send(result[1]);
+      // #endregion
+    } else {
+      // // #region suche mit String
+      // let result = await Help.searchByType(parameters, sensorValue);
+      // if (result[0].hasOwnProperty("id")) {
+      //   if (downloadSpecific == "download") {
+      //     handler.createAndSendFile("sensorValues_with_" + parameters, "csv", result, res);
+      //   } else res.status(200).send(result);
+      // } else {
+      //   res.status(result[0]).send(result[1]);
+      // }
+      // // #endregion
+      res.status(400).send(Help.notANumber);
+    }
+  }
 })
 
 // erstellt einen oder mehrere neue Sensorwerte

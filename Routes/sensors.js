@@ -1,7 +1,9 @@
 const express = require("express");
+const app = express.Router();
+
 const sensor = require("../Objects/Sensor");
 const Help = require("../Helper/Helper");
-const app = express.Router();
+const handler = require("../Objects/FileHandler");
 
 let objectProperties = [
     "fieldID",
@@ -11,33 +13,67 @@ let objectProperties = [
   
 
 // Gibt alle Sensoren zurück
-app.get("/",async (req, res) => {
-    res.status(200).send(await sensor.getAll());
+app.get("/:parameters?/:downloadSpecific?",async (req, res) => {
+  let parameters = req.params.parameters;
+  let downloadSpecific = req.params.downloadSpecific;
+  let sensors = await sensor.getAll();
+  
+  // create users.csv
+  if (parameters == "download") {
+    handler.createAndSendFile("sensors", "csv", sensors, res);
+  } else if (parameters == undefined) {
+    // userausgabe
+    res.status(200).send(sensors);
+  } else {
+    if (!isNaN(parameters)) {
+      // #region Suche nach user mit id
+      let result = await Help.searchById(parameters, sensor);
+        if(result[0].hasOwnProperty("id")){
+          if (downloadSpecific == "download") {
+
+            handler.createAndSendFile("sensor_with_id_" + parameters, "csv", result, res);
+
+          } else res.status(200).send(result);
+        } else res.status(result[0]).send(result[1]);
+      // #endregion
+    } else {
+      // #region suche mit String
+      let result = await Help.searchByType(parameters, sensor);
+      if (result[0].hasOwnProperty("id")) {
+        if (downloadSpecific == "download") {
+          handler.createAndSendFile("sensors_with_" + parameters, "csv", result, res);
+        } else res.status(200).send(result);
+      } else {
+        res.status(result[0]).send(result[1]);
+      }
+      // #endregion
+    }
+  }
 })
 
 // Get with id or type 
-app.get("/:idOrType",async (req,res) => {
-    let idOrType = req.params.idOrType;
-  if (!isNaN(idOrType)) {
-    if (idOrType > 0) {
-      let receivedSensor = await sensor.getById(idOrType);
-      if(receivedSensor.length != 0){
-        res
-          .status(200)
-          .send(receivedSensor);
-      } else res.status(404).send(Help.notFound);
-    } else res.status(400).send(Help.largerThanZero);
-  } else {
-    if (idOrType.length >= 3) {
-      let receivedSensor = await sensor.getByType(idOrType);
-      if(receivedSensor.length != 0){
-        res
-          .status(200)
-          .send(receivedSensor);
-      } else res.status(404).send(Help.notFound);
-    } else res.status(400).send(Help.longerThan + " 3");
-  }
-})
+// app.get("/:idOrType",async (req,res) => {
+//     let idOrType = req.params.idOrType;
+//   if (!isNaN(idOrType)) {
+//     if (idOrType > 0) {
+//       let receivedSensor = await sensor.getById(idOrType);
+//       if(receivedSensor.length != 0){
+//         res
+//           .status(200)
+//           .send(receivedSensor);
+//       } else res.status(404).send(Help.notFound);
+//     } else res.status(400).send(Help.largerThanZero);
+//   } else {
+//     if (idOrType.length >= 3) {
+//       let receivedSensor = await sensor.getByType(idOrType);
+//       if(receivedSensor.length != 0){
+//         res
+//           .status(200)
+//           .send(receivedSensor);
+//       } else res.status(404).send(Help.notFound);
+//     } else res.status(400).send(Help.longerThan + " 3");
+//   }
+// })
 
 // erstellt einen oder mehrere neue Sensoren
 app.post("/",async (req, res) => {

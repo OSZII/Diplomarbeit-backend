@@ -16,3 +16,7 @@ Bei Eingabe vom Land überprüfen ob Länge = 2 ISO-2 Standard oder so
 
 Validierung bei den Routes nicht bei den Objects
 Bei users vermeiden von unique error, wenn jemand die gleiche EMAIL 2 mal schickt
+
+Eventuell wenn bei Sensor nach id gesucht 2 Objekte liefern eines mit der id und anderes mit FieldID
+
+Bei sensorValues timestamp suche implementieren

@@ -1,25 +1,11 @@
-const fastcsv = require("fast-csv");
-const fs = require("fs");
-const path = require("path");
-
 class Helper {
 
     static notANumber = "Parameter must be a number";
     static largerThanZero = "Parameter must be larger than 0";
-    static longerThan = "Parameter must be longer than: 3";
+    static longerThan3 = "Parameter must be longer than: 3";
     static notFound = "No results matching to given Parameters could be found";
     static notAllProperties = "Not all properties given";
     static mustBeString = "Parameter must be String";
-
-    static sendFileTimeout = 100;
-    static deleteFileTimeout = 200;
-
-    static createCSV(fileName){
-      fs.writeFile(fileName, 'Learn Node FS module', function (err) {
-        if (err) throw err;
-        console.log('File is created successfully.');
-      });
-    }
 
     static async searchById(parameters, object) {
       if (parameters > 0) {
@@ -30,12 +16,22 @@ class Helper {
       } else return [400, this.largerThanZero];
     }
 
-    static async writeToCSV(data, fileName) {
-      const ws = fs.createWriteStream(fileName);
+    static async searchByString(parameters, object) {
+      if (parameters.length >= 3) {
+        let receivedObject = await object.getByName(parameters);
+        if (receivedObject.length != 0) {
+          return receivedObject;
+        } else return [404, this.notFound];
+      } else return [400, this.longerThan3];
+    }
 
-      fastcsv.write(data, { headers: true }).on("finish", function() {
-          console.log("Write to CSV successfully!");
-        }).pipe(ws);
+    static async searchByType(parameters, object) {
+      if (parameters.length >= 3) {
+        let receivedObject = await object.getByType(parameters);
+        if (receivedObject.length != 0) {
+          return receivedObject;
+        } else return [404, this.notFound];
+      } else return [400, this.longerThan3];
     }
 
     static hasOwnProperties(object, properties) {

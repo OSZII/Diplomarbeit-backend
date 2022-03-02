@@ -4,6 +4,8 @@ const app = express.Router();
 const Help = require("../Helper/Helper");
 const field = require("../Objects/Field");
 
+const handler = require("../Objects/FileHandler");
+
 const axios = require('axios').default;
 
 let objectProperties = [
@@ -31,34 +33,68 @@ async function getGeoData(countryCode, federalState, postalCode, street){
 }
 
 // Get all fields
-app.get("/", async (req, res) => {
-  res.status(200).send(await field.getAll());
+app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
+  let parameters = req.params.parameters;
+  let downloadSpecific = req.params.downloadSpecific;
+  let fields = await field.getAll();
+  
+  // create users.csv
+  if (parameters == "download") {
+    handler.createAndSendFile("fields", "csv", fields, res);
+  } else if (parameters == undefined) {
+    // userausgabe
+    res.status(200).send(fields);
+  } else {
+    if (!isNaN(parameters)) {
+      // #region Suche nach user mit id
+      let result = await Help.searchById(parameters, field);
+        if(result[0].hasOwnProperty("id")){
+          if (downloadSpecific == "download") {
+
+            handler.createAndSendFile("field_with_id_" + parameters, "csv", result, res);
+
+          } else res.status(200).send(result);
+        } else res.status(result[0]).send(result[1]);
+      // #endregion
+    } else {
+      // #region suche mit String
+      let result = await Help.searchByString(parameters, field);
+      if (result[0].hasOwnProperty("id")) {
+        if (downloadSpecific == "download") {
+          handler.createAndSendFile("fields_with_" + parameters, "csv", result, res);
+        } else res.status(200).send(result);
+      } else {
+        res.status(result[0]).send(result[1]);
+      }
+      // #endregion
+    }
+  }
 });
 
 // Get fields by name or id
-app.get("/:idOrName", async (req, res) => {
-  let idOrName = req.params.idOrName;
-  if (!isNaN(idOrName)) {
-    if (idOrName > 0) {
-      let receivedField = await field.getById(idOrName);
-      if(receivedField.length != 0){
-        res
-          .status(200)
-          .send(receivedField);
-      } else res.status(404).send(Help.notFound);
-    } else res.status(400).send(Help.largerThanZero);
-  } else {
-    // Namesearch
-    if (idOrName.length >= 3) {
-      let receivedField = await field.getByName(idOrName);
-      if(receivedField.length != 0){
-        res
-        .status(200)
-        .send(receivedField);
-      } else res.status(404).send(Help.notFound);
-    } else res.status(400).send(Help.longerThan + " 3");
-  }
-});
+// app.get("/:idOrName", async (req, res) => {
+//   let idOrName = req.params.idOrName;
+//   if (!isNaN(idOrName)) {
+//     if (idOrName > 0) {
+//       let receivedField = await field.getById(idOrName);
+//       if(receivedField.length != 0){
+//         res
+//           .status(200)
+//           .send(receivedField);
+//       } else res.status(404).send(Help.notFound);
+//     } else res.status(400).send(Help.largerThanZero);
+//   } else {
+//     // Namesearch
+//     if (idOrName.length >= 3) {
+//       let receivedField = await field.getByName(idOrName);
+//       if(receivedField.length != 0){
+//         res
+//         .status(200)
+//         .send(receivedField);
+//       } else res.status(404).send(Help.notFound);
+//     } else res.status(400).send(Help.longerThan + " 3");
+//   }
+// });
 
 // Creates field or multiple fields
 app.post("/", async (req, res) => {
