@@ -23,6 +23,7 @@ app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
   let filePath = "";
   let users = await user.getAll();
   if (parameters == "download") {
+    // download
     fileName = "users.csv";
     filePath = path.join(__dirname, "..", fileName);
     Help.writeToCSV(users, fileName);
@@ -34,6 +35,7 @@ app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
         console.log("File:", filePath, "has been deleted")
       });
     }, 200);
+    // download ende
   } else if (parameters == undefined) {
     res.status(200).send(users);
   } else {
@@ -46,6 +48,7 @@ app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
         if (receivedUser.length != 0) {
           // Gibt user mit ID als csv zurück
           if (downloadSpecific == "download") {
+            // download
             fileName = "users_with_id_" + parameters + ".csv";
             filePath = path.join(__dirname, "..", fileName);
             Help.writeToCSV(receivedUser, fileName);
@@ -57,6 +60,7 @@ app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
                 console.log("File:", filePath, "has been deleted")
               });
             }, 200);
+            // Download ende
             // Gibt user mit ID zurück
           } else res.status(200).send(receivedUser);
         } else res.status(404).send(Help.notFound);
@@ -67,6 +71,7 @@ app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
         let receivedUser = await user.getByName(parameters);
         if (receivedUser.length != 0) {
           if (downloadSpecific == "download") {
+            // Download
             fileName = "users_with_" + parameters + ".csv";
             let filePath = path.join(__dirname, "..", fileName);
             Help.writeToCSV(receivedUser, fileName);
@@ -78,6 +83,7 @@ app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
                 console.log("File:", filePath, "has been deleted")
               });
             }, 200);
+            // Download ende
           } else res.status(200).send(receivedUser);
         } else res.status(404).send(Help.notFound);
       } else res.status(400).send(Help.longerThan + " 3");
@@ -129,7 +135,8 @@ app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
 //   }
 // });
 
-// Passwörter werden vor dem versenden gehashed
+// TODO: als rückgabe auch die erstellten User zurückgeben
+// Passwörter werden vor dem versenden vom Frontend gehashed
 app.post("/", async (req, res) => {
   let users = req.body;
   if (Array.isArray(users)) {
@@ -172,14 +179,21 @@ app.post("/", async (req, res) => {
   }
 });
 
+// Beim return auch den gelöschten user in einem Array zurückgeben
 app.delete("/:id", async (req, res) => {
+  let responseArray = [];
   let id = req.params.id;
+  console.log(id)
   let message = validateNumber(id);
   if (message == true) {
+    let returnedUser = await user.getById(id)
     let receivedUser = await user.deleteById(id);
-    receivedUser.length != 0
-      ? res.status(200).send(receivedUser)
-      : res.status(404).send(Help.notFound);
+    if(receivedUser.affectedRows != 0) {
+      responseArray.push(receivedUser, returnedUser[0]);
+      res.status(200).send(responseArray) 
+    } else { 
+      res.status(404).send(Help.notFound); 
+    }
   } else res.status(400).send(message);
 
   // if (!isNaN(id)) {
