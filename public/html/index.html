@@ -23,9 +23,16 @@
         <div class="use">
             <h1>Verwendung</h1>
             <p>Über verschiedene Routen lassen sich Daten abfragen, suchen, erstellen löschen und updaten</p>
-            <div class="accordionContainer">
-                <button class="accordion firstAccordion">Users</button>
-                <div class="panel">
+            <div class="accordionButtonContainer">
+
+                <button class="accordionButton">Users</button>
+                <button class="accordionButton">Fields</button>
+                <button class="accordionButton">Sensors</button>
+                <button class="accordionButton">SensorValues</button>
+            
+            </div>
+            <div class="accordionContentContainer"></div>
+                <div class="accordionContent">
                     <a href="/users">/users</a>
                     <a href="/users/5">/users/5</a>
                     <a href="/users/ste">/users/ste</a>
@@ -33,9 +40,7 @@
                     <a href="/users/ste">/users/5/download</a>
                     <a href="/users/ste">/users/ste/download</a>
                 </div>
-
-                <button class="accordion">Fields</button>
-                <div class="panel">
+                <div class="accordionContent">
                     <a href="/fields">/fields</a>
                     <a href="/fields/5">/fields/5</a>
                     <a href="/fields/ste">/fields/ste</a>
@@ -43,9 +48,7 @@
                     <a href="/fields/3/download">/fields/3/download</a>
                     <a href="/fields/ste/download">/fields/ste/download</a>
                 </div>
-
-                <button class="accordion">Sensors</button>
-                <div class="panel">
+                <div class="accordionContent">
                     <a href="/sensors">/sensors</a>
                     <a href="/sensors/5">/sensors/5</a>
                     <a href="/sensors/temp">/sensors/temp</a>
@@ -53,9 +56,7 @@
                     <a href="/sensors/5/download">/sensors/5/download</a>
                     <a href="/sensors/temp/download">/sensors/temp/download</a>
                 </div>
-
-                <button class="accordion lastAccordion">SensorValues</button>
-                <div class="panel">
+                <div class="accordionContent">
                     <a href="/sensorvalues">/sensorvalues</a>
                     <a href="/sensorvalues/5">/sensorvalues/5</a>
                     <a href="/sensorvalues/download">/sensorvalues/download</a>
