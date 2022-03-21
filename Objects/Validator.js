@@ -47,6 +47,32 @@ class Validator{
         // return true;
     }
 
+    // Verify Token
+    static verifyToken(req, res, next){
+        // Get auth header value
+        const brearerHeader = req.headers["authorization"];
+        
+        // Check if bearer is undefined
+        if(typeof brearerHeader !== "undefined"){
+          // Token von bearer trennen
+          const bearer = brearerHeader.split(" ");
+        
+          // Get token
+          const bearerToken = bearer[1];
+        
+          req.token = bearerToken;
+        
+          next();
+        
+        
+        }else {
+          // forbidden
+          res.sendStatus(403)
+        }
+  
+  
+  }
+
 }
 
 module.exports = Validator;

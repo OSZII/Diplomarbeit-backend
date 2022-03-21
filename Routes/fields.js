@@ -3,6 +3,7 @@ const app = express.Router();
 
 const Help = require("../Helper/Helper");
 const field = require("../Objects/Field");
+const auth = require("../Objects/Validator");
 
 const handler = require("../Objects/FileHandler");
 

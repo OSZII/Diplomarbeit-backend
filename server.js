@@ -5,13 +5,18 @@
 // testen ob das geht
 // db.query("INSERT INTO users (username, role) values ('testuser', 'user');", "Füge User Hinzu!");
 const path = require("path")
+const bcrypt = require("bcrypt");
 const express = require('express');
 const app = express();
+
+const usersObject = require("./Objects/User");
 
 const users = require("./Routes/users");
 const fields = require("./Routes/fields");
 const sensors = require("./Routes/sensors");
 const sensorValues = require("./Routes/sensorValues");
+
+const jwt = require("jsonwebtoken");
 
 // console.log(connection.state)
 
@@ -30,6 +35,36 @@ app.use("/sensorvalues", sensorValues);
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/html/index.html"));
+})
+
+app.post("/login", async (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    
+    const loginUser = (await usersObject.getByName(username))[0];
+    
+    if(bcrypt.compareSync(password, loginUser.password)){
+        jwt.sign({user: loginUser}, "secretkey", (err, token) => {
+            res.json({token: token})
+        })
+    }else{
+        res.sendStatus(403);
+    }
+
+    
+
+    // res.send(loginUser)
+})
+
+app.post("/hashpassword", (req, res) => {
+    let password = req.body.password;
+
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+            res.json({hash: hash})
+        })
+    })
+
 })
 
 app.post("/", (req, res) => {

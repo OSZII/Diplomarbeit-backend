@@ -13,7 +13,7 @@ USE floweraufdauer;
 -- ENUM('admin', 'user', 'manager', 'verwalter', 'betreuer')  
 CREATE TABLE IF NOT EXISTS users(  
         id int AUTO_INCREMENT PRIMARY KEY NOT NULL,  
-        username varchar(255) NOT NULL,  
+        username varchar(255) NOT NULL UNIQUE,  
         firstname varchar(255) NULL,  
         lastname varchar(255) NULL,
         email varchar(255) UNIQUE NOT NULL,
