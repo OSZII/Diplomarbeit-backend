@@ -133,29 +133,25 @@ app.post("/", verifyToken ,async (req, res) => {
 });
 
 // Beim return auch den gelöschten user in einem Array zurückgeben
-app.delete("/:id", async (req, res) => {
-  let responseArray = [];
-  let id = req.params.id;
-  let message = validateNumber(id);
-  if (message == true) {
-    let returnedUser = await user.getById(id);
-    let receivedUser = await user.deleteById(id);
-    if (receivedUser.affectedRows != 0) {
-      responseArray.push(receivedUser, returnedUser[0]);
-      res.status(200).send(responseArray);
-    } else {
-      res.status(404).send(Help.notFound);
+app.delete("/:id", verifyToken ,async (req, res) => {
+  jwt.verify(req.token, "secretkey", async (err, authData) => {
+    if(err) res.sendStatus(403);
+    else{
+      let responseArray = [];
+      let id = req.params.id;
+      let message = validateNumber(id);
+      if (message == true) {
+        let returnedUser = await user.getById(id);
+        let receivedUser = await user.deleteById(id);
+        if (receivedUser.affectedRows != 0) {
+          responseArray.push(receivedUser, returnedUser[0]);
+          res.status(200).send(responseArray);
+        } else {
+          res.status(404).send(Help.notFound);
+        }
+      } else res.status(400).send(message);
     }
-  } else res.status(400).send(message);
-
-  // if (!isNaN(id)) {
-  //   if (id > 0) {
-  //     let receivedUser = await user.deleteById(id);
-  //     if(receivedUser.length != 0){
-  //       res.status(200).send(receivedUser);
-  //     }else res.status(404).send(Help.notFound);
-  //   }else res.status(400).send(Help.largerThanZero);
-  // }else res.status(400).send(Help.notANumber);
+  })
 });
 
 // Verify Token

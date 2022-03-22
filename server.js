@@ -41,14 +41,18 @@ app.post("/login", async (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
     
-    const loginUser = (await usersObject.getByName(username))[0];
-    
-    if(bcrypt.compareSync(password, loginUser.password)){
-        jwt.sign({user: loginUser}, "secretkey", (err, token) => {
-            res.json({token: token})
-        })
-    }else{
-        res.sendStatus(403);
+    if(username == undefined | password == undefined){
+        res.sendStatus(412);
+    }else {
+        const loginUser = (await usersObject.getByName(username))[0];
+        
+        if(bcrypt.compareSync(password, loginUser.password)){
+            jwt.sign({user: loginUser}, "secretkey", (err, token) => {
+                res.json({token: token})
+            })
+        }else{
+            res.sendStatus(403);
+        }
     }
 
     
@@ -75,6 +79,18 @@ app.post("/", (req, res) => {
 app.get('*', function(req, res){
     res.status(404).send('No such route found???');
   });
+
+app.put("*", (req, res) => {
+    res.status(404).send("No such route found???");
+})
+
+app.post("*", (req, res) => {
+    res.status(404).send("No such route found???");
+})
+
+app.delete("*", (req, res) => {
+    res.status(404).send("No such route found???");
+})
 
 // console.log(process.env.NODE_ENV)
 // console.log(process.env.GEO_API)
