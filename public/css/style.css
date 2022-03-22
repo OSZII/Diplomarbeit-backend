@@ -1,6 +1,7 @@
 body{
     margin: 0;
     padding: 0;
+    background-color: #D9DBF1;
 }
 
 .center{
@@ -20,12 +21,38 @@ body{
     margin-bottom: 200px;
 }
 
-.accordion{
+.accordionButton{
+    border: none;
+    height: 70px;
+    color: white;
+}
+
+.accordionButton:hover{
     cursor: pointer;
-    padding-left: 40px;
-    text-align: left;
+}
+
+.accordionButtonContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+.accordionButtonContainer > button{
+    width: 25%;
+}
+
+.accordionContent{
+    flex-direction: column;
+    background-color: #8E9DCC;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.accordion{
+    /* cursor: pointer; */
+    /* padding-left: 40px; */
+    /* text-align: left; */
     background-color: lightgray;
-    width: 100%;
+    width: 25%;
     height: 70px;
     border: 1px solid gray;
     font-weight: bold;
@@ -45,15 +72,6 @@ body{
     align-items: left;
     /* justify-content: center; */
     flex-direction: column;
-}
-
-.lastAccordion{
-    border-radius: 0px 0px 20px 20px;
-}
-
-.firstAccordion{
-    border-radius: 20px 20px 0px 0px;
-    
 }
 
 .row{
@@ -79,4 +97,18 @@ body{
 
 .placeholder{
     height: 20vh;
+}
+
+.linkDescriptionContainer > p{
+    margin: 0;
+    padding: 0;
+}
+
+.badge{
+    background-color: orange;
+    border-radius: 5px;
+    width: 100%;
+    padding: 0px 2px 0px 2px;
+    /* border: 1px solid black; */
+    /* text-decoration: none; */
 }

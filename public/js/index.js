@@ -1,34 +1,37 @@
-let accordions = document.getElementsByClassName("accordion");
-let panels = document.getElementsByClassName("panel");
+let accordionButtons = document.getElementsByClassName("accordionButton");
+let accordionContent = document.getElementsByClassName("accordionContent");
 
-for (let i = 0; i < accordions.length; i++) {
-    accordions[i].addEventListener("click", function() {
-      
-      if(i == accordions.length-1){
-        if(accordions[i].classList.contains("lastAccordion")){
-          accordions[i].classList.remove("lastAccordion");
-        }else{
-          setTimeout(() => {
-            accordions[i].classList.add("lastAccordion");
-          }, 100)
-        }
+for (let i = 0; i < accordionButtons.length; i++) {
+    accordionContent[i].style.display = "none";
+    setAllButtonColor();
 
-        if(panels[i].classList.contains("lastAccordion")){
-          panels[i].classList.remove("lastAccordion");
-        }else{
-          setTimeout(() => {
-            panels[i].classList.add("lastAccordion");
-          }, 100)
-        }
+    accordionButtons[i].addEventListener("click", function() {  
 
+      if(accordionContent[i].style.display == "none"){
+        setAllButtonColor();
+        hideAllContent();
+        accordionContent[i].style.display = "flex";
+        accordionButtons[i].style.backgroundColor = "#8E9DCC";
+        // accordionButtons[i].style.border = "5px solid lightblue";
+      }else{
+        accordionContent[i].style.display = "none";
+        setAllButtonColor();
+        hideAllContent();
       }
 
-      // console.log(panels[i].style)
-      if(panels[i].style.maxHeight){
-        panels[i].style.maxHeight = null;
-      }else {
-        panels[i].style.maxHeight = panels[i].scrollHeight + "px";
-      }
 
     });
   }
+
+function hideAllContent(){
+  for(let i = 0; i < accordionContent.length; i++){
+    accordionContent[i].style.display = "none";
+  }
+}
+
+function setAllButtonColor(){
+  for(let i = 0; i < accordionButtons.length; i++){
+    accordionButtons[i].style.backgroundColor = "#7D84B2";
+    accordionButtons[i].style.border = "none";
+  }
+}

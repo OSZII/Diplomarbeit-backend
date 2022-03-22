@@ -23,43 +23,69 @@
         <div class="use">
             <h1>Verwendung</h1>
             <p>Über verschiedene Routen lassen sich Daten abfragen, suchen, erstellen löschen und updaten</p>
-            <div class="accordionContainer">
-                <button class="accordion firstAccordion">Users</button>
-                <div class="panel">
+            <div class="accordionButtonContainer">
+
+                <button class="accordionButton">Users</button>
+                <button class="accordionButton">Fields</button>
+                <button class="accordionButton">Sensors</button>
+                <button class="accordionButton">SensorValues</button>
+            
+            </div>
+            <div class="accordionContentContainer"></div>
+                <div class="accordionContent">
+                    <p>Zeigt alle Users im Json-Format an</p>
                     <a href="/users">/users</a>
-                    <a href="/users/5">/users/5</a>
-                    <a href="/users/ste">/users/ste</a>
-                    <a href="/users/ste">/users/download</a>
-                    <a href="/users/ste">/users/5/download</a>
-                    <a href="/users/ste">/users/ste/download</a>
-                </div>
 
-                <button class="accordion">Fields</button>
-                <div class="panel">
+                    <p>Gibt den User mit übereinstimmender id im Json-Format aus</p>
+                    <a href="/users/5">/users/<span class="badge">id</span></a>
+
+                    <p>Gibt einen oder mehrere User mit dem übereinstimmenden suchstring im Json-Format aus</p>
+                    <a href="/users/ste">/users/<span class="badge">suchstring</span></a>
+
+                    <p>Ladet alle User im Csv-Format herunter</p>
+                    <a href="/users/download">/users/<span class="badge">download</span></a>
+                    <p>Ladet user mit übereinstimmender id im Csv-Fromat herunter</p>
+                    <a href="/users/5/download">/users/<span class="badge">id</span>/<span class="badge">download</span></a>
+                    <p>Ladet user mit übereinstimmendem suchstring im Csv-Format herunter</p>
+                    <a href="/users/ste/download">/users/<span class="badge">suchstring</span>/<span class="badge">download</span></a>
+                </div>
+                <div class="accordionContent">
+                    <p>Zeigt alle Fields im json-Format an</p>
                     <a href="/fields">/fields</a>
-                    <a href="/fields/5">/fields/5</a>
-                    <a href="/fields/ste">/fields/ste</a>
-                    <a href="/fields/download">/fields/download</a>
-                    <a href="/fields/3/download">/fields/3/download</a>
-                    <a href="/fields/ste/download">/fields/ste/download</a>
+                    <p>Zeigt das Field mit übereinstimmender id im Json-Format an</p>
+                    <a href="/fields/3">/fields/<span class="badge">id</span></a>
+                    <p>Gibt ein oder mehrere Fields mit übereinstimmendem suchstring im Json-Format zurück</p>
+                    <a href="/fields/feld">/fields/<span class="badge">suchstring</span></a>
+                    <p>Ladet alle Fields im Csv-Format herunter</p>
+                    <a href="/fields/download">/fields/<span class="badge">download</span></a>
+                    <p>Ladet das Field mit übereinstimmender id im Csv-Format herunter</p>
+                    <a href="/fields/3/download">/fields/<span class="badge">id</span>/<span class="badge">download</span></a>
+                    <p>Ladet die fields mit übereinstimmendem suchstring im Csv-Format herunter</p>
+                    <a href="/fields/feld/download">/fields/<span class="badge">suchstring</span>/<span class="badge">download</span></a>
                 </div>
-
-                <button class="accordion">Sensors</button>
-                <div class="panel">
+                <div class="accordionContent">
+                    <p>Zeigt alle Sensoren im Json-Format an</p>
                     <a href="/sensors">/sensors</a>
-                    <a href="/sensors/5">/sensors/5</a>
-                    <a href="/sensors/temp">/sensors/temp</a>
-                    <a href="/sensors/download">/sensors/download</a>
-                    <a href="/sensors/5/download">/sensors/5/download</a>
-                    <a href="/sensors/temp/download">/sensors/temp/download</a>
+                    <p>Zeigt Sensor mit übereinstimmender id im Json-Format an</p>
+                    <a href="/sensors/5">/sensors/<span class="badge">id</span></a>
+                    <p>Zeigt alle Sensoren mit übereinstimmendem suchstring im Json-Format an</p>
+                    <a href="/sensors/temp">/sensors/<span class="badge">suchstring</span></a>
+                    <p>Ladet alle Sensoren im Csv-Format herunter</p>
+                    <a href="/sensors/download">/sensors/<span class="badge">download</span></a>
+                    <p>Ladet den Sensor mit übereinstimmender id im Csv-Format herunter</p>
+                    <a href="/sensors/5/download">/sensors/<span class="badge">id</span>/<span class="badge">download</span></a>
+                    <p>Ladet alle Sensoren mit übereinstimmendem suchstring im Csv-Format herunter</p>
+                    <a href="/sensors/temp/download">/sensors/<span class="badge">temp</span>/<span class="badge">download</span></a>
                 </div>
-
-                <button class="accordion lastAccordion">SensorValues</button>
-                <div class="panel">
+                <div class="accordionContent">
+                    <p>Zeigt alle Sensorwerte im Json-Format an</p>
                     <a href="/sensorvalues">/sensorvalues</a>
-                    <a href="/sensorvalues/5">/sensorvalues/5</a>
-                    <a href="/sensorvalues/download">/sensorvalues/download</a>
-                    <a href="/sensorvalues/5/download">/sensorvalues/5/download</a>
+                    <p>Zeigt Sensorwert mit übereinstimmender id im Json-Format an</p>
+                    <a href="/sensorvalues/5">/sensorvalues/<span class="badge">id</span></a>
+                    <p>Lädt alle Sensorwerte im Csv-Format herunter</p>
+                    <a href="/sensorvalues/download">/sensorvalues/<span class="badge">download</span></a>
+                    <p>Lädt den Sensorwert mit übereinstimmender id im Csv-Format herunter</p>
+                    <a href="/sensorvalues/5/download">/sensorvalues/<span class="badge">id</span>/<span class="badge">download</span></a>
                 </div>
 
             </div>
