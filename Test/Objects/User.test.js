@@ -42,7 +42,7 @@ describe('Post User', () => {
     test("Erstellt zwei User und schaut in den zurückgegebenen Objekten nach, ob die affected rows in summe 2 ergeben, da 2 user erstellt werden", async () => {
         let result = await user.createMultipleUsers(
             [{
-                "username": "TestUser",
+                "username": "TestUser3",
                 "firstname": "Test3",
                 "lastname": "User3",
                 "email": "TestmailUser3@gmail.com",
