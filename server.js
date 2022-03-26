@@ -42,12 +42,12 @@ app.post("/login", async (req, res) => {
     let password = req.body.password;
     
     if(username == undefined | password == undefined){
-        res.sendStatus(412);
+        res.sendStatus(400);
     }else {
         const loginUser = (await usersObject.getByName(username))[0];
         
         if(bcrypt.compareSync(password, loginUser.password)){
-            jwt.sign({user: loginUser}, "secretkey", (err, token) => {
+            jwt.sign({user: loginUser}, "secretkey", {expiresIn: '30s'}, (err, token) => {
                 res.json({token: token})
             })
         }else{

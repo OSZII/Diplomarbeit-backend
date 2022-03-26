@@ -7,6 +7,7 @@ const user = require("../Objects/User");
 const Help = require("../Helper/Helper");
 const handler = require("../Objects/FileHandler");
 const { JsonWebTokenError } = require("jsonwebtoken");
+const validator = require("../Objects/Validator");
 
 let objectProperties = [
   "username",
@@ -139,7 +140,7 @@ app.delete("/:id", verifyToken ,async (req, res) => {
     else{
       let responseArray = [];
       let id = req.params.id;
-      let message = validateNumber(id);
+      let message = validator.validateNumber(id);
       if (message == true) {
         let returnedUser = await user.getById(id);
         let receivedUser = await user.deleteById(id);
