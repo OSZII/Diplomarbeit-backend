@@ -73,6 +73,7 @@ app.post("/hashpassword", (req, res) => {
 
 app.post("/", (req, res) => {
     // console.log(req.body);
+    console.log(req.socket.remoteAddress)
     res.send("GOT A POST REQUEST!");
 })
 
