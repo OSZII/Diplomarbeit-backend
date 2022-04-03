@@ -154,11 +154,6 @@ app.delete("/:id",verifyToken , async (req, res) => {
   })
 });
 
-// app.delete("/", async (req, res) => {
-//   // console.log("delete all")
-//   res.status(200).send(await field.deleteAll());
-// });
-
 // Verify Token
 function verifyToken(req, res, next){
   // Get auth header value
