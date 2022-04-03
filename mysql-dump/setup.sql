@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS fields(
         id int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
         name varchar(255) NOT NULL, 
         area int NOT NULL,
-        unit ENUM("square meter", "hectar", "square kilometer", "square feet", "square yard", "acre") NOT NULL,
+        unit ENUM("square meter", "hectar", "square kilometer", "square feet", "acre") NOT NULL,
         country varchar(2) NOT NULL,
         federalState varchar(255) NOT NULL,
         postalCode varchar(10) NOT NULL,
@@ -151,12 +151,16 @@ CREATE TABLE IF NOT EXISTS fields(
         longitude DOUBLE NULL,
         description varchar(255) NOT NULL
     );
+
+/* #region */
+
 CREATE INDEX IF NOT EXISTS fieldsIndex ON fields(country, federalState);
 
 INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (1, "Feld1", "200", "hectar", "AT", "Tirol", "6020", "Olympiastraße 9", 47.258006, 11.405026, "Feld in Innsbruck"); 
 INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (2, "Feld2", "400", "square meter", "AT", "Salzburg", "5020", "Karl-Höller-Straße 8", 47.789757, 13.045045, "Feld in Salzburg"); 
 INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (3, "Landteil", "15", "square kilometer", "AT", "Vorarlberg", "6700", "Ferdinand-Gassnerstraße 5", 47.159558, 9.814118, "Feld in Eisenstadt"); 
 
+/* #endregion */
 
 -- SENSORS
 CREATE TABLE IF NOT EXISTS sensors(  
@@ -166,6 +170,8 @@ CREATE TABLE IF NOT EXISTS sensors(
         locationOnField varchar(255) NULL,
         Foreign key (fieldID) REFERENCES fields(id)
     );
+
+/* #region */
 CREATE INDEX IF NOT EXISTS sensorIndex ON sensors(fieldID, type, locationOnField);
 
 INSERT IGNORE INTO sensors (id, fieldID, type, locationOnField) values (1, 1,'Temperatur', "middle"); 
@@ -179,6 +185,7 @@ INSERT IGNORE INTO sensors (id, fieldID, type, locationOnField) values (7, 2,'Fe
 
 INSERT IGNORE INTO sensors (id, fieldID, type, locationOnField) values (8, 3,'Luftqualitätssensor', "middle"); 
 
+/* #endregion */
 
 -- SENSORVALUES
 CREATE TABLE IF NOT EXISTS sensorValues(
@@ -189,8 +196,9 @@ CREATE TABLE IF NOT EXISTS sensorValues(
     Foreign KEY (sensorId) REFERENCES sensors(id)
 );
 
-CREATE INDEX IF NOT EXISTS valueIndex ON sensorValues(id, timestamp);
+/* #region */
 
+CREATE INDEX IF NOT EXISTS valueIndex ON sensorValues(id, timestamp);
 INSERT IGNORE INTO sensorValues (id, sensorId, value, timestamp) values (1, 1, "12,5", now());
 INSERT IGNORE INTO sensorValues (id, sensorId, value, timestamp) values (2, 2, "14,3", now());
 INSERT IGNORE INTO sensorValues (id, sensorId, value, timestamp) values (3, 3, "14,7", now());
@@ -201,6 +209,8 @@ INSERT IGNORE INTO sensorValues (id, sensorId, value, timestamp) values (6, 6, "
 INSERT IGNORE INTO sensorValues (id, sensorId, value, timestamp) values (7, 7, "51,4%", now());
 
 INSERT IGNORE INTO sensorValues (id, sensorId, value, timestamp) values (8, 8, "Gut", now());
+
+/* #endregion */
 
 -- SETTINGS
 CREATE TABLE IF NOT EXISTS settings(
@@ -215,3 +225,168 @@ CREATE TABLE IF NOT EXISTS settings(
     animations boolean NOT NULL,
     Foreign KEY (userID) REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS plants(
+    id int PRIMARY KEY,
+    name varchar(255) NOT NULL,
+    type ENUM("fruit", "vegetable", "fungi", "not yet set"),
+    growTime int NOT NULL,  -- days to grow from zero to harvestable
+    oneTimeHarvest boolean NULL,
+    -- Zum Beispiel bei Bäumen dauert es ja am Anfang mehrere Jahre bis diese wachsen und dann
+    -- sind sie meistens jedes Jahr erntbar
+    timeUntilNextHarvest int NULL  
+);
+
+/* #region   */
+INSERT INTO plants (id, name, type, growTime, oneTimeHarvest) values
+(0, "Alfalfa Sprouts", "not yet set", 365, 1),
+(1, "Apple", "not yet set", 365, 1),
+(2, "Apricot", "not yet set", 365, 1),
+(3, "Artichoke", "not yet set", 365, 1),
+(4, "Asian Pear", "not yet set", 365, 1),
+(5, "Asparagus", "not yet set", 365, 1),
+(6, "Atemoya", "not yet set", 365, 1),
+(7, "Avocado", "not yet set", 365, 1),
+(8, "Bamboo Shoots", "not yet set", 365, 1),
+(9, "Banana", "not yet set", 365, 1),
+(10, "Bean Sprouts", "not yet set", 365, 1),
+(11, "Beans", "not yet set", 365, 1),
+(12, "Beets", "not yet set", 365, 1),
+(13, "Belgian Endive", "not yet set", 365, 1),
+(14, "Bell Peppers", "not yet set", 365, 1),
+(15, "Bitter Melon", "not yet set", 365, 1),
+(16, "Blackberries", "not yet set", 365, 1),
+(17, "Blueberries", "not yet set", 365, 1),
+(18, "Bok Choy", "not yet set", 365, 1),
+(19, "Boniato", "not yet set", 365, 1),
+(20, "Boysenberries", "not yet set", 365, 1),
+(21, "Broccoflower", "not yet set", 365, 1),
+(22, "Broccoli", "not yet set", 365, 1),
+(23, "Brussels Sprouts", "not yet set", 365, 1),
+(24, "Cabbage", "not yet set", 365, 1),
+(25, "Cactus Pear", "not yet set", 365, 1),
+(26, "Cantaloupe", "not yet set", 365, 1),
+(27, "Carambola", "not yet set", 365, 1),
+(28, "Carrots", "not yet set", 365, 1),
+(29, "Casaba Melon", "not yet set", 365, 1),
+(30, "Cauliflower", "not yet set", 365, 1),
+(31, "Celery", "not yet set", 365, 1),
+(32, "Chayote", "not yet set", 365, 1),
+(33, "Cherimoya", "not yet set", 365, 1),
+(34, "Cherries", "not yet set", 365, 1),
+(35, "Coconuts", "not yet set", 365, 1),
+(36, "Collard Greens", "not yet set", 365, 1),
+(37, "Corn", "not yet set", 365, 1),
+(38, "Cranberries", "not yet set", 365, 1),
+(39, "Cucumber", "not yet set", 365, 1),
+(40, "Dates", "not yet set", 365, 1),
+(41, "Dried Plums", "not yet set", 365, 1),
+(42, "Eggplant", "not yet set", 365, 1),
+(43, "Endive", "not yet set", 365, 1),
+(44, "Escarole", "not yet set", 365, 1),
+(45, "Feijoa", "not yet set", 365, 1),
+(46, "Fennel", "not yet set", 365, 1),
+(47, "Figs", "not yet set", 365, 1),
+(48, "Garlic", "not yet set", 365, 1),
+(49, "Gooseberries", "not yet set", 365, 1),
+(50, "Grapefruit", "not yet set", 365, 1),
+(51, "Grapes", "not yet set", 365, 1),
+(52, "Green Beans", "not yet set", 365, 1),
+(53, "Green Onions", "not yet set", 365, 1),
+(54, "Greens", "not yet set", 365, 1),
+(55, "Guava", "not yet set", 365, 1),
+(56, "Hominy", "not yet set", 365, 1),
+(57, "Honeydew Melon", "not yet set", 365, 1),
+(58, "Horned Melon", "not yet set", 365, 1),
+(59, "Iceberg Lettuce", "not yet set", 365, 1),
+(60, "Jerusalem Artichok", "not yet set", 365, 1),
+(61, "Jicama", "not yet set", 365, 1),
+(62, "Kale", "not yet set", 365, 1),
+(63, "Kiwifruit", "not yet set", 365, 1),
+(64, "Kohlrabi", "not yet set", 365, 1),
+(65, "Kumquat", "not yet set", 365, 1),
+(66, "Leeks", "not yet set", 365, 1),
+(67, "Lemons", "not yet set", 365, 1),
+(68, "Lettuce", "not yet set", 365, 1),
+(69, "Lima Beans", "not yet set", 365, 1),
+(70, "Limes", "not yet set", 365, 1),
+(71, "Longan", "not yet set", 365, 1),
+(72, "Loquat", "not yet set", 365, 1),
+(73, "Lychee", "not yet set", 365, 1),
+(74, "Madarins", "not yet set", 365, 1),
+(75, "Malanga", "not yet set", 365, 1),
+(76, "Mandarin Oranges", "not yet set", 365, 1),
+(77, "Mangos", "not yet set", 365, 1),
+(78, "Mulberries", "not yet set", 365, 1),
+(79, "Mushrooms", "not yet set", 365, 1),
+(80, "Napa", "not yet set", 365, 1),
+(81, "Nectarines", "not yet set", 365, 1),
+(82, "Okra", "not yet set", 365, 1),
+(83, "Onion", "not yet set", 365, 1),
+(84, "Oranges", "not yet set", 365, 1),
+(85, "Papayas", "not yet set", 365, 1),
+(86, "Parsnip", "not yet set", 365, 1),
+(87, "Passion Fruit", "not yet set", 365, 1),
+(88, "Peaches", "not yet set", 365, 1),
+(89, "Pears", "not yet set", 365, 1),
+(90, "Peas", "not yet set", 365, 1),
+(91, "Peppers", "not yet set", 365, 1),
+(92, "Persimmons", "not yet set", 365, 1),
+(93, "Pineapple", "not yet set", 365, 1),
+(94, "Plantains", "not yet set", 365, 1),
+(95, "Plums", "not yet set", 365, 1),
+(96, "Pomegranate", "not yet set", 365, 1),
+(97, "Potatoes", "not yet set", 365, 1),
+(98, "Prickly Pear", "not yet set", 365, 1),
+(99, "Prunes", "not yet set", 365, 1),
+(100, "Pummelo", "not yet set", 365, 1),
+(101, "Pumpkin", "not yet set", 365, 1),
+(102, "Quince", "not yet set", 365, 1),
+(103, "Radicchio", "not yet set", 365, 1),
+(104, "Radishes", "not yet set", 365, 1),
+(105, "Raisins", "not yet set", 365, 1),
+(106, "Raspberries", "not yet set", 365, 1),
+(107, "Red Cabbage", "not yet set", 365, 1),
+(108, "Rhubarb", "not yet set", 365, 1),
+(109, "Romaine Lettuce", "not yet set", 365, 1),
+(110, "Rutabaga", "not yet set", 365, 1),
+(111, "Shallots", "not yet set", 365, 1),
+(112, "Snow Peas", "not yet set", 365, 1),
+(113, "Spinach", "not yet set", 365, 1),
+(114, "Sprouts", "not yet set", 365, 1),
+(115, "Squash", "not yet set", 365, 1),
+(116, "Strawberries", "not yet set", 365, 1),
+(117, "String Beans", "not yet set", 365, 1),
+(118, "Sweet Potato", "not yet set", 365, 1),
+(119, "Tangelo", "not yet set", 365, 1),
+(120, "Tangerines", "not yet set", 365, 1),
+(121, "Tomatillo", "not yet set", 365, 1),
+(122, "Tomato", "not yet set", 365, 1),
+(123, "Turnip", "not yet set", 365, 1),
+(124, "Ugli Fruit", "not yet set", 365, 1),
+(125, "Water Chestnuts", "not yet set", 365, 1),
+(126, "Watercress", "not yet set", 365, 1),
+(127, "Watermelon", "not yet set", 365, 1),
+(128, "Waxed Beans", "not yet set", 365, 1),
+(129, "Yams", "not yet set", 365, 1),
+(130, "Yellow Squash", "not yet set", 365, 1),
+(131, "Yuca/Cassava", "not yet set", 365, 1),
+(132, "Zucchini Squash", "not yet set", 365, 1);
+/* #endregion   )*/
+
+CREATE TABLE IF NOT EXISTS plantedCrop(
+    id int PRIMARY KEY AUTO_INCREMENT,
+    fieldId int NOT NULL,
+    plantedDate TIMESTAMP NOT NULL,
+    plantId int NOT NULL,
+    FOREIGN KEY (fieldId) REFERENCES fields(id),
+    FOREIGN KEY (plantId) REFERENCES plants(id)
+);
+
+SET @MIN = "2022-04-01 00:53:27";
+SET @MAX = now();
+
+INSERT INTO plantedCrop (fieldId, plantedDate, plantId) values 
+(1, TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN), 1),  -- Apple
+(2, TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN), 37),  -- Corn
+(3, TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN), 39);  -- cucumber

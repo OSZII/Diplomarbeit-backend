@@ -80,36 +80,12 @@ app.get("/:parameters?/:downloadSpecific?",verifyToken , async (req, res) => {
   })
 });
 
-// Get fields by name or id
-// app.get("/:idOrName", async (req, res) => {
-//   let idOrName = req.params.idOrName;
-//   if (!isNaN(idOrName)) {
-//     if (idOrName > 0) {
-//       let receivedField = await field.getById(idOrName);
-//       if(receivedField.length != 0){
-//         res
-//           .status(200)
-//           .send(receivedField);
-//       } else res.status(404).send(Help.notFound);
-//     } else res.status(400).send(Help.largerThanZero);
-//   } else {
-//     // Namesearch
-//     if (idOrName.length >= 3) {
-//       let receivedField = await field.getByName(idOrName);
-//       if(receivedField.length != 0){
-//         res
-//         .status(200)
-//         .send(receivedField);
-//       } else res.status(404).send(Help.notFound);
-//     } else res.status(400).send(Help.longerThan + " 3");
-//   }
-// });
-
 // Creates field or multiple fields
 app.post("/",verifyToken , async (req, res) => {
   jwt.verify(req.token, "secretkey", async (err, authData) => {
     if(err) res.sendStatus(403);
     else{
+      console.log("post")
       let fields = req.body;
       if (Array.isArray(fields)) {
         // validate if each object in array has all properties
@@ -142,15 +118,15 @@ app.post("/",verifyToken , async (req, res) => {
               fields.unit,
               fields.country,
               fields.federalState,
-              fields.postalCode,
               fields.street,
               fields.description
             ])
           ) {
             if (fields.country.length == 2) {
-              let geoData = (await getGeoData(fields.country, fields.federalState, fields.postalCode, fields.street));
-              fields.latitude = geoData[0];
-              fields.longitude = geoData[1];
+              console.log("country 2 lang")
+              // let geoData = (await getGeoData(fields.country, fields.federalState, fields.postalCode, fields.street));
+              fields.latitude = -1// geoData[0];
+              fields.longitude = -1// geoData[1];
               res.status(200).send(await field.createField(fields));
             } else res.status(400).send("Countrycode length maximum 2");
           } else
@@ -197,7 +173,6 @@ function verifyToken(req, res, next){
     const bearerToken = bearer[1];
 
     req.token = bearerToken;
-
     next();
 
   }else {

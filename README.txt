@@ -20,3 +20,5 @@ Bei users vermeiden von unique error, wenn jemand die gleiche EMAIL 2 mal schick
 Eventuell wenn bei Sensor nach id gesucht 2 Objekte liefern eines mit der id und anderes mit FieldID
 
 Bei sensorValues timestamp suche implementieren
+
+Field hat PflanzenId und nach ernte wird Pflanzenid auf 0 gesetzt

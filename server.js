@@ -6,6 +6,8 @@
 // db.query("INSERT INTO users (username, role) values ('testuser', 'user');", "Füge User Hinzu!");
 const path = require("path")
 const bcrypt = require("bcrypt");
+var cors = require('cors')
+
 const express = require('express');
 const app = express();
 
@@ -22,9 +24,10 @@ const jwt = require("jsonwebtoken");
 
 // Erlaubt es URL encoded Data zu verwenden, weil ansonsten ist req bei post immer undefined
 // Mit dem allein Funktioniert json aber nicht
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 // Mit dieser Zeile geht dann auch json
 app.use(express.json());
+app.use(cors());
 
 app.use(express.static("public"))
 
@@ -38,6 +41,7 @@ app.get("/", (req, res) => {
 })
 
 app.post("/login", async (req, res) => {
+    console.log("login");
     let username = req.body.username;
     let password = req.body.password;
     
@@ -47,7 +51,7 @@ app.post("/login", async (req, res) => {
         const loginUser = (await usersObject.getByName(username))[0];
         
         if(bcrypt.compareSync(password, loginUser.password)){
-            jwt.sign({user: loginUser}, "secretkey", {expiresIn: '30s'}, (err, token) => {
+            jwt.sign({user: loginUser}, "secretkey"/* , {expiresIn: '30s'} */, (err, token) => {
                 res.json({token: token})
             })
         }else{
