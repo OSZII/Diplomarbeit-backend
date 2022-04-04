@@ -19,6 +19,7 @@ const sensors = require("./Routes/sensors");
 const sensorValues = require("./Routes/sensorValues");
 
 const jwt = require("jsonwebtoken");
+const { default: axios } = require("axios");
 
 // console.log(connection.state)
 
@@ -64,6 +65,31 @@ app.post("/login", async (req, res) => {
     // res.send(loginUser)
 })
 
+app.get("/weatherforecast", verifyToken, (req, res) => {
+    jwt.verify(req.token, "secretkey", async (err, authData) => {
+        if(err) res.sendStatus(403);
+        else{
+            // hier kommt der code hinein
+            console.log(req.headers.latitude)
+            console.log(req.headers.longitude)
+            let weatherApiKey = process.env.Openweather_API_KEY;
+            axios({
+                method: "GET",
+                url: `https://api.openweathermap.org/data/2.5/onecall?lat=${req.headers.latitude}&lon=${req.headers.longitude}&exclude=current,minutely,alerts,hourly&appid=${process.env.Openweather_API_KEY}&units=metric`,
+            }).then((response) => {
+                console.log("ok")
+                // console.log(response)
+                // res.json(response).status(200);
+                res.send(response.data)
+                // console.log("not ok")
+            }).catch((error) => {
+                console.log(error)
+                console.log("Fehlermeldung")
+            });
+        }
+    })
+})
+
 app.post("/hashpassword", (req, res) => {
     let password = req.body.password;
 
@@ -99,6 +125,28 @@ app.delete("*", (req, res) => {
 
 // console.log(process.env.NODE_ENV)
 // console.log(process.env.GEO_API)
+// Verify Token
+function verifyToken(req, res, next){
+    // Get auth header value
+    const brearerHeader = req.headers["authorization"];
+  
+    // Check if bearer is undefined
+    if(typeof brearerHeader !== "undefined"){
+      // Token von bearer trennen
+      const bearer = brearerHeader.split(" ");
+      
+      // Get token
+      const bearerToken = bearer[1];
+  
+      req.token = bearerToken;
+      next();
+  
+    }else {
+      // forbidden
+      res.sendStatus(403)
+    }
+  }
+
 
 const PORT = process.env.PORT || 3000;
 

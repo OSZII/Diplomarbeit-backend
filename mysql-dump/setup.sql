@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS floweraufdauer;
 
-CREATE DATABASE IF NOT EXISTS floweraufdauer;
+CREATE DATABASE IF NOT EXISTS floweraufdauer CHARACTER SET utf8;
 
 -- for docker Database;
 USE floweraufdauer;
@@ -161,7 +161,6 @@ INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCo
 INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (3, "Landteil", "15", "square kilometer", "AT", "Vorarlberg", "6700", "Ferdinand-Gassnerstraße 5", 47.159558, 9.814118, "Feld in Eisenstadt"); 
 
 /* #endregion */
-
 -- SENSORS
 CREATE TABLE IF NOT EXISTS sensors(  
         id int AUTO_INCREMENT PRIMARY KEY NOT NULL,  
