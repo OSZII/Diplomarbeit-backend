@@ -46,9 +46,8 @@ app.post("/login", async (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
     
-    if(username == undefined | password == undefined){
-        res.sendStatus(400);
-    }else {
+    if(username == undefined | password == undefined)res.sendStatus(400);
+    else {
         const loginUser = (await usersObject.getByName(username))[0];
         
         if(bcrypt.compareSync(password, loginUser.password)){
@@ -59,10 +58,6 @@ app.post("/login", async (req, res) => {
             res.sendStatus(403);
         }
     }
-
-    
-
-    // res.send(loginUser)
 })
 
 app.get("/weatherforecast", verifyToken, (req, res) => {
