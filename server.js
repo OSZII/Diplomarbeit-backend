@@ -46,16 +46,18 @@ app.post("/login", async (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
     
-    if(username == undefined | password == undefined)res.sendStatus(400);
+    if(username == undefined | password == undefined) res.sendStatus(400);
     else {
         const loginUser = (await usersObject.getByName(username))[0];
-        
-        if(bcrypt.compareSync(password, loginUser.password)){
-            jwt.sign({user: loginUser}, "secretkey"/* , {expiresIn: '30s'} */, (err, token) => {
-                res.json({token: token})
-            })
-        }else{
-            res.sendStatus(403);
+        if(loginUser == undefined) res.sendStatus(400);
+        else{
+            if(bcrypt.compareSync(password, loginUser.password)){
+                jwt.sign({user: loginUser}, "secretkey"/* , {expiresIn: '30s'} */, (err, token) => {
+                    res.json({token: token})
+                })
+            }else{
+                res.sendStatus(403);
+            }
         }
     }
 })
@@ -81,6 +83,15 @@ app.get("/weatherforecast", verifyToken, (req, res) => {
                 console.log(error)
                 console.log("Fehlermeldung")
             });
+        }
+    })
+})
+
+app.get("/countrynames", verifyToken, (req, res) => {
+    jwt.verify(req.token, "secretkey", async (err, authData) => {
+        if(err) res.sendStatus(403);
+        else{
+            
         }
     })
 })
