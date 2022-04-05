@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS floweraufdauer;
 
-CREATE DATABASE IF NOT EXISTS floweraufdauer CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS floweraufdauer;
 
 -- for docker Database;
 USE floweraufdauer;

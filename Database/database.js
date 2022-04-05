@@ -1,14 +1,19 @@
 var mariadb = require('mariadb');
 
+const clc = require("cli-color");
+
 let host, user, password, database;
+
+
 
 if(process.env.NODE_ENV == "development"){
 // Test Database
-    host = "127.0.0.1"
+    // host = "127.0.0.1"
+    host = "localhost"
     user = "root"
     password = "password"
     database = "floweraufdauer"
-    console.log("Database connection set to DEVELOPMENT")
+    console.log(clc.blue("Database connection set to DEVELOPMENT"))
 
 }else if(process.env.NODE_ENV  == "production"){
   // // Production Database
@@ -16,9 +21,9 @@ if(process.env.NODE_ENV == "development"){
     user = process.env.DATABASE_USER
     password = process.env.DATABASE_PASSWORD
     database = process.env.DATABASE_DATABASE
-    console.log("Database connection set to PRODUCTION")
+    console.log(clc.green("Database connection set to PRODUCTION"))
 }else {
-  console.log("Check NODE_ENV enviroment variable")
+  console.log(clc.red("Check NODE_ENV enviroment variable"))
 }
 
 const pool = mariadb.createPool({
