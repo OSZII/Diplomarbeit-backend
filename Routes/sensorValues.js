@@ -19,10 +19,11 @@ app.get("/:parameters?/:downloadSpecific?",verifyToken ,async (req, res) => {
   jwt.verify(req.token, "secretkey", async (err, authData) => {
     if(err) res.sendStatus(403);
     else{
+      console.log("sensorvalues")
       let parameters = req.params.parameters;
       let downloadSpecific = req.params.downloadSpecific;
       let sensorValues = await sensorValue.getAll();
-
+      console.log(sensorValues)
       // create users.csv
       if (parameters == "download") {
         handler.createAndSendFile("sensorValues", "csv", sensorValues, res);

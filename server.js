@@ -67,14 +67,14 @@ app.get("/weatherforecast", verifyToken, (req, res) => {
         if(err) res.sendStatus(403);
         else{
             // hier kommt der code hinein
-            console.log(req.headers.latitude)
-            console.log(req.headers.longitude)
+            // console.log(req.headers.latitude)
+            // console.log(req.headers.longitude)
             let weatherApiKey = process.env.Openweather_API_KEY;
             axios({
                 method: "GET",
                 url: `https://api.openweathermap.org/data/2.5/onecall?lat=${req.headers.latitude}&lon=${req.headers.longitude}&exclude=current,minutely,alerts,hourly&appid=${process.env.Openweather_API_KEY}&units=metric`,
             }).then((response) => {
-                console.log("ok")
+                // console.log("ok")
                 // console.log(response)
                 // res.json(response).status(200);
                 res.send(response.data)
