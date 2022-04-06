@@ -30,6 +30,11 @@ app.get("/:parameters?/:downloadSpecific?",verifyToken ,async (req, res) => {
       } else if (parameters == undefined) {
         // userausgabe
         res.status(200).send(sensorValues);
+      } else if(parameters == "fields"){
+          console.log("sensorvalues/fields")
+          let values = await sensorValue.getAllByField(); 
+          res.send(values).status(200);
+
       } else {
         if (!isNaN(parameters)) {
           // #region Suche nach user mit id

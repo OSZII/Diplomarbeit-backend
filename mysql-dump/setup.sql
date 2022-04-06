@@ -176,13 +176,13 @@ CREATE INDEX IF NOT EXISTS sensorIndex ON sensors(fieldID, type, locationOnField
 INSERT IGNORE INTO sensors (id, fieldID, type, locationOnField) values 
 /* id, fieldId, type locationOnField  */
 (1, 1,'Temperatur', "middle"),
-(2, 1,'Temperatur', "top left"), 
-(3, 1,'Temperatur', "top right"), 
-(4, 2,'Temperatur', "bottom left"), 
+(2, 2,'Temperatur', "middle"), 
+(3, 3,'Temperatur', "middle");
+/* (4, 2,'Temperatur', "bottom left"), 
 (5, 2,'Temperatur', "bottom right"), 
 (6, 2,'Temperatur', "middle"), 
 (7, 3,'Temperatur',  "top left"), 
-(8, 3,'Temperatur', "middle"); 
+(8, 3,'Temperatur', "middle");  */
 
 /* #endregion */
 

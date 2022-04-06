@@ -113,9 +113,7 @@ app.post("/",verifyToken ,async (req, res) => {
               sensors.locationOnField
             ])
           ) {
-            if (sensors.country.length == 2) {
-              res.status(200).send(await sensor.createField(sensors));
-            } else res.status(400).send("Countrycode length maximum 2");
+              res.status(200).send(await sensor.createSensor(sensors));
           } else
             res
               .status(400)

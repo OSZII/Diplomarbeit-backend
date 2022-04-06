@@ -15,7 +15,8 @@ class Sensor{
         // TODO: validieren
         // Check first if fieldId exists
         let conn = await pool.getConnection();
-        let sql = "INSERT INTO sensors (fieldId, type, locationOnField) VALUES (?, ?, ?);";
+        // console.log(sensor)
+        let sql = "INSERT INTO sensors (fieldID, type, locationOnField) VALUES (?, ?, ?);";
         let result = await conn.query(sql, [sensor.fieldID, sensor.type, sensor.locationOnField]);
         conn.end();
         return result;

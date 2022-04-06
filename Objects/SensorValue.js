@@ -56,6 +56,14 @@ class SensorValue {
         return results;
     }
 
+    static async getAllByField(){
+        let conn = await pool.getConnection();
+        let sql = "SELECT f.id as 'fieldId', s.id as 'sensorId', sv.value, sv.timestamp FROM fields f LEFT JOIN sensors s ON(f.id = s.fieldID) LEFT JOIN sensorValues sv ON (s.id = sv.sensorId)";
+        let results = await conn.query(sql);
+        conn.end();
+        return results;
+    }
+
     // Update
     static async update(sensorValue){
         // TODO: authentifizieren
