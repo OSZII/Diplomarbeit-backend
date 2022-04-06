@@ -178,10 +178,10 @@ INSERT IGNORE INTO sensors (id, fieldID, type, locationOnField) values
 (1, 1,'Temperatur', "middle"),
 (2, 1,'Temperatur', "top left"), 
 (3, 1,'Temperatur', "top right"), 
-(4, 1,'Temperatur', "bottom left"), 
-(5, 1,'Temperatur', "bottom right"), 
+(4, 2,'Temperatur', "bottom left"), 
+(5, 2,'Temperatur', "bottom right"), 
 (6, 2,'Temperatur', "middle"), 
-(7, 2,'Temperatur',  "top left"), 
+(7, 3,'Temperatur',  "top left"), 
 (8, 3,'Temperatur', "middle"); 
 
 /* #endregion */

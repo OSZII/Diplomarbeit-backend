@@ -23,7 +23,7 @@ app.get("/:parameters?/:downloadSpecific?",verifyToken ,async (req, res) => {
       let parameters = req.params.parameters;
       let downloadSpecific = req.params.downloadSpecific;
       let sensorValues = await sensorValue.getAll();
-      console.log(sensorValues)
+      // console.log(sensorValues)
       // create users.csv
       if (parameters == "download") {
         handler.createAndSendFile("sensorValues", "csv", sensorValues, res);
