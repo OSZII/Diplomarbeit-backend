@@ -4,7 +4,7 @@ describe('Get SensorValue', () => {
 
     test("getAll() und checkt die länge", async () => {
         let returnedSensorValue = await sensorValue.getAll();
-        expect(returnedSensorValue.length).toBe(8);
+        expect(returnedSensorValue.length).toBe(192);
     });
 
     test("getById(3) und schaut ob die ID 3 ist", async () => {

@@ -12,8 +12,8 @@ describe("Get Field", () => {
   });
 
   test("getByName('teil') Checkt ob er den Field mit dem namen oszi findet", async () => {
-    let returnedField = await field.getByName("teil");
-    expect(returnedField[0].name).toBe("Landteil");
+    let returnedField = await field.getByName("Feld 1");
+    expect(returnedField[0].name).toBe("Feld 1 von Bauer Mair");
   });
 });
 
