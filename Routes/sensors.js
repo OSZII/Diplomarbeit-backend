@@ -17,6 +17,7 @@ let objectProperties = [
 
 // Gibt alle Sensoren zurück
 app.get("/:parameters?/:downloadSpecific?",verifyToken ,async (req, res) => {
+  console.log("Sensors Requested")
   jwt.verify(req.token, "secretkey", async (err, authData) => {
     if(err) res.sendStatus(403);
     else{
@@ -85,6 +86,7 @@ app.get("/:parameters?/:downloadSpecific?",verifyToken ,async (req, res) => {
 
 // erstellt einen oder mehrere neue Sensoren
 app.post("/",verifyToken ,async (req, res) => {
+  console.log("Sensor created")
   jwt.verify(req.token, "secretkey", async (err, authData) => {
     if(err) res.sendStatus(403);
     else{
