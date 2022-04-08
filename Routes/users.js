@@ -24,38 +24,47 @@ app.get("/:parameters?/:downloadSpecific?", verifyToken, async (req, res) => {
   jwt.verify(req.token, "secretkey", async (err, authData) => {
     if (err) res.sendStatus(403);
     else {
-      // let parameters = req.params.parameters; // erste Parameter
+      let parameters = req.params.parameters; // erste Parameter
       let downloadSpecific = req.params.downloadSpecific; // zweiter Parameter
-      let users = await user.getAll();
 
-      // try {
-      //   parameters = parseInt(parameters);
-      // } catch (error) {
-      //   console.log("Keine Number")
-      // }
+      // Falls erster Parameter eine Zahl, dann wird sie hier umgewandelt
+      try {
+        let temp = parseInt(parameters);
+        if(typeof temp === "number") parameters = temp;
+      } catch (error) {
+        console.log("Parameter keine Number");
+      }
 
-      let parameters = 2
-
-      console.log(typeof parameters)
-
+      console.log("zweiter Parameter: ", downloadSpecific)
       console.log(parameters)
 
-      switch (parameters) {
-        case undefined:
-          res.send(users).status(200);
+      switch (true) {
+        case typeof parameters == "undefined":
+          res.send(await user.getAll()).status(200);
           break;
-        case "download":
+        case parameters == "download":
           // creates file for all users
-          handler.createAndSendFile("users", "csv", users, res);
+          handler.createAndSendFile("users", "csv", await user.getAll(), res);
           break;
-        case parameters === 'number':
-          console.log("Number getById 1");
+        case typeof parameters === "number":
+          // Wenn eine id eingegeben wurde
+          console.log("NUMBER")
+          switch (true) {
+            case typeof downloadSpecific == "undefined":
+              // GetById
+              res.send(await user.getById(parameters)).status(200);
+            case downloadSpecific === "download":
+              // Download By Id
+              handler.createAndSendFile("user_" + parameters, "csv", await user.getById(parameters), res);
+              break;
+            default:
+              // Ungültiger Wert
+              res.send("Ungültiger zweiter Parameter nur download möglich").status(400);
+          }
           break;
-        case (typeof parameters === 'number'):
-          console.log("Number getById 2");
-          break;
-        case (parameters instanceof Number):
-          console.log("Number getById 3");
+        default:
+          // parameter ist string
+          res.send(await user.getByName(parameters)).status(200);
           break;
       }
       // create users.csv

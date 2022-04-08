@@ -57,8 +57,17 @@ class User{
     static async getByName(name){
         // TODO: authentifizieren
         let conn = await pool.getConnection();
-        let sql = `SELECT * FROM users WHERE username LIKE CONCAT('%', ?, '%') OR firstname LIKE CONCAT('%', ?, '%') OR lastname LIKE CONCAT('%', ?, '%');`;
+        let sql = `SELECT * FROM users WHERE username LIKE CONCAT('%', ?, '%') OR firstname LIKE CONCAT('%', ?, '%') OR lastname LIKE CONCAT('%', ?, '%')`;
         let results = await conn.query(sql, [name, name, name]);
+        conn.end();
+        return results;
+    }
+
+    static async getByUsername(username){
+        // TODO: authentifizieren
+        let conn = await pool.getConnection();
+        let sql = `SELECT * FROM users WHERE username LIKE CONCAT('%', ?, '%')`;
+        let results = await conn.query(sql, [username]);
         conn.end();
         return results;
     }
