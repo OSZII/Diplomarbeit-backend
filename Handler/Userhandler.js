@@ -1,88 +1,139 @@
 const { use } = require("bcrypt/promises");
 const fileHandler = require("../Objects/FileHandler")
 
-async function handleId(parameters, downloadSpecific, user, res){
-    switch(true){
-        case typeof downloadSpecific == "undefined":
-            res.send(await user.getById(parameters)).status(200);
-            break;
-        case downloadSpecific == "download":
-            fileHandler.createAndSendFile("user_" + parameters, "csv", await user.getById(parameters), res);
-            break;
-        default:
-            res.send("Ungültiger zweiter Parameter nur download möglich").status(400);
-            break;
+class Userhandler {
+
+    userClass;
+    properties;
+
+    constructor(userClass, properties){
+        this.userClass = userClass;
+        this.properties = properties;
+        // console.log("userClass set")
+        // console.log(this.userClass)
     }
-}
 
-async function handleName(parameters, downloadSpecific, user, res){
-    switch (true) {
-        case typeof downloadSpecific == "undefined":
-            res.send(await user.getByName(parameters)).status(200);
-            break;
-        case downloadSpecific == "download":
-            fileHandler.createAndSendFile("users_" + parameters, "csv", await user.getByName(parameters), res);
-            break;
-        default:
-            res.send("Ungültiger zweiter Parameter nur download möglich").status(400);
-            break;
-    }
-}
-
-function checkIfHasAllProperties(object, properties){
-    let hasAllProperties = true;
-      for (let i = 0; i < properties.length; i++) {
-        if (!object.hasOwnProperty(properties[i])) hasAllProperties = false;
-      }
-      return hasAllProperties;
-}
-
-function checkValues(user){
-    let valuesOk = true;
-    Object.values(user).forEach((values) => {
-        // console.log(valuesOk)
-        // console.log(values)
-        if(values == null){
-            // isOk
-        }else if(values.length >= 5){
-            // auch ok
-        }else{
-            valuesOk = false;
+    async handleId(parameters, downloadSpecific, res){
+        switch(true){
+            case typeof downloadSpecific == "undefined":
+                res.send(await this.userClass.getById(parameters)).status(200);
+                break;
+            case downloadSpecific == "download":
+                fileHandler.createAndSendFile("user_" + parameters, "csv", await this.userClass.getById(parameters), res);
+                break;
+            default:
+                res.send("Ungültiger zweiter Parameter nur download möglich").status(400);
+                break;
         }
-    })
+    }
+    
+    async handleName(parameters, downloadSpecific, user, res){
+        switch (true) {
+            case typeof downloadSpecific == "undefined":
+                res.send(await user.getByName(parameters)).status(200);
+                break;
+            case downloadSpecific == "download":
+                fileHandler.createAndSendFile("users_" + parameters, "csv", await user.getByName(parameters), res);
+                break;
+            default:
+                res.send("Ungültiger zweiter Parameter nur download möglich").status(400);
+                break;
+        }
+    }
+    
+    checkIfHasAllProperties(object){
+        let hasAllProperties = true;
+          for (let i = 0; i < this.properties.length; i++) {
+            if (!object.hasOwnProperty(this.properties[i])) hasAllProperties = false;
+          }
+          return hasAllProperties;
+    }
+    
+    checkValues(user){
+        let valuesOk = true;
+        Object.values(user).forEach((values) => {
+            if(!(values == null || values.length >= 5)) valuesOk = false;
+        })
+        return valuesOk
+    }
+    
+    // async createMultipleUsers(users, res){
+    // 
+    // }
+    
+    async userAlreadyExistsByEmail(email){
+        let userExists = false;
+        console.log("email")
+        console.log(email)
+        let result = await this.userClass.getByEmail(email);
+        if(!(typeof result[0] === "undefined")) userExists = true;
+        return userExists
+    }
+    
+    async userAlreadyExistsById(id){
+        let userExists = false;
+        let result = await this.userClass.getById(id);
+        if(!(typeof result[0] === "undefined")) userExists = true;
+        return userExists
+    }
 
-    return valuesOk
+    async userAlreadyExistsByUsername(username){
+        let userExists = false;
+        let result = await this.userClass.getByUsername(username);
+        if(!(typeof result[0] === "undefined")) userExists = true;
+        return userExists
+    }
+    
+    async userAlreadyExists(userBody){
+        console.log("userBody")
+        console.log(userBody)
+        console.log("userBody")
+        return (await this.userAlreadyExistsByEmail(userBody.email)) || (await this.userAlreadyExistsByUsername(userBody.username));
+    }
+
+    async updateUser(userBody,id, res){
+        // check ob der user mit derid existiert
+        if(this.userAlreadyExistsById(id)){
+            if(this.checkIfHasAllProperties(userBody)){
+                if(this.checkValues(userBody)){
+                    res.send(await this.userClass.update(userBody, id)).status(200)
+                } else res.send("Invalid Values")
+            } else res.send("Not all properties given").status(400);
+        } else res.send("User existiert nicht").status(400);
+    }
+    
+    async createUser(userBody, res){
+        if(this.checkIfHasAllProperties(userBody)){
+            console.log("properties ok")
+            if(this.checkValues(userBody)){
+                if(!(await this.userAlreadyExists(userBody))){
+                    res.send(await this.userClass.createUser(userBody)).status(200);
+                }else  res.send("Email or Username already exists").status(400)
+            } else res.status(400).send("Values can't be empty")
+        } else res.status(400).send("Not All Properties given")
+    }
+
+    async deleteUserById(id, res){
+        try {
+            id = parseInt(id);
+        } catch (error) {
+            console.log("Konnte nicht geparsed werden!");
+        }
+
+        if(isNaN(id)){
+            res.send("Id is not a Number").status(400)
+        } else {
+            if(this.userAlreadyExistsById(id)){
+                res.send(await this.userClass.deleteById(id)).status(200)
+            } else res.send("Existiert nicht").status(400)
+        }
+        
+
+    }
+
 }
 
-async function createMultipleUsers(users, res){
-
-}
-
-async function userAlreadyExists(email, userClass){
-    let userExists = false;
-    let result = await userClass.getByEmail(email);
-    if(!(typeof result[0] == "undefined")) userExists = true;
-    console.log("userexists: " + userExists);
-    return userExists
-}
-
-async function createUser(user, userBody, properties, res){
-    // console.log(userBody)
-    if(checkIfHasAllProperties(userBody, properties)){
-        console.log("properties ok")
-        if(checkValues(userBody)){
-            if(!userAlreadyExists(userBody.email, user)){
-                res.send(await user.createUser(userBody)).status(200);
-            }else  res.send("Email already exists").status(400)
-        } else res.status(400).send("Values can't be empty")
-    } else res.status(400).send("Not All Properties given")
-}
 
 
-module.exports = {
-    handleId: handleId,
-    handleName: handleName,
-    checkIfHasAllProperties: checkIfHasAllProperties,
-    createMultipleUsers: createMultipleUsers,
-    createUser: createUser,
-}
+
+module.exports = Userhandler;

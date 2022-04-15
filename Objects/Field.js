@@ -50,10 +50,10 @@ class Field{
         return results;
     }
     // Update
-    static async update(field){
+    static async update(field, id){
         let conn = await pool.getConnection();
         let sql = "UPDATE fields SET name = ?, area = ?, unit = ?, country = ?, federalState = ?, postalCode = ?, street = ?, latitude = ?, longitude = ?, description = ? WHERE id = ?;";
-        let result = await conn.query(sql, [field.name, field.area, field.unit, field.country, field.federalState, field.postalCode, field.street, field.latitude, field.longitude, field.description, field.id]);
+        let result = await conn.query(sql, [field.name, field.area, field.unit, field.country, field.federalState, field.postalCode, field.street, field.latitude, field.longitude, field.description, id]);
         conn.end();
         return result;
     }
@@ -67,90 +67,6 @@ class Field{
         return result;
     }
 
-    // static async deleteAll(){
-    //     let conn = await pool.getConnection();
-    //     let sql = "DELETE FROM fields WHERE id > 3";
-    //     let result = await conn.query(sql);
-    //     conn.end();
-    //     return result;
-    // }
-
-    //#region Getter & Setter
-    // getId(){
-    //     return this.#id;
-    // }
-
-    // setId(id){
-    //     this.#id = id;
-    // }
-
-    // getName(){
-    //     return this.#name;
-    // }
-
-    // setName(name){
-    //     this.#name = name;
-    // }
-
-    // getArea(){
-    //     return this.#area;
-    // }
-
-    // setArea(area){
-    //     this.#area = area;
-    // }
-
-    // getUnit(){
-    //     return this.#unit;
-    // }
-
-    // setUnit(unit){
-    //     // check if unit is one of the following: "square meter", "hectar", "square kilometer", "square feet", "square yard", "acre"
-    //     if(unit == "square meter" || unit == "hectar" || unit == "square kilometer" || unit == "square feet" || unit == "square yard" || unit == "acre") this.#unit = unit;
-    //     else return false;
-    // }
-
-    // getCountry(){
-    //     return this.#country;
-    // }
-
-    // setCountry(country){
-    //     this.#country = country;
-    // }
-
-    // getFederalState(){
-    //     return this.#federalState;
-    // }
-
-    // setFederalState(federalState){
-    //     this.#federalState = federalState;
-    // }
-
-    // getLatitude(){
-    //     return this.#latitude;
-    // }
-
-    // setLatitude(latitude){
-    //     this.#latitude = latitude;
-    // }
-
-    // getLongitude(){
-    //     return this.#longitude;
-    // }
-
-    // setLongitude(longitude){
-    //     this.#longitude = longitude;
-    // }
-
-    // getDescription(){
-    //     return this.#description;
-    // }
-
-    // setDescription(description){
-    //     this.#description = description;
-    // }
-    
-    //#endregion
 }
 
 module.exports = Field

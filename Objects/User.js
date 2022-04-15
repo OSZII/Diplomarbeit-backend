@@ -75,17 +75,17 @@ class User{
     static async getByEmail(email){
         // TODO: authentifizieren
         let conn = await pool.getConnection();
-        let sql = `SELECT * FROM users WHERE email = ? ;`;
+        let sql = `SELECT * FROM users WHERE email Like CONCAT('%', ?, '%')`;
         let results = await conn.query(sql, [email]);
         conn.end();
         return results;
     }
 
     // Update
-    static async update(user){
+    static async update(user, Id){
         let conn = await pool.getConnection();
         let sql = "UPDATE users SET username = ?, firstname = ?, lastname = ?, email = ?, password = ?, role = ?, authToken = ? WHERE id = ?;";
-        let result = await conn.query(sql, [user.username, user.firstname, user.lastname, user.email, user.password, user.role, user.authToken, user.id]);
+        let result = await conn.query(sql, [user.username, user.firstname, user.lastname, user.email, user.password, user.role, user.authToken, Id]);
         conn.end();
         return result;
     }
@@ -107,80 +107,6 @@ class User{
         conn.end();
         return result;
     }
-
-    // static async deleteAll(){
-    //     let conn = await pool.getConnection();
-    //     let sql = "DELETE FROM users WHERE id;";
-    //     let result = await conn.query(sql);
-    //     conn.end();
-    //     return result;
-    // }
-
-    //#region Getter & Setter
-    getId(){
-        return this.#id;
-    }
-
-    setId(id){
-        this.#id = id;
-    }
-
-    getUsername(){
-        return this.#username;
-    }
-
-    setUsername(username){
-        this.#username = username;
-    }
-
-    getFirstname(){
-        return this.#firstname;
-    }
-
-    setFirstname(firstname){
-        this.#firstname = firstname;
-    }
-
-    getLastname(){
-        return this.#lastname;
-    }
-
-    setLastname(lastname){
-        this.#lastname = lastname;
-    }
-
-    getEmail(){
-        return this.#email;
-    }
-
-    setEmail(email){
-        this.#email = email;
-    }
-
-    getPassword(){
-        return this.#password;
-    }
-
-    setPassword(password){
-        this.#password = password;
-    }
-
-    getRole(){
-        return this.#role;
-    }
-
-    setRole(role){
-        this.#role = role;
-    }
-
-    getAuthToken(){
-        return this.#authToken;
-    }
-
-    setAuthToken(authToken){
-        this.#authToken = authToken;
-    }
-    //#endregion
 
 }
 
