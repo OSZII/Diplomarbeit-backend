@@ -16,22 +16,22 @@ class Sensor{
         // Check first if fieldId exists
         let conn = await pool.getConnection();
         // console.log(sensor)
-        let sql = "INSERT INTO sensors (fieldID, type, locationOnField) VALUES (?, ?, ?);";
-        let result = await conn.query(sql, [sensor.fieldID, sensor.type, sensor.locationOnField]);
+        let sql = "INSERT INTO sensors (fieldId, type, locationOnField) VALUES (?, ?, ?);";
+        let result = await conn.query(sql, [sensor.fieldId, sensor.type, sensor.locationOnField]);
         conn.end();
         return result;
     }
 
     //standard
-    static async createMultipleSensors(sensors){
-        // TODO: authentifizieren
-        // TODO: validieren
-        let results = [];
-        for(let i = 0; i < sensors.length; i++){
-            results.push(await this.createSensor(sensors[i]));
-        }
-        return results
-    }
+    // static async createMultipleSensors(sensors){
+    //     // TODO: authentifizieren
+    //     // TODO: validieren
+    //     let results = [];
+    //     for(let i = 0; i < sensors.length; i++){
+    //         results.push(await this.createSensor(sensors[i]));
+    //     }
+    //     return results
+    // }
 
     // Read
     //standard
@@ -50,6 +50,15 @@ class Sensor{
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM sensors WHERE id = ?;";
         let result = await conn.query(sql, [id]);
+        conn.end();
+        return result;
+    }
+
+    static async getByFieldId(fieldId){
+        // TODO: authentifizieren
+        let conn = await pool.getConnection();
+        let sql = "SELECT * FROM sensors WHERE fieldId = ?;";
+        let result = await conn.query(sql, [fieldId]);
         conn.end();
         return result;
     }

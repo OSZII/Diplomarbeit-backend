@@ -164,16 +164,16 @@ INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCo
 -- SENSORS
 CREATE TABLE IF NOT EXISTS sensors(  
         id int AUTO_INCREMENT PRIMARY KEY NOT NULL,  
-        fieldID int NOT NULL,
+        fieldId int NOT NULL,
         type varchar(255) NULL,
         locationOnField varchar(255) NULL,
-        Foreign key (fieldID) REFERENCES fields(id)
+        Foreign key (fieldId) REFERENCES fields(id)
     );
 
 /* #region */
-CREATE INDEX IF NOT EXISTS sensorIndex ON sensors(fieldID, type, locationOnField);
+CREATE INDEX IF NOT EXISTS sensorIndex ON sensors(fieldId, type, locationOnField);
 
-INSERT IGNORE INTO sensors (id, fieldID, type, locationOnField) values 
+INSERT IGNORE INTO sensors (id, fieldId, type, locationOnField) values 
 /* id, fieldId, type locationOnField  */
 (1, 1,'Temperatur', "middle"),
 (2, 2,'Temperatur', "middle"), 
@@ -230,7 +230,7 @@ INSERT IGNORE INTO sensorValues (sensorId, value, timestamp) values(1, round(22.
 -- SETTINGS
 CREATE TABLE IF NOT EXISTS settings(
     id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    userID int NOT NULL,
+    userId int NOT NULL,
     displayedUsername varchar(255) NOT NULL,
     primaryColor varchar(255) NOT NULL,
     secondaryColor varchar(255) NOT NULL,
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS settings(
     textColor varchar(255) NOT NULL,
     fontSize varchar(255) NOT NULL,
     animations boolean NOT NULL,
-    Foreign KEY (userID) REFERENCES users(id)
+    Foreign KEY (userId) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS plants(
