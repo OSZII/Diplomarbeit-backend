@@ -41,6 +41,11 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/html/index.html"));
 })
 
+app.post("/", (req, res) => {
+    console.log(req.body);
+    res.status(200);
+})
+
 app.post("/login", async (req, res) => {
     console.log("login");
     let username = req.body.username;
