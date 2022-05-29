@@ -168,7 +168,6 @@ function verifyToken(req, res, next) {
       }
     })
   } else {
-    // forbidden
     res.sendStatus(403);
   }
 }
