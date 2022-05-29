@@ -1,4 +1,4 @@
-const { use } = require("bcrypt/promises");
+// const { use } = require("bcrypt/promises");
 const fileHandler = require("../Objects/FileHandler");
 
 class Sensorhandler {
@@ -31,32 +31,6 @@ class Sensorhandler {
           .send("Ungültiger zweiter Parameter nur download möglich")
           .status(400);
         break;
-    }
-  }
-
-  async handleByFieldId(parameters, downloadSpecific){
-    // parameters ist sowas wie fields1, fields2, fields3, ...
-    // und wird in 2 teile aufgeteilt um die id herauszubekommen
-    let id = parameters.split("fields")[1]
-    // console.log(id)
-    // this.res.send("OK").status(200)
-
-    try {
-      let temp = parseInt(id);
-      if(!isNaN(temp)) id = temp;
-    } catch (error) {
-      console.log("Parameter keine Number");
-  }
-    
-    if(typeof downloadSpecific == "undefined"){
-      this.res.send(await this.sensorClass.getByFieldId(id)).status(200)
-    }else if(downloadSpecific == "download"){
-      fileHandler.createAndSendFile(
-        "sensors_from_" + parameters,
-        "csv",
-        await this.sensorClass.getByFieldId(id),
-        this.res
-      );
     }
   }
 
@@ -95,7 +69,7 @@ class Sensorhandler {
     Object.values(sensor).forEach((values) => {
       if (!(values == null || values.length >= 5)) return false;
     });
-    console.log("values OK")
+    // console.log("values OK")
     return valuesOk;
   }
 

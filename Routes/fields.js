@@ -37,7 +37,7 @@ const fieldhandler = new FieldHandler(field, objectProperties)
 // }
 
 // Get all fields
-app.get("/:parameters?/:downloadSpecific?", validator.verifyToken , async (req, res) => {
+app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
       let parameters = req.params.parameters; // erste Parameter
       let downloadSpecific = req.params.downloadSpecific; // zweiter Parameter
 
@@ -65,20 +65,20 @@ app.get("/:parameters?/:downloadSpecific?", validator.verifyToken , async (req, 
 });
 
 // Creates field
-app.post("/", validator.verifyToken , async (req, res) => {
+app.post("/" , async (req, res) => {
   let fields = req.body;
       switch(true){
         case Object.keys(fields).length == 0:
           res.send("Body can't be empty").status(400);
           break;
         default:
-          console.log("single Field")
+          // console.log("single Field")
           fieldhandler.createField(fields, res);
           break;
       }
 });
 
-app.put("/:id", validator.verifyToken, async (req, res) => {
+app.put("/:id", async (req, res) => {
   let id = req.params.id;
   let fields = req.body;
   if(typeof id == "undefined" || typeof fields == "undefined"){
@@ -88,7 +88,7 @@ app.put("/:id", validator.verifyToken, async (req, res) => {
   }
 })
 
-app.delete("/:id", validator.verifyToken , async (req, res) => {
+app.delete("/:id", async (req, res) => {
   let id = req.params.id;
       fieldhandler.deleteFieldById(id, res);
 });

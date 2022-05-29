@@ -3,31 +3,6 @@ const Help = require("../Helper/Helper");
 class Validator{
 
     // Verify Token
-    static verifyToken(req, res, next) {
-    // Get auth header value
-    const brearerHeader = req.headers["authorization"];
-  
-    // Check if bearer is undefined
-    if (typeof brearerHeader !== "undefined") {
-      // Token von bearer trennen
-      const bearer = brearerHeader.split(" ");
-  
-      // Get token
-      const bearerToken = bearer[1];
-  
-      req.token = bearerToken;
-  
-      jwt.verify(req.token, "secretkey", async (err, authData) => {
-        if (err) res.sendStatus(403);
-        else {
-          next();
-        }
-      })
-    } else {
-      // forbidden
-      res.sendStatus(403);
-    }
-  }
 
     static validate(value, min, max){
         return this.validateNotNUll(value) && this.validateLenght(value, min, max);

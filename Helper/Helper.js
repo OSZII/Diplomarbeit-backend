@@ -1,11 +1,19 @@
 class Helper {
 
-    static notANumber = "Parameter must be a number";
-    static largerThanZero = "Parameter must be larger than 0";
-    static longerThan3 = "Parameter must be longer than: 3";
-    static notFound = "No results matching to given Parameters could be found";
-    static notAllProperties = "Not all properties given";
-    static mustBeString = "Parameter must be String";
+    static ID_ERROR = "Id must be number and positive!";
+    static INVALID_PROPERTIES_ERROR = "Properties are incorrect!";
+    static NOTHING_FOUND_ERROR = "No results matching to given Parameters could be found";
+
+    static checkProperties(properties, object) {
+      for(let i = 0; i < properties.length; i++) {
+        if(!object.hasOwnProperty(properties[i])) return false;
+      }
+      return true;
+    }
+
+    static checkIfIdExists(id, object){
+
+    }
 
     static async searchById(parameters, object) {
       if (parameters > 0) {
@@ -34,14 +42,6 @@ class Helper {
       } else return [400, this.longerThan3];
     }
 
-    static hasOwnProperties(object, properties) {
-      let result = true;
-      for (let i = 0; i < properties.length; i++) {
-        if (!object.hasOwnProperty(properties[i])) result = false;
-      }
-      return result;
-    }
-
     static isNanArray(values) {
       let result = true;
       for (let i = 0; i < values.length; i++) {
@@ -51,4 +51,11 @@ class Helper {
     }
 }
 
-module.exports = Helper;
+module.exports = {
+    Helper : Helper,
+    checkProperties : Helper.checkProperties,
+    INVALID_PROPERTIES_ERROR: this.INVALID_PROPERTIES_ERROR, 
+    ID_ERROR: this.ID_ERROR,
+    NOTHING_FOUND_ERROR: this.NOTHING_FOUND_ERROR,
+    checkIfIdExists: Helper.checkIfIdExists,
+};

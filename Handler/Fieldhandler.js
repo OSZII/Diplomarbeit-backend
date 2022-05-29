@@ -67,7 +67,7 @@ class Fieldhandler {
     Object.values(field).forEach((values) => {
       if (!(values == null || values.length >= 5)) return false;
     });
-    console.log("values OK")
+    // console.log("values OK")
     return valuesOk;
   }
 
@@ -91,10 +91,9 @@ class Fieldhandler {
 
   async createField(fieldBody, res) {
     if (this.checkIfHasAllProperties(fieldBody)) {
-      console.log("properties ok");
+      // console.log("properties ok");
       if (this.checkValues(fieldBody)) {
         res.send(await this.fieldClass.createField(fieldBody)).status(200);
-        console.log("hi")
       } else res.status(400).send("Values can't be empty");
     } else res.status(400).send("Not All Properties given");
   }

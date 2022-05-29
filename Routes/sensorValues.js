@@ -1,143 +1,83 @@
 const express = require("express");
 const app = express.Router();
 
+const SensorValueHandler = require("../Handler/SensorValuehandler");
 const sensorValue = require("../Objects/SensorValue");
-const Help = require("../Helper/Helper");
+const {Helper, checkProperties, INVALID_PROPERTIES_ERROR, ID_ERROR, NOTHING_FOUND_ERROR, checkIfIdExists} = require("../Helper/Helper");
 const handler = require("../Objects/FileHandler");
 
-const jwt = require("jsonwebtoken");
+const properties = ["sensorId", "value", "timestamp"];
 
 
-let objectProperties = [
-    "sensorId",
-    "value",
-    "timestamp"
-]
 
-// Gibt alle Sensoren zurück
-app.get("/:parameters?/:downloadSpecific?",verifyToken ,async (req, res) => {
-  jwt.verify(req.token, "secretkey", async (err, authData) => {
-    if(err) res.sendStatus(403);
-    else{
-      console.log("sensorvalues")
-      let parameters = req.params.parameters;
-      let downloadSpecific = req.params.downloadSpecific;
-      let sensorValues = await sensorValue.getAll();
-      // console.log(sensorValues)
-      // create users.csv
-      if (parameters == "download") {
-        handler.createAndSendFile("sensorValues", "csv", sensorValues, res);
-      } else if (parameters == undefined) {
-        // userausgabe
-        res.status(200).send(sensorValues);
-      } else if(parameters == "fields"){
-          console.log("sensorvalues/fields")
-          let values = await sensorValue.getAllByField(); 
-          res.send(values).status(200);
-
-      } else {
-        if (!isNaN(parameters)) {
-          // #region Suche nach user mit id
-          let result = await Help.searchById(parameters, sensorValue);
-            if(result[0].hasOwnProperty("id")){
-              if (downloadSpecific == "download") {
-              
-                handler.createAndSendFile("sensorValue_with_id_" + parameters, "csv", result, res);
-              
-              } else res.status(200).send(result);
-            } else res.status(result[0]).send(result[1]);
-          // #endregion
-        } else {
-          // // #region suche mit String
-          // let result = await Help.searchByType(parameters, sensorValue);
-          // if (result[0].hasOwnProperty("id")) {
-          //   if (downloadSpecific == "download") {
-          //     handler.createAndSendFile("sensorValues_with_" + parameters, "csv", result, res);
-          //   } else res.status(200).send(result);
-          // } else {
-          //   res.status(result[0]).send(result[1]);
-          // }
-          // // #endregion
-          res.status(400).send(Help.notANumber);
-        }
-      }
-    }
-  })
+// #region GET SensorValues
+app.get("/", async (req, res) => {
+    res.status(200).send(await sensorValue.getAll());
 })
 
-// erstellt einen oder mehrere neue Sensorwerte
-app.post("/",verifyToken ,async (req, res) => {
-  jwt.verify(req.token, "secretkey", async (err, authData) => {
-    if(err) res.sendStatus(403);
-    else{
-      let sensorValues = req.body;
-      if (Array.isArray(sensorValues)) {
-        // validate if each object in array has all properties
-        let result = true;
-        for (let i = 0; i < sensorValues.length; i++) {
-          result &=
-            Help.hasOwnProperties(sensorValues[i], objectProperties) &
-            Help.isNanArray([
-              sensorValues[i].value,
-              sensorValues[i].timestamp
-            ]);
-        }
-        if (result) res.status(200).send(await sensorValue.createMultipleSensorValues(sensorValues));
-        else res.status(400).send(Help.notAllProperties);
-      } else {
-        if (Help.hasOwnProperties(sensorValues, objectProperties)) {
-          if (
-            Help.isNanArray([
-              sensorValues.value,
-              sensorValues.timestamp
-            ])
-          ) {
-            res.status(200).send(await sensorValue.createSensorValue(sensorValues));
-          } else res.status(400).send("Properties must be string or null");
-        } else res.status(400).send(Help.notAllProperties);
-      }
-    }
-  })
+app.get("/download", async (req, res) => {
+    handler.createAndSendFile("sensorValues", "csv", await sensorValue.getAll(), res);
 })
 
-app.delete("/:id",verifyToken ,async (req, res) => {
-  jwt.verify(req.token, "secretkey", async (err, authData) => {
-    if(err) res.sendStatus(403);
-    else{
-      let id = req.params.id;
-      if(!isNaN(id)){
-          if(id > 0){
-              let receivedSensorValue = await sensorValue.deleteById(id);
-              if(receivedSensorValue.length != 0){
-                  res.status(200).send(await sensorValue.deleteById(id));
-              } else res.status(404).send(Help.notFound);
-          } else res.status(400).send(Help.largerThanZero);
-      } else res.status(400).send(Help.notANumber);
-    }
-  })
+app.get("/:id", async (req, res) => {
+    res.status(200).send(await sensorValue.getById(req.params.id));  
 })
 
-// Verify Token
-function verifyToken(req, res, next){
-  // Get auth header value
-  const brearerHeader = req.headers["authorization"];
+app.get("/:id/download", async (req, res) => {
+    let id = req.params.id;
 
-  // Check if bearer is undefined
-  if(typeof brearerHeader !== "undefined"){
-    // Token von bearer trennen
-    const bearer = brearerHeader.split(" ");
+    if(id < 0 || isNaN(id)) {res.send(ID_ERROR); return;}
+    let sensorvalues = await sensorValue.getById(id);
+    if(sensorValue.length == 0) {res.status(404).send(NOTHING_FOUND_ERROR); return;}
+
+    handler.createAndSendFile("sensorValue_" + id, "csv", sensorvalues, res);
+})
+// #endregion
+
+// #region POST SensorValues
+app.post("/", async (req, res) => {
+    let sensorValueBody = req.body;
+    if(!checkProperties(properties, sensorValueBody)) {res.status(400).send(INVALID_PROPERTIES_ERROR); return;}
+
+    res.send(await sensorValue.createSensorValue(sensorValueBody)).status(200);
+})
+// #endregion
+
+// #region PUT SensorValues
+app.put("/:id", async (req, res) => {
+    let id = req.params.id;
+
+    // validate id
+    if(id < 0 || isNaN(id)) { console.log("HERE1"); res.status(400).send(Helper.ID_ERROR); return;}
+
+    // check if id exists
+    let sensorValueById = await sensorValue.getById(id);
+    if(sensorValueById.length == 0) { console.log("HERE2"); res.status(404).send(Helper.NOTHING_FOUND_ERROR); return;}
+
+    // validate Body
+    let sensorValueBody = req.body;
+    if(!checkProperties(properties, sensorValueBody)) { console.log("HERE3"); res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return;}
+
+    sensorValueBody.id = id;
+    res.status(200).send(await sensorValue.update(sensorValueBody));
+
+})
+// #endregion
+
+// #region DELETE SensorValue
+app.delete("/:id", async (req, res) => {
+    let id = req.params.id;
+
+    // validate id
+    if(id < 0 || isNaN(id)) {res.status(400).send(Helper.ID_ERROR); return;}
+
+    // check if id exists
+    let sensorValueById = await sensorValue.getById(id);
+    if(sensorValueById.length == 0) {res.status(404).send(Helper.NOTHING_FOUND_ERROR); return;}
+
+    res.status(200).send(await sensorValue.deleteById(id));
     
-    // Get token
-    const bearerToken = bearer[1];
-
-    req.token = bearerToken;
-
-    next();
-
-  }else {
-    // forbidden
-    res.sendStatus(403)
-  }
-}
+})
+// #endregion
 
 module.exports = app;

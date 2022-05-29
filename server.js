@@ -29,23 +29,8 @@ app.use(express.urlencoded({ extended: true }));
 // Mit dieser Zeile geht dann auch json
 app.use(express.json());
 app.use(cors());
-
 app.use(express.static("public"))
-
-app.use("/users", users);
-app.use("/fields", fields);
-app.use("/sensors", sensors);
-app.use("/sensorvalues", sensorValues);
-
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/html/index.html"));
-})
-
-app.post("/", (req, res) => {
-    console.log(req.body);
-    res.send("Ok").status(200);
-})
-
+// All Routes that should be accesible without a token
 app.post("/login", async (req, res) => {
     console.log("login");
     let username = req.body.username;
@@ -67,6 +52,30 @@ app.post("/login", async (req, res) => {
     }
 })
 
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "/public/html/index.html"));
+})
+
+// All routesm after this need to be verified
+// app.get("*", verifyToken ,(req, res, next) => {
+//     console.log("GET REQUEST");
+//     next();
+// })
+
+app.all("*", verifyToken);
+
+app.use("/users", users);
+app.use("/fields", fields);
+app.use("/sensors", sensors);
+app.use("/sensorvalues", sensorValues);
+
+app.post("/", (req, res) => {
+    console.log(req.body);
+    res.send("Ok").status(200);
+})
+
+
+// #region Some routes
 app.get("/weatherforecast", verifyToken, (req, res) => {
     jwt.verify(req.token, "secretkey", async (err, authData) => {
         if(err) res.sendStatus(403);
@@ -134,30 +143,35 @@ app.delete("*", (req, res) => {
     res.status(404).send("No such route found???");
 })
 
-// console.log(process.env.NODE_ENV)
-// console.log(process.env.GEO_API)
-// Verify Token
-function verifyToken(req, res, next){
-    // Get auth header value
-    const brearerHeader = req.headers["authorization"];
-  
-    // Check if bearer is undefined
-    if(typeof brearerHeader !== "undefined"){
-      // Token von bearer trennen
-      const bearer = brearerHeader.split(" ");
-      
-      // Get token
-      const bearerToken = bearer[1];
-  
-      req.token = bearerToken;
-      next();
-  
-    }else {
-      // forbidden
-      res.sendStatus(403)
-    }
-  }
+// #endregion
 
+function verifyToken(req, res, next) {
+  console.log("Verification");
+
+    // Get auth header value
+  const brearerHeader = req.headers["authorization"];
+
+  // Check if bearer is undefined
+  if (typeof brearerHeader !== "undefined") {
+    // Token von bearer trennen
+    const bearer = brearerHeader.split(" ");
+
+    // Get token
+    const bearerToken = bearer[1];
+
+    req.token = bearerToken;
+
+    jwt.verify(req.token, "secretkey", async (err, authData) => {
+      if (err) res.sendStatus(403);
+      else {
+        next();
+      }
+    })
+  } else {
+    // forbidden
+    res.sendStatus(403);
+  }
+}
 
 const PORT = process.env.PORT || 3000;
 
