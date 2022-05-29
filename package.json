@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/OSZII/Diplomarbeite-Repository.git"
   },
-  "author": "Ostojic Stefan, Tusch Alexander",
+  "author": "Ostojic Stefan",
   "license": "ISC",
   "engines": {
     "node": "16.x"
@@ -31,10 +31,10 @@
     "fast-csv": "^4.3.6",
     "jsonwebtoken": "^8.5.1",
     "mariadb": "^2.5.5",
-    "nodemon": "^2.0.15",
-    "supertest": "^6.2.2"
+    "nodemon": "^2.0.15"
   },
   "devDependencies": {
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "supertest": "^6.2.3"
   }
 }

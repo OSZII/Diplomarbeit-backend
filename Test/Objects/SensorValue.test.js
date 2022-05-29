@@ -4,7 +4,7 @@ describe('Get SensorValue', () => {
 
     test("getAll() und checkt die länge", async () => {
         let returnedSensorValue = await sensorValue.getAll();
-        expect(returnedSensorValue.length).toBe(192);
+        expect(returnedSensorValue.length > 1 && returnedSensorValue[0].hasOwnProperty("timestamp")).toBeTruthy();
     });
 
     test("getById(3) und schaut ob die ID 3 ist", async () => {
@@ -25,23 +25,6 @@ describe('Post SensorValue', () => {
         expect(result.affectedRows).toBe(1);
     });
 
-    test("Erstellt zwei SensorsValue und schaut in den zurückgegebenen Objekten nach, ob die affected rows in summe 2 ergeben, da 2 SensorValues erstellt werden", async () => {
-        let result = await sensorValue.createMultipleSensorValues(
-            [{
-                "sensorId": 1,
-                "value": "19,5",
-                "timestamp": "2022-02-17 17:16:00"
-            },
-            {
-                "sensorId": 1,
-                "value": "19,7",
-                "timestamp": "2022-02-17 17:23:00"
-            }   
-        ]
-    )
-        expect(result[0].affectedRows + result[1].affectedRows).toBe(2);
-    });
-
 });
 
 describe("Update SensorValue", () => {
@@ -50,7 +33,7 @@ describe("Update SensorValue", () => {
         let returnedSensorValue = await sensorValue.getById(1);
         returnedSensorValue = returnedSensorValue[0];
         returnedSensorValue.value = 15;
-        let result = await sensorValue.update(returnedSensorValue);
+        let result = await sensorValue.update(returnedSensorValue, 1);
         expect(result.affectedRows).toBe(1);
     })
 })
@@ -58,14 +41,19 @@ describe("Update SensorValue", () => {
 describe('Delete SensorValue', () => {
     
     test("deleteById(4) und schaut beim rückgabewert auf affectedRows und schaut ob 1", async () => {
-        let result = await sensorValue.deleteById(10);
+        let resultFromCreated = await sensorValue.createSensorValue({
+            "sensorId": 1,
+            "value": "19,3",
+            "timestamp": "2022-02-17 17:08:00"
+        })
+        let result = await sensorValue.deleteById(resultFromCreated.insertId);
         expect(result.affectedRows).toBe(1)
     })
 
-    test("deleteAll()", async () => {
-        await sensorValue.deleteAll();
-        let result = await sensorValue.getAll();
-        expect(result.length).toBe(0);
-    })
+    // test("deleteAll()", async () => {
+    //     await sensorValue.deleteAll();
+    //     let result = await sensorValue.getAll();
+    //     expect(result.length).toBe(0);
+    // })
 
 });

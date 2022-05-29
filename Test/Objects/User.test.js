@@ -4,7 +4,8 @@ describe('Get User', () => {
 
     test("getAll() und checkt die länge", async () => {
         let returnedUser = await user.getAll();
-        expect(returnedUser.length).toBe(105);
+        // console.log(returnedUser);
+        expect(returnedUser.length > 1 && returnedUser[0].hasOwnProperty("username")).toBeTruthy();
     });
 
     test("getUserById(2) und schaut ob die ID 2 ist", async () => {
@@ -13,7 +14,7 @@ describe('Get User', () => {
     });
 
     test("getUserByName('oszi') Checkt ob er den user mit dem namen oszi findet", async () => {
-        let returnedUser = await user.getByName("oszi");
+        let returnedUser = await user.getByUsername("oszi");
         expect(returnedUser[0].username).toBe("oszi");
     })
 
@@ -38,32 +39,6 @@ describe('Post User', () => {
         })
         expect(result.affectedRows).toBe(1);
     });
-
-    test("Erstellt zwei User und schaut in den zurückgegebenen Objekten nach, ob die affected rows in summe 2 ergeben, da 2 user erstellt werden", async () => {
-        let result = await user.createMultipleUsers(
-            [{
-                "username": "TestUser3",
-                "firstname": "Test3",
-                "lastname": "User3",
-                "email": "TestmailUser3@gmail.com",
-                "password": "password",
-                "role": "user",
-                "authToken": "null"
-            },
-            {
-                "username": "TestUser2",
-                "firstname": "Test2",
-                "lastname": "User2",
-                "email": "TestmailUser2@gmail.com",
-                "password": "password",
-                "role": "user",
-                "authToken": "null"
-            }   
-        ]
-    )
-        expect(result[0].affectedRows + result[1].affectedRows).toBe(2);
-    });
-
 });
 
 describe("Update User", () => {
@@ -72,7 +47,7 @@ describe("Update User", () => {
         let returnedUser = await user.getByName("klausi");
         returnedUser = returnedUser[0];
         returnedUser.username = "Klausi3";
-        let result = await user.update(returnedUser);
+        let result = await user.update(returnedUser, returnedUser.id);
         expect(result.affectedRows).toBe(1);
     })
 })
@@ -80,19 +55,17 @@ describe("Update User", () => {
 describe('Delete User', () => {
     
     test("deleteUserById(7) und schaut beim rückgabewert auf affectedRows und schaut ob 1", async () => {
-        let result = await user.deleteById(7);
+        let resultCreated = await user.createUser({
+            "username": "TestUser",
+            "firstname": "Test",
+            "lastname": "User",
+            "email": "TestmailUser@gmail.com",
+            "password": "password",
+            "role": "user",
+            "authToken": "null"
+        })
+        let result = await user.deleteById(resultCreated.insertId);
         expect(result.affectedRows).toBe(1)
     })
-
-    test("deleteByEmail('ipsum.dolor.sit@yahoo.us') schaut bei Rückgabewert ob affectedRows = 1", async () => {
-        let result = await user.deleteByEmail("ipsum.dolor.sit@yahoo.us");
-        expect(result.affectedRows).toBe(1)
-    })
-
-    // test("deleteAll() schaut danach ob die getAll() länge 0 ist", async () => {
-    //     await user.deleteAll();
-    //     let result = await user.getAll();
-    //     expect(result.length).toBe(0);
-    // })
 
 });

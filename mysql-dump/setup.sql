@@ -1,9 +1,9 @@
-DROP DATABASE IF EXISTS floweraufdauer;
+/* DROP DATABASE IF EXISTS floweraufdauer; */
 
-CREATE DATABASE IF NOT EXISTS floweraufdauer;
+/* CREATE DATABASE IF NOT EXISTS floweraufdauer; */
 
 -- for docker Database;
-USE floweraufdauer;
+/* USE floweraufdauer; */
 
 -- For onlinedatabase
 -- USE d038e858;
@@ -253,7 +253,7 @@ CREATE TABLE IF NOT EXISTS plants(
 );
 
 /* #region   */
-INSERT INTO plants (id, name, type, growTime, oneTimeHarvest) values
+/* INSERT INTO plants (id, name, type, growTime, oneTimeHarvest) values
 (0, "Alfalfa Sprouts", "not yet set", 365, 1),
 (1, "Apple", "not yet set", 365, 1),
 (2, "Apricot", "not yet set", 365, 1),
@@ -389,7 +389,7 @@ INSERT INTO plants (id, name, type, growTime, oneTimeHarvest) values
 (132, "Zucchini Squash", "not yet set", 365, 1);
 /* #endregion   )*/
 
-CREATE TABLE IF NOT EXISTS plantedCrop(
+/* CREATE TABLE IF NOT EXISTS plantedCrop(
     id int PRIMARY KEY AUTO_INCREMENT,
     fieldId int NOT NULL,
     plantedDate TIMESTAMP NOT NULL,

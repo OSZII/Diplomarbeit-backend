@@ -4,7 +4,7 @@ describe('Get Sensor', () => {
 
     test("getAll() und checkt die länge", async () => {
         let returnedSensor = await sensor.getAll();
-        expect(returnedSensor.length).toBe(8);
+        expect(returnedSensor.length > 1 && returnedSensor[0].hasOwnProperty("fieldId")).toBeTruthy();
     });
 
     test("getById(3) und schaut ob die ID 3 ist", async () => {
@@ -24,24 +24,6 @@ describe('Post Sensor', () => {
         })
         expect(result.affectedRows).toBe(1);
     });
-
-    test("Erstellt zwei Sensors und schaut in den zurückgegebenen Objekten nach, ob die affected rows in summe 2 ergeben, da 2 Sensors erstellt werden", async () => {
-        let result = await sensor.createMultipleSensors(
-            [{
-                "fieldId": 3,
-                "type": "Helligkeit",
-                "locationOnField": "right"
-            },
-            {
-                "fieldId": 3,
-                "type": "Helligkeit",
-                "locationOnField": "top middle"
-            }   
-        ]
-    )
-        expect(result[0].affectedRows + result[1].affectedRows).toBe(2);
-    });
-
 });
 
 describe("Update Sensor", () => {
@@ -49,17 +31,17 @@ describe("Update Sensor", () => {
     test("Sensor 1 von Feld 1 auf Feld 3 zuwewisen", async () => {
         let returnedSensor = await sensor.getById(1);
         returnedSensor = returnedSensor[0];
-        returnedSensor.id = 3;
-        let result = await sensor.update(returnedSensor);
+        returnedSensor.fieldId = 3;
+        let result = await sensor.update(returnedSensor, 1);
         expect(result.affectedRows).toBe(1);
     })
 })
 
-describe('Delete Field', () => {
+describe('Delete SSensor', () => {
     
     test("deleteById(4) und schaut beim rückgabewert auf affectedRows und schaut ob 1", async () => {
         // 4 weil die anderen Felder haben sensoren dran und diese müssen davor gelöscht werden
-        let result = await sensor.deleteById(10);
+        let result = await sensor.deleteById(4);
         expect(result.affectedRows).toBe(1)
     })
 
