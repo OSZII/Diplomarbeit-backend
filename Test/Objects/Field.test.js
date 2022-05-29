@@ -70,7 +70,7 @@ describe("Update Field", () => {
     let returnedField = await field.getById(1);
     returnedField = returnedField[0];
     returnedField.name = "Truefelland";
-    let result = await field.update(returnedField);
+    let result = await field.update(returnedField, id);
     expect(result.affectedRows).toBe(1);
   });
 });

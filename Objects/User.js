@@ -15,8 +15,6 @@ class User{
 
     // Create
     static async createUser(user){
-        // TODO: authentifizieren
-        // TODO: validieren
         let conn = await pool.getConnection();
         let sql = "INSERT INTO users (username, firstname, lastname, email, password, role, authToken) VALUES (?, ?, ?, ?, ?, ?, ?);";
         let result = await conn.query(sql, [user.username, user.firstname, user.lastname, user.email, user.password, user.role, user.authToken]);
@@ -25,8 +23,6 @@ class User{
     }
 
     static async createMultipleUsers(users){
-        // TODO: authentifizieren
-        // TODO: validieren
         let results = [];
         for(let i = 0; i < users.length; i++){
             results.push(await this.createUser(users[i]));
@@ -36,7 +32,6 @@ class User{
 
     // Read
     static async getAll(){
-        // TODO: authentifizieren
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM users;";
         // zu Field Objecten mappen mit ORM
@@ -46,7 +41,6 @@ class User{
     }
 
     static async getById(id){
-        // TODO: authentifizieren
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM users WHERE id = ?;";
         let result = await conn.query(sql, [id]);
@@ -55,7 +49,6 @@ class User{
     }
 
     static async getByName(name){
-        // TODO: authentifizieren
         let conn = await pool.getConnection();
         let sql = `SELECT * FROM users WHERE username LIKE CONCAT('%', ?, '%') OR firstname LIKE CONCAT('%', ?, '%') OR lastname LIKE CONCAT('%', ?, '%')`;
         let results = await conn.query(sql, [name, name, name]);
@@ -64,7 +57,6 @@ class User{
     }
 
     static async getByUsername(username){
-        // TODO: authentifizieren
         let conn = await pool.getConnection();
         let sql = `SELECT * FROM users WHERE username LIKE CONCAT('%', ?, '%')`;
         let results = await conn.query(sql, [username]);
@@ -73,7 +65,6 @@ class User{
     }
 
     static async getByEmail(email){
-        // TODO: authentifizieren
         let conn = await pool.getConnection();
         let sql = `SELECT * FROM users WHERE email Like CONCAT('%', ?, '%')`;
         let results = await conn.query(sql, [email]);
@@ -82,17 +73,16 @@ class User{
     }
 
     // Update
-    static async update(user, Id){
+    static async update(user, id){
         let conn = await pool.getConnection();
         let sql = "UPDATE users SET username = ?, firstname = ?, lastname = ?, email = ?, password = ?, role = ?, authToken = ? WHERE id = ?;";
-        let result = await conn.query(sql, [user.username, user.firstname, user.lastname, user.email, user.password, user.role, user.authToken, Id]);
+        let result = await conn.query(sql, [user.username, user.firstname, user.lastname, user.email, user.password, user.role, user.authToken, id]);
         conn.end();
         return result;
     }
 
     // Delete
     static async deleteById(id){
-        // TODO: authentifizieren
         let conn = await pool.getConnection();
         let sql = "DELETE FROM users WHERE id = ?;";
         let result = await conn.query(sql, [id])

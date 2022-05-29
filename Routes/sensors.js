@@ -1,84 +1,131 @@
 const express = require("express");
 const app = express.Router();
 
-const SensorHandler = require("../Handler/Sensorhandler");
 const sensor = require("../Objects/Sensor");
-const Help = require("../Helper/Helper");
+const field = require("../Objects/Field");
+const {
+    Helper,
+    checkProperties,
+    INVALID_PROPERTIES_ERROR,
+    ID_ERROR,
+    NOTHING_FOUND_ERROR,
+} = require("../Helper/Helper");
 const handler = require("../Objects/FileHandler");
 
-let objectProperties = ["fieldID", "type", "locationOnField"];
+let properties = ["fieldId", "type", "locationOnField"];
 
-const sensorhandler = new SensorHandler(sensor, objectProperties);
-
-// Get all sensors
-app.get("/:parameters?/:downloadSpecific?", async (req, res) => {
-  let parameters = req.params.parameters; // erste Parameter
-  let downloadSpecific = req.params.downloadSpecific; // zweiter Parameter
-
-  try {
-    let temp = parseInt(parameters);
-    if (!isNaN(temp)) parameters = temp;
-  } catch (error) {
-    console.log("Parameter keine Number");
-  }
-
-  sensorhandler.setRes(res);
-
-  switch (true) {
-    case typeof parameters == "undefined":
-      res.send(await sensor.getAll()).status(200);
-      break;
-    case parameters == "download":
-      handler.createAndSendFile("sensors", "csv", await sensor.getAll(), res);
-      break;
-    case typeof parameters === "number":
-      sensorhandler.handleId(parameters, downloadSpecific);
-      break;
-    case parameters.includes("fields"):
-      sensorhandler.handleByFieldId(parameters, downloadSpecific);
-      break;
-    default:
-      sensorhandler.handleType(parameters, downloadSpecific);
-      break;
-  }
+// #region GET Sensors
+app.get("/", async(req, res) => {
+    res.status(200).send(await sensor.getAll());
 });
 
-// Creates sensor
-app.post("/", async (req, res) => {
-  sensorhandler.setRes(res);
-  let sensors = req.body;
-  switch (true) {
-    case Object.keys(sensors).length == 0:
-      res.send("Body can't be empty").status(400);
-      break;
-    default:
-      console.log("single Sensor");
-      sensorhandler.createSensor(sensors);
-      break;
-  }
+app.get("/download", async(req, res) => {
+    handler.createAndSendFile("sensors", "csv", await sensor.getAll(), res);
 });
 
-app.put("/:id", async (req, res) => {
-  sensorhandler.setRes(res);
-  let id = req.params.id;
-  let sensors = req.body;
-  if (typeof id == "undefined" || typeof sensors == "undefined") {
-    res.send("Undefined id or body").status(400);
-  } else {
-    sensorhandler.updateSensor(sensors, id);
-  }
+app.get("/:id", async(req, res) => {
+    let id = req.params.id;
+
+    // validate id
+    if (id < 0 || isNaN(id)) { res.status(400).send(Helper.ID_ERROR); return; }
+
+    // check if id exists
+    let userById = await user.getById(id);
+    if (userById.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return; }
+
+    res.status(200).send(await sensor.getById(id));
 });
 
-app.delete("/:id", async (req, res) => {
-  sensorhandler.setRes(res);
-  let id = req.params.id;
-  sensorhandler.deleteSensorById(id);
+app.get("/:id/download", async(req, res) => {
+    let id = req.params.id;
+
+    if (id < 0 || isNaN(id)) { res.status(400).send(ID_ERROR); return; }
+
+    // check if id exists
+    let sensorById = await sensor.getById(id);
+    if (sensorById.length == 0) { res.status(404).send(NOTHING_FOUND_ERROR); return; }
+
+    handler.createAndSendFile("sensor_" + id, "csv", sensorById, res);
 });
 
-function setValues(parameters, downloadSpecific, res) {
-  sensorhandler.setParameters(parameters);
-  sensorhandler.setDownloadSpecific(downloadSpecific);
-  sensorhandler.setRes(res);
-}
+app.get("/fields/:id", async(req, res) => {
+    let id = req.params.id;
+
+    // validate id
+    if (id < 0 || isNaN(id)) { res.status(400).send(Helper.ID_ERROR); return; }
+
+    // check if field with id exists
+    let fieldById = await field.getById(id);
+    if (fieldById.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return; }
+
+    res.status(200).send(await sensor.getByFieldId(id));
+
+})
+
+app.get("/fields/:id/download", async(req, res) => {
+    let id = req.params.id;
+
+    // validate id
+    if (id < 0 || isNaN(id)) { res.status(400).send(Helper.ID_ERROR); return; }
+
+    // check if field with id exists
+    let fieldById = await field.getById(id);
+    if (fieldById.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return; }
+
+    handler.createAndSendFile("sensors_on_filed_with_id_" + id, "csv", await sensor.getByFieldId(id), res);
+})
+
+// #endregion
+
+// #region POST Sensor
+app.post("/", async(req, res) => {
+    let sensorBody = req.body;
+    if (!checkProperties(properties, sensorBody)) { res.status(400).send(INVALID_PROPERTIES_ERROR); return; }
+
+    // check if fieldId exists
+    let fieldById = await field.getById(sensorBody.fieldId);
+    if (fieldById.length == 0) { res.status(404).send(Helper.INVALID_FOREIGNKEY_ERROR); return; }
+
+    res.status(200).send(await sensor.createSensor(sensorBody));
+});
+// #endregion
+
+// #region PUT Sensor
+app.put("/:id", async(req, res) => {
+    let id = req.params.id;
+    let sensorBody = req.body;
+
+    // validate id
+    if (id < 0 || isNaN(id)) { res.status(400).send(Helper.ID_ERROR); return; }
+
+    // check if fieldId exists
+    let fieldById = await field.getById(sensorBody.fieldId);
+    if (fieldById.length == 0) { res.status(404).send(Helper.INVALID_FOREIGNKEY_ERROR); return; }
+
+    // check if id exists
+    let sensorById = await sensor.getById(id);
+    if (sensorById.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return; }
+
+    // validate Body
+    if (!checkProperties(properties, sensorBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return; }
+
+    res.status(200).send(await sensor.update(sensorBody, id));
+});
+// #endregion
+
+// #region DELETE Sensor
+app.delete("/:id", async(req, res) => {
+    let id = req.params.id;
+
+    // validate id
+    if (id < 0 || isNaN(id)) { res.status(400).send(Helper.ID_ERROR); return; }
+
+    // check if id exists
+    let sensorById = await sensor.getById(id);
+    if (sensorById.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return; }
+
+    res.status(200).send(await sensor.deleteById(id));
+});
+// #endregion
 
 module.exports = app;

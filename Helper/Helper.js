@@ -3,6 +3,10 @@ class Helper {
     static ID_ERROR = "Id must be number and positive!";
     static INVALID_PROPERTIES_ERROR = "Properties are incorrect!";
     static NOTHING_FOUND_ERROR = "No results matching to given Parameters could be found";
+    static LENGTH_ERROR = "Length must be at least 3 characters long!";
+    static USERNAME_ERROR = "Username already exists!";
+    static EMAIL_ERROR = "Email already exists!";
+    static INVALID_FOREIGNKEY_ERROR = "Foreign key is invalid!";
 
     static checkProperties(properties, object) {
       for(let i = 0; i < properties.length; i++) {
@@ -58,4 +62,8 @@ module.exports = {
     ID_ERROR: this.ID_ERROR,
     NOTHING_FOUND_ERROR: this.NOTHING_FOUND_ERROR,
     checkIfIdExists: Helper.checkIfIdExists,
+    LENGTH_ERROR: this.LENGTH_ERROR,
+    USERNAME_ERROR: this.USERNAME_ERROR,
+    EMAIL_ERROR: this.EMAIL_ERROR,
+    INVALID_FOREIGNKEY_ERROR: this.INVALID_FOREIGNKEY_ERROR,
 };

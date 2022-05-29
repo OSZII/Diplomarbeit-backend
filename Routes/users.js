@@ -1,20 +1,13 @@
 const express = require("express");
 const app = express.Router();
 
-const jwt = require("jsonwebtoken");
-
 const user = require("../Objects/User");
-const Help = require("../Helper/Helper");
+const {Helper, checkProperties, INVALID_PROPERTIES_ERROR, ID_ERROR, NOTHING_FOUND_ERROR, LENGTH_ERROR} = require("../Helper/Helper");
 const handler = require("../Objects/FileHandler");
-const validator = require("../Objects/Validator");
-const Userhandler = require("../Handler/Userhandler");
-
-const { JsonWebTokenError } = require("jsonwebtoken");
-const { TypeNumbers } = require("mariadb");
-const { type } = require("express/lib/response");
+// const Userhandler = require("../Handler/Userhandler");
 
 
-let objectProperties = [
+const properties = [
   "username",
   "firstname",
   "lastname",
@@ -24,63 +17,124 @@ let objectProperties = [
   "authToken",
 ];
 
-const userhandler = new Userhandler(user, objectProperties);
+// #region GET Users
+app.get("/", async (req, res) => {
+    res.status(200).send(await user.getAll());
+}) 
 
-app.get("/:parameters?/:downloadSpecific?", validator.verifyToken, async (req, res) => {
-      let parameters = req.params.parameters; // erste Parameter
-      let downloadSpecific = req.params.downloadSpecific; // zweiter Parameter
-
-      try {
-          let temp = parseInt(parameters);
-          if(!isNaN(temp)) parameters = temp;
-      } catch (error) {
-        console.log("Parameter keine Number");
-      }
-
-      switch (true) {
-        case typeof parameters == "undefined":
-          res.send(await user.getAll()).status(200);
-          break;
-        case parameters == "download":
-          handler.createAndSendFile("users", "csv", await user.getAll(), res);
-          break;
-        case typeof parameters === "number":
-          userhandler.handleId(parameters, downloadSpecific, res)
-          break;
-        default:
-          userhandler.handleName(parameters, downloadSpecific, res)
-          break;
-      }
-});
-
-// TODO: als rückgabe auch die erstellten User zurückgeben
-app.post("/", validator.verifyToken, async (req, res) => {
-      let users = req.body;
-      switch(true){
-        case Object.keys(users).length == 0:
-          res.send("Body can't be empty").status(400);
-          break;
-        default:
-          console.log("single User")
-          userhandler.createUser(users, objectProperties, res);
-          break;
-      }
-});
-
-app.put("/:id", validator.verifyToken, async (req, res) => {
-  
-  let id = req.params.id;
-  let user = req.body;
-  if(typeof id == "undefined" || typeof user == "undefined"){
-    res.send("Undefined Id or body").status(400)
-  } else {
-    userhandler.updateUser(user, id, res)
-  }
+app.get("/download", async (req, res) => {
+    handler.createAndSendFile("users", "csv", await user.getAll(), res);
 })
 
-app.delete("/:id", validator.verifyToken, async (req, res) => {
-      let id = req.params.id;
-      userhandler.deleteUserById(id, res);
-});
+app.get("/:id", async (req, res, next) => {
+    let id = req.params.id;
+    
+    // if id is not a number go to the next route because it could be a name
+    if(isNaN(id)){ next(); return; }
+
+    // validate id
+    if(id < 0) {res.status(400).send(Helper.ID_ERROR); return;}
+
+    // check if id exists
+    let userById = await user.getById(id);
+    if(userById.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return;}
+
+    res.status(200).send(await user.getById(req.params.id));
+})
+
+app.get("/:name", async (req, res) => {
+    let name = req.params.name;
+
+    if(name.length < 3) {res.status(400).send(Helper.LENGTH_ERROR); return;}
+
+    // check if users with name exists
+    let foundUsers = await user.getByName(name);
+    if(foundUsers.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return;}
+
+    res.status(200).send(foundUsers);
+})
+
+app.get("/:id/download", async (req, res, next) => {
+    let id = req.params.id;
+
+    if(isNaN(id)){ next(); return; }
+
+    // validate id
+    if(id < 0) {res.status(400).send(ID_ERROR); return;}
+  
+    // check if id exists   
+    let userById = await user.getById(id);
+    if(userById.length == 0) {res.status(404).send(NOTHING_FOUND_ERROR); return;}
+
+    handler.createAndSendFile("user_" + id, "csv", userById, res);
+})
+
+app.get("/:name/download", async (req, res) => {
+    let name = req.params.name;
+
+    if(name.length < 3) {res.status(400).send(Helper.LENGTH_ERROR); return;}
+
+    let foundUsers = await user.getByName(name);
+    if(foundUsers.length == 0) {res.status(404).send(NOTHING_FOUND_ERROR); return;}
+
+    handler.createAndSendFile("users_" + name, "csv", foundUsers, res);
+})
+
+// #endregion
+
+// #region POST User
+app.post("/", async (req, res) => {
+    let userBody = req.body;
+    if(!checkProperties(properties, userBody)) {res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return;}
+
+    // check if user with username exists
+    let userByUsername = await user.getByUsername(userBody.username);
+    if(userByUsername.length > 0) {res.status(400).send(Helper.USERNAME_ERROR); return;}
+
+    if(!(userBody.email.includes("@") && userBody.email.includes("."))) { res.status(400).send("Invalid email!"); return;}
+
+    let userByEmail = await user.getByEmail(userBody.email);
+    if(userByEmail.length > 0) {res.status(400).send(Helper.EMAIL_ERROR); return;}
+
+
+    res.status(200).send(await user.createUser(userBody));
+})
+// #endregion
+
+// #region PUT User
+app.put("/:id", async (req, res) => {
+    let id = req.params.id;
+
+    // validate id
+    if(id < 0 || isNaN(id)) { res.status(400).send(Helper.ID_ERROR); return;}
+
+    // check if id exists
+    let userById = await user.getById(id);
+    if(userById.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return;}
+
+    // validate Body
+    let userBody = req.body;
+    if(!checkProperties(properties, userBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return;}
+
+    res.status(200).send(await user.update(userBody, id));
+
+})
+// #endregion
+
+// #region DELETE User
+app.delete("/:id", async (req, res) => {
+    let id = req.params.id;
+
+    // validate id
+    if(id < 0 || isNaN(id)) {res.status(400).send(Helper.ID_ERROR); return;}
+
+    // check if id exists
+    let userById = await user.getById(id);
+    if(userById.length == 0) {res.status(404).send(Helper.NOTHING_FOUND_ERROR); return;}
+
+    res.status(200).send(await user.deleteById(id));
+  
+})
+// #endregion
 
 module.exports = app;

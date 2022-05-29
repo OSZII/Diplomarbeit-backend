@@ -228,7 +228,7 @@ INSERT IGNORE INTO sensorValues (sensorId, value, timestamp) values(1, round(22.
 /* #endregion */
 
 -- SETTINGS
-CREATE TABLE IF NOT EXISTS settings(
+/* CREATE TABLE IF NOT EXISTS settings(
     id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
     userId int NOT NULL,
     displayedUsername varchar(255) NOT NULL,
@@ -404,4 +404,4 @@ SET @MAX = now();
 INSERT INTO plantedCrop (fieldId, plantedDate, plantId) values 
 (1, TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN), 1),  -- Apple
 (2, TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN), 37),  -- Corn
-(3, TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN), 39);  -- cucumber
+(3, TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN), 39);  -- cucumber */

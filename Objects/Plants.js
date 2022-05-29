@@ -15,7 +15,7 @@ class Plants{
         // Check first if fieldId exists
         let conn = await pool.getConnection();
         let sql = "INSERT INTO sensors (fieldId, type, locationOnField) VALUES (?, ?, ?);";
-        let result = await conn.query(sql, [sensor.fieldID, sensor.type, sensor.locationOnField]);
+        let result = await conn.query(sql, [sensor.fieldId, sensor.type, sensor.locationOnField]);
         conn.end();
         return result;
     }
@@ -62,11 +62,11 @@ class Plants{
     }
 
     // Update
-    static async update(sensor){
+    static async update(sensor, id){
         // Check first if fieldId Exists
         let conn = await pool.getConnection();
         let sql = "UPDATE sensors SET fieldId = ?, type = ?, locationOnField = ? WHERE id = ?;";
-        let result = await conn.query(sql, [sensor.fieldID, sensor.type, sensor.locationOnField, sensor.id]);
+        let result = await conn.query(sql, [sensor.fieldId, sensor.type, sensor.locationOnField, id]);
         conn.end();
         return result;
     }

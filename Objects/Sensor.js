@@ -11,8 +11,6 @@ class Sensor{
     // Create
     //standard
     static async createSensor(sensor){
-        // TODO: authentifizieren
-        // TODO: validieren
         // Check first if fieldId exists
         let conn = await pool.getConnection();
         // console.log(sensor)
@@ -24,8 +22,6 @@ class Sensor{
 
     //standard
     // static async createMultipleSensors(sensors){
-    //     // TODO: authentifizieren
-    //     // TODO: validieren
     //     let results = [];
     //     for(let i = 0; i < sensors.length; i++){
     //         results.push(await this.createSensor(sensors[i]));
@@ -36,7 +32,6 @@ class Sensor{
     // Read
     //standard
     static async getAll(){
-        // TODO: authentifizieren
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM sensors;";
         let results = await conn.query(sql);
@@ -46,7 +41,6 @@ class Sensor{
 
     //standard
     static async getById(id){
-        // TODO: authentifizieren
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM sensors WHERE id = ?;";
         let result = await conn.query(sql, [id]);
@@ -55,7 +49,6 @@ class Sensor{
     }
 
     static async getByFieldId(fieldId){
-        // TODO: authentifizieren
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM sensors WHERE fieldId = ?;";
         let result = await conn.query(sql, [fieldId]);
@@ -64,7 +57,6 @@ class Sensor{
     }
 
     static async getByType(type){
-        // TODO: authentifizieren
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM sensors WHERE type LIKE CONCAT('%', ?, '%');";
         let result = await conn.query(sql, [type]);
@@ -73,18 +65,17 @@ class Sensor{
     }
 
     // Update
-    static async update(sensor){
+    static async update(sensor, id){
         // Check first if fieldId Exists
         let conn = await pool.getConnection();
         let sql = "UPDATE sensors SET fieldId = ?, type = ?, locationOnField = ? WHERE id = ?;";
-        let result = await conn.query(sql, [sensor.fieldID, sensor.type, sensor.locationOnField, sensor.id]);
+        let result = await conn.query(sql, [sensor.fieldId, sensor.type, sensor.locationOnField, id]);
         conn.end();
         return result;
     }
 
     // Delete
     static async deleteById(id){
-        // TODO: authentifizieren
         let conn = await pool.getConnection();
         let sql = "DELETE FROM sensors WHERE id = ?;";
         let result = await conn.query(sql, [id]);

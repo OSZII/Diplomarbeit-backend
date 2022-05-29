@@ -18,7 +18,7 @@ describe('Post Sensor', () => {
 
     test("Erstellt einen Sensor und testet ob die affectedRows = 1", async () => {
         let result = await sensor.createSensor({
-            "fieldID": 3,
+            "fieldId": 3,
             "type": "Helligkeit",
             "locationOnField": "left"
         })
@@ -28,12 +28,12 @@ describe('Post Sensor', () => {
     test("Erstellt zwei Sensors und schaut in den zurückgegebenen Objekten nach, ob die affected rows in summe 2 ergeben, da 2 Sensors erstellt werden", async () => {
         let result = await sensor.createMultipleSensors(
             [{
-                "fieldID": 3,
+                "fieldId": 3,
                 "type": "Helligkeit",
                 "locationOnField": "right"
             },
             {
-                "fieldID": 3,
+                "fieldId": 3,
                 "type": "Helligkeit",
                 "locationOnField": "top middle"
             }   

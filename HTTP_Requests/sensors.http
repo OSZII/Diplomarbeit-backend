@@ -16,7 +16,7 @@ POST http://localhost:3000/sensors
 content-type: application/json
 
 {
-    "fieldID": 1,
+    "fieldId": 1,
     "type": "temperatur",
     "locationOnField": "bottom"
 }
@@ -29,17 +29,17 @@ content-type: application/json
 {
     "sensors": [
         {
-            "fieldID": 3,
+            "fieldId": 3,
             "type": "temperatur",
             "locationOnField": "top left"
         },
         {
-            "fieldID": 3,
+            "fieldId": 3,
             "type": "temperatur",
             "locationOnField": "middle left"
         },
         {
-            "fieldID": 3,
+            "fieldId": 3,
             "type": "temperatur",
             "locationOnField": "middle right"
         }
