@@ -17,7 +17,6 @@ describe("Get Field", () => {
     test("getByName('teil') Checkt ob er den Field mit dem namen oszi findet", async() => {
         let searchString = "Feld 1";
         let returnedField = await field.getByName(searchString);
-        console.log(returnedField);
         expect(returnedField[0].name.includes(searchString)).toBeTruthy();
     });
 });
@@ -36,7 +35,6 @@ describe("Post Field", () => {
             longitude: -1,
             description: "Feld im Obertauern 10",
         });
-        console.log(result.affectedRows);
         expect(result.affectedRows).toBe(1);
     });
 
@@ -82,7 +80,6 @@ describe("Update Field", () => {
 
 describe("Delete Field", () => {
     test("deleteById(4) und schaut beim rückgabewert auf affectedRows und schaut ob 1", async() => {
-        // 4 weil die anderen Felder haben sensoren dran und diese müssen davor gelöscht werden
         let result = await field.deleteById(4);
         expect(result.affectedRows).toBe(1);
     });
