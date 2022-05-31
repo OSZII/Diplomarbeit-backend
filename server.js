@@ -31,6 +31,7 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static("public"))
 // All Routes that should be accesible without a token
+
 app.post("/login", async (req, res) => {
     console.log("login");
     let username = req.body.username;
@@ -53,6 +54,7 @@ app.post("/login", async (req, res) => {
 })
 
 app.get("/", (req, res) => {
+    console.log("Hi");
     res.sendFile(path.join(__dirname, "/public/html/index.html"));
 })
 
