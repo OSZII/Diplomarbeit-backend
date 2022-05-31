@@ -1,0 +1,1034 @@
+{
+	"info": {
+		"_postman_id": "30c7d224-5a25-47e5-acdc-1e2ae2faeec5",
+		"name": "Flower Auf Dauer Online System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21209649"
+	},
+	"item": [
+		{
+			"name": "Login & more",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"oszi\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/login",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/users",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/users/download",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users",
+								"download"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get UsersById",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{ url }}/users/2",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download UsersById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/users/ste",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users",
+								"ste"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get UsersByName",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{ url }}/users/ste",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users",
+								"ste"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download UsersByName",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/users",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User Empty",
+					"request": {
+						"method": "POST",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/users",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create single User",
+					"request": {
+						"method": "POST",
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"SPEZIAsLTESTUSERAMK2\",\r\n    \"firstname\": \"firstname\",\r\n    \"lastname\": \"lastname\",\r\n    \"email\": \"testasdmasil18sdsdffd29s3@gmail.com\",\r\n    \"password\": \"$2bdsf$10$uzDcis0cerThfkMjDyh8peX/EhUWleCTKZLGKUyndThYWCHLDwStO\",\r\n    \"role\": \"admin\",\r\n    \"authToken\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/users",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \" USERSUPERAMK\",\r\n    \"firstname\": \"firstname\",\r\n    \"lastname\": \"lastname\",\r\n    \"email\": \"testmailrichtig@gmail.com\",\r\n    \"password\": \"$2b$10$uzDcis0cerThfkMjDyh8peX/EhUWleCTKZLGKUyndThYWCHLDwStO\",\r\n    \"role\": \"admin\",\r\n    \"authToken\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/users/108",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users",
+								"108"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User By Id",
+					"request": {
+						"method": "DELETE",
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"username\",\r\n    \"firstname\": \"firstname\",\r\n    \"lastname\": \"lastname\",\r\n    \"email\": \"testmailrichtig@gmail.com\",\r\n    \"password\": \"$2b$10$uzDcis0cerThfkMjDyh8peX/EhUWleCTKZLGKUyndThYWCHLDwStO\",\r\n    \"role\": \"admin\",\r\n    \"authToken\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/users/5",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SensorValues",
+			"item": [
+				{
+					"name": "Get Sensorvalues",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{ url }}/sensorvalues/1/download",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensorvalues",
+								"1",
+								"download"
+							],
+							"query": [
+								{
+									"key": "Authorization",
+									"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6Im9zemkiLCJmaXJzdG5hbWUiOiJTdGVmYW4iLCJsYXN0bmFtZSI6Ik9zdG9qaWMiLCJlbWFpbCI6Im9zemlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkbWR1b2U0REY4THhOcjRLNnkvbHNtTzJCc21lTTJ5TW9seFFJZ2ZmSnZweVNSQ3NSbVNOeTYiLCJyb2xlIjoiYWRtaW4iLCJhdXRoVG9rZW4iOm51bGx9LCJpYXQiOjE2NDkzNDA4ODJ9.gzXd1cbgoiSd_teoPjz2Ym3UpH1BmgV7oLZgNUK_DdA",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Sensorvalues",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{ url }}/sensorvalues/download",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensorvalues",
+								"download"
+							],
+							"query": [
+								{
+									"key": "Authorization",
+									"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6Im9zemkiLCJmaXJzdG5hbWUiOiJTdGVmYW4iLCJsYXN0bmFtZSI6Ik9zdG9qaWMiLCJlbWFpbCI6Im9zemlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkbWR1b2U0REY4THhOcjRLNnkvbHNtTzJCc21lTTJ5TW9seFFJZ2ZmSnZweVNSQ3NSbVNOeTYiLCJyb2xlIjoiYWRtaW4iLCJhdXRoVG9rZW4iOm51bGx9LCJpYXQiOjE2NDkzNDA4ODJ9.gzXd1cbgoiSd_teoPjz2Ym3UpH1BmgV7oLZgNUK_DdA",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET SensorValueById",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{ url }}/sensorvalues/download",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensorvalues",
+								"download"
+							],
+							"query": [
+								{
+									"key": "Authorization",
+									"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6Im9zemkiLCJmaXJzdG5hbWUiOiJTdGVmYW4iLCJsYXN0bmFtZSI6Ik9zdG9qaWMiLCJlbWFpbCI6Im9zemlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkbWR1b2U0REY4THhOcjRLNnkvbHNtTzJCc21lTTJ5TW9seFFJZ2ZmSnZweVNSQ3NSbVNOeTYiLCJyb2xlIjoiYWRtaW4iLCJhdXRoVG9rZW4iOm51bGx9LCJpYXQiOjE2NDkzNDA4ODJ9.gzXd1cbgoiSd_teoPjz2Ym3UpH1BmgV7oLZgNUK_DdA",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download SensorValueById",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{ url }}/sensorvalues/download",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensorvalues",
+								"download"
+							],
+							"query": [
+								{
+									"key": "Authorization",
+									"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6Im9zemkiLCJmaXJzdG5hbWUiOiJTdGVmYW4iLCJsYXN0bmFtZSI6Ik9zdG9qaWMiLCJlbWFpbCI6Im9zemlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkbWR1b2U0REY4THhOcjRLNnkvbHNtTzJCc21lTTJ5TW9seFFJZ2ZmSnZweVNSQ3NSbVNOeTYiLCJyb2xlIjoiYWRtaW4iLCJhdXRoVG9rZW4iOm51bGx9LCJpYXQiOjE2NDkzNDA4ODJ9.gzXd1cbgoiSd_teoPjz2Ym3UpH1BmgV7oLZgNUK_DdA",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE SensorValue",
+					"request": {
+						"method": "PUT",
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sensorId\" : 1,\r\n    \"value\" : \"10\",\r\n    \"timestamp\" : \"2022-05-29 00:00:00\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/sensorvalues/1",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensorvalues",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE SensorValue",
+					"request": {
+						"method": "POST",
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sensorId\" : 1,\r\n    \"value\" : \"54\",\r\n    \"timestamp\" : \"2022-06-29 00:00:00\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/sensorvalues",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensorvalues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE SensorValue",
+					"request": {
+						"method": "DELETE",
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sensorId\" : 1,\r\n    \"value\" : \"54\",\r\n    \"timestamp\" : \"2022-06-29 00:00:00\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/sensorvalues",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensorvalues"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sensors",
+			"item": [
+				{
+					"name": "Get Sensors",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/sensors",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Sensors",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/fields/download",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"fields",
+								"download"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SensorsById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/sensor/1",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensor",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download SensorsById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/users/ste",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users",
+								"ste"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SensorsByFieldId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/sensors/fields/1",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensors",
+								"fields",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download SensorsByFieldId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/sensors/fields/1/download",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensors",
+								"fields",
+								"1",
+								"download"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sensor",
+					"request": {
+						"method": "POST",
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"fieldId\": 1,\r\n        \"type\": \"Temperatur\",\r\n        \"locationOnField\": \"middle left\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/sensors",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Sensor",
+					"request": {
+						"method": "PUT",
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"username\": \"updateusername\",\r\n        \"firstname\": \"firstname\",\r\n        \"lastname\": \"lastname\",\r\n        \"email\": \"updateemail@gmail.com\",\r\n        \"password\": \"password\",\r\n        \"role\": \"admin\",\r\n        \"authToken\": null\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/sensors/2",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"sensors",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete SensorById",
+					"request": {
+						"method": "DELETE",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/fields/2",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"fields",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fields",
+			"item": [
+				{
+					"name": "Get Fields",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/fields",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"fields"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Fields",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/fields/download",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"fields",
+								"download"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get FieldsById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/fields/6",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"fields",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download FieldsById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/users/ste",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"users",
+								"ste"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get FieldsByName",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/fields/ste",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"fields",
+								"ste"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download FieldsByName",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/fields/Feld/download",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"fields",
+								"Feld",
+								"download"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Field",
+					"request": {
+						"method": "POST",
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"usersssssname\",\r\n    \"firstname\": \"firstname\",\r\n    \"lastname\": \"lastname\",\r\n    \"email\": \"testmassssil18ssdfd29s3@gmail.com\",\r\n    \"password\": \"$2b$10$uzDcis0cerThfkMjDyh8peX/EhUWleCTKZLGKUyndThYWCHLDwStO\",\r\n    \"role\": \"admin\",\r\n    \"authToken\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/fields",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"fields"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"username\": \"updateusername\",\r\n        \"firstname\": \"firstname\",\r\n        \"lastname\": \"lastname\",\r\n        \"email\": \"updateemail@gmail.com\",\r\n        \"password\": \"password\",\r\n        \"role\": \"admin\",\r\n        \"authToken\": null\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/fields/2",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"fields",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete FieldsById",
+					"request": {
+						"method": "DELETE",
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ url }}/fields/2",
+							"host": [
+								"{{ url }}"
+							],
+							"path": [
+								"fields",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{token}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6Im9zemkiLCJmaXJzdG5hbWUiOiJTdGVmYW4iLCJsYXN0bmFtZSI6Ik9zdG9qaWMiLCJlbWFpbCI6Im9zemlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkbWR1b2U0REY4THhOcjRLNnkvbHNtTzJCc21lTTJ5TW9seFFJZ2ZmSnZweVNSQ3NSbVNOeTYiLCJyb2xlIjoiYWRtaW4iLCJhdXRoVG9rZW4iOm51bGx9LCJpYXQiOjE2NDkzNDA4ODJ9.gzXd1cbgoiSd_teoPjz2Ym3UpH1BmgV7oLZgNUK_DdA",
+			"type": "secret"
+		},
+		{
+			"key": " url ",
+			"value": "https://diplomarbeit-backend.herokuapp.com"
+		}
+	]
+}
