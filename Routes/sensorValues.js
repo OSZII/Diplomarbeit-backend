@@ -20,6 +20,7 @@ app.get("/download", async(req, res) => {
 
 app.get("/:id", async(req, res) => {
     // validate id
+    let id = req.params.id;
     if (id < 0 || isNaN(id)) { res.status(400).send(Helper.ID_ERROR); return; }
     res.status(200).send(await sensorValue.getById(req.params.id));
 })
