@@ -148,7 +148,7 @@ app.delete("*", (req, res) => {
 // #endregion
 
 function verifyToken(req, res, next) {
-
+    console.log("LOGINNNNN");
     console.log(req.body);
     console.log(req.headers);
     // Get auth header value
