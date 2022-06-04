@@ -147,12 +147,8 @@ app.delete("*", (req, res) => {
 // #endregion
 
 function verifyToken(req, res, next) {
-    console.log("\n\n\n---------------------------------------");
-    console.log("request Body---------------------------------");
     console.log(req.body);
-    console.log("request Headers ---------------------------------");
     console.log(req.headers['authorization']);
-    console.log("---------------------------------------\n\n\n");
     // Get auth header value
     const brearerHeader = req.headers["authorization"];
 
