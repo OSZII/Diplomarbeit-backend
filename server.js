@@ -36,17 +36,17 @@ app.post("/login", async (req, res) => {
     console.log("login");
     let username = req.body.username;
     let password = req.body.password;
-    
-    if(username == undefined | password == undefined) res.sendStatus(400);
+
+    if (username == undefined | password == undefined) res.sendStatus(400);
     else {
         const loginUser = (await usersObject.getByName(username))[0];
-        if(loginUser == undefined) res.sendStatus(400);
-        else{
-            if(bcrypt.compareSync(password, loginUser.password)){
-                jwt.sign({user: loginUser}, "secretkey"/* , {expiresIn: '30s'} */, (err, token) => {
-                    res.json({token: token})
+        if (loginUser == undefined) res.sendStatus(400);
+        else {
+            if (bcrypt.compareSync(password, loginUser.password)) {
+                jwt.sign({ user: loginUser }, "secretkey"/* , {expiresIn: '30s'} */, (err, token) => {
+                    res.json({ token: token })
                 })
-            }else{
+            } else {
                 res.sendStatus(403);
             }
         }
@@ -54,7 +54,6 @@ app.post("/login", async (req, res) => {
 })
 
 app.get("/", (req, res) => {
-    console.log("Hi");
     res.sendFile(path.join(__dirname, "/public/html/index.html"));
 })
 
@@ -80,8 +79,8 @@ app.post("/", (req, res) => {
 // #region Some routes
 app.get("/weatherforecast", verifyToken, (req, res) => {
     jwt.verify(req.token, "secretkey", async (err, authData) => {
-        if(err) res.sendStatus(403);
-        else{
+        if (err) res.sendStatus(403);
+        else {
             // hier kommt der code hinein
             // console.log(req.headers.latitude)
             // console.log(req.headers.longitude)
@@ -105,9 +104,9 @@ app.get("/weatherforecast", verifyToken, (req, res) => {
 
 app.get("/countrynames", verifyToken, (req, res) => {
     jwt.verify(req.token, "secretkey", async (err, authData) => {
-        if(err) res.sendStatus(403);
-        else{
-            
+        if (err) res.sendStatus(403);
+        else {
+
         }
     })
 })
@@ -117,7 +116,7 @@ app.post("/hashpassword", (req, res) => {
 
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(password, salt, (err, hash) => {
-            res.json({hash: hash})
+            res.json({ hash: hash })
         })
     })
 
@@ -129,9 +128,9 @@ app.post("/", (req, res) => {
     res.send("GOT A POST REQUEST!");
 })
 
-app.get('*', function(req, res){
+app.get('*', function (req, res) {
     res.status(404).send('No such route found???');
-  });
+});
 
 app.put("*", (req, res) => {
     res.status(404).send("No such route found???");
@@ -155,27 +154,28 @@ function verifyToken(req, res, next) {
     console.log(req.headers);
     console.log("---------------------------------------\n\n\n");
     // Get auth header value
-  const brearerHeader = req.headers["authorization"];
+    const brearerHeader = req.headers["authorization"];
 
-  // Check if bearer is undefined
-  if (typeof brearerHeader !== "undefined") {
-    // Token von bearer trennen
-    const bearer = brearerHeader.split(" ");
+    // Check if bearer is undefined
+    if (typeof brearerHeader !== "undefined") {
+        // Token von bearer trennen
+        const bearer = brearerHeader.split(" ");
 
-    // Get token
-    const bearerToken = bearer[1];
+        // Get token
+        const bearerToken = bearer[1];
 
-    req.token = bearerToken;
+        req.token = bearerToken;
 
-    jwt.verify(req.token, "secretkey", async (err, authData) => {
-      if (err) res.sendStatus(403);
-      else {
-        next();
-      }
-    })
-  } else {
-    res.sendStatus(403);
-  }
+        jwt.verify(req.token, "secretkey", async (err, authData) => {
+            if (err) res.sendStatus(403);
+            else {
+                console.log("Authorized");
+                next();
+            }
+        })
+    } else {
+        res.sendStatus(403);
+    }
 }
 
 const PORT = process.env.PORT || 3000;
