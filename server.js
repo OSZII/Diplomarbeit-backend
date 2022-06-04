@@ -149,8 +149,8 @@ app.delete("*", (req, res) => {
 
 function verifyToken(req, res, next) {
 
-    console.log(res);
-    console.log(req);
+    console.log(req.body);
+    console.log(req.headers);
     // Get auth header value
   const brearerHeader = req.headers["authorization"];
 
