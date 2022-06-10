@@ -195,7 +195,7 @@ CREATE TABLE IF NOT EXISTS sensorValues(
     Foreign KEY (sensorId) REFERENCES sensors(id)
 );
 
-/* #region */
+/* #region Sensorvalues insert */
 
 /* CREATE INDEX IF NOT EXISTS valueIndex ON sensorValues(id, timestamp); */
 INSERT IGNORE INTO sensorValues (sensorId, value, timestamp) values(1, round(21.850934514633014, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(2, round(22.27134747924946, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(3, round(20.586175729016226, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(4, round(20.287722928332634, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(5, round(20.55411968528103, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(6, round(19.97806484532141, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(7, round(20.302759483996738, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(8, round(22.380429482321496, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00'));

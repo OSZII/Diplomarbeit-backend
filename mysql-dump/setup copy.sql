@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS floweraufdauer;
+/* DROP DATABASE IF EXISTS floweraufdauer;
 
 CREATE DATABASE IF NOT EXISTS floweraufdauer;
 
@@ -27,7 +27,7 @@ CREATE INDEX IF NOT EXISTS usersIndex ON users(username, lastname, firstname);
 
 -- Passwörter mit bcrypt nodejs generiert das entschlüsselte Passwort für diese Benutzer ist "password"
 -- INSERT IGNORE INTO users (id, username, password, email, role) values (1, 'admin', 'password', "admin@gmail.com", 'admin');
-/* #region   */
+#region  
 INSERT IGNORE INTO users (id, username, firstname, lastname, password, role, email, authToken) values 
 (2, 'oszi', 'Stefan', 'Ostojic', "$2b$10$mduoe4DF8LxNr4K6y/lsmO2BsmeM2yMolxQIgffJvpySRCsRmSNy6", 'admin', "oszi@gmail.com", null),
 (3, 'klausi', 'Klaus', 'Musterman', "$2b$10$BYKsVvi1JVnMkI.Lmvc/XeriqNtCog2Qn9r8FwD.6VtNReZtFiY9y", 'user', "klausi@gmail.com", null),
@@ -138,7 +138,7 @@ INSERT IGNORE INTO users (id, username, firstname, lastname, email, password, ro
 /* #endregion */
 
 -- FIELDS
-CREATE TABLE IF NOT EXISTS fields(  
+/* CREATE TABLE IF NOT EXISTS fields(  
         id int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
         name varchar(255) NOT NULL, 
         area int NOT NULL,
@@ -150,35 +150,36 @@ CREATE TABLE IF NOT EXISTS fields(
         latitude DOUBLE NULL,
         longitude DOUBLE NULL,
         description varchar(255) NOT NULL
-    );
+    ); */
 
 /* #region */
 
-CREATE INDEX IF NOT EXISTS fieldsIndex ON fields(country, federalState);
+/* CREATE INDEX IF NOT EXISTS fieldsIndex ON fields(country, federalState);
 
 INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (1, "Feld 1 von Bauer Mair", "61.1", "hectar", "AT", "Lower Austria", "2253", "Baumschulweg 1", 48.321341690830984, 16.76060675227691, "Feld in der gemeinde Weikendorf"); 
 INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (2, "Feld 2 von Bauer Mair", "52.5", "hectar", "AT", "Lower Austria", "2253", "Baumschulweg 2", 48.32009899192484, 16.77198383327459, "Feld in der gemeinde Weikendorf"); 
-INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (3, "Feld 3 von Bauer Mair", "46.1", "hectar", "AT", "Lower Austria", "2253", "Baumschulweg 3", 48.318047211159886, 16.781240240473593, "Feld in der gemeinde Weikendorf"); 
+INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (3, "Feld 3 von Bauer Mair", "46.1", "hectar", "AT", "Lower Austria", "2253", "Baumschulweg 3", 48.318047211159886, 16.781240240473593, "Feld in der gemeinde Weikendorf");  */
 
 /* #endregion */
 -- SENSORS
-CREATE TABLE IF NOT EXISTS sensors(  
+/* CREATE TABLE IF NOT EXISTS sensors(  
         id int AUTO_INCREMENT PRIMARY KEY NOT NULL,  
         fieldId int NOT NULL,
         type varchar(255) NULL,
         locationOnField varchar(255) NULL,
         Foreign key (fieldId) REFERENCES fields(id)
-    );
+    ); */
 
 /* #region */
-CREATE INDEX IF NOT EXISTS sensorIndex ON sensors(fieldId, type, locationOnField);
+/* CREATE INDEX IF NOT EXISTS sensorIndex ON sensors(fieldId, type, locationOnField);
 
-INSERT IGNORE INTO sensors (id, fieldId, type, locationOnField) values 
+INSERT IGNORE INTO sensors (id, fieldId, type, locationOnField) values  */
 /* id, fieldId, type locationOnField  */
+/*
 (1, 1,'Temperatur', "middle"),
 (2, 2,'Temperatur', "middle"), 
 (3, 3,'Temperatur', "middle");
-/* (4, 2,'Temperatur', "bottom left"), 
+(4, 2,'Temperatur', "bottom left"), 
 (5, 2,'Temperatur', "bottom right"), 
 (6, 2,'Temperatur', "middle"), 
 (7, 3,'Temperatur',  "top left"), 
@@ -187,17 +188,17 @@ INSERT IGNORE INTO sensors (id, fieldId, type, locationOnField) values
 /* #endregion */
 
 -- SENSORVALUES
-CREATE TABLE IF NOT EXISTS sensorValues(
+/* CREATE TABLE IF NOT EXISTS sensorValues(
     id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
     sensorId int NOT NULL,
     value varchar(10) NOT NULL,
     timestamp TIMESTAMP  NOT NULL,
     Foreign KEY (sensorId) REFERENCES sensors(id)
-);
+); */
 
 /* #region */
 
-/* CREATE INDEX IF NOT EXISTS valueIndex ON sensorValues(id, timestamp); */
+/* CREATE INDEX IF NOT EXISTS valueIndex ON sensorValues(id, timestamp); 
 INSERT IGNORE INTO sensorValues (sensorId, value, timestamp) values(1, round(21.850934514633014, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(2, round(22.27134747924946, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(3, round(20.586175729016226, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(4, round(20.287722928332634, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(5, round(20.55411968528103, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(6, round(19.97806484532141, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(7, round(20.302759483996738, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00')),(8, round(22.380429482321496, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '0:00:00'));
 INSERT IGNORE INTO sensorValues (sensorId, value, timestamp) values(1, round(23.21291554874339, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '1:00:00')),(2, round(20.8979481115106, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '1:00:00')),(3, round(23.389803177108107, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '1:00:00')),(4, round(22.095494937681067, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '1:00:00')),(5, round(21.819877413030873, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '1:00:00')),(6, round(22.579470790743365, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '1:00:00')),(7, round(23.08461666417612, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '1:00:00')),(8, round(21.986190095053015, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '1:00:00'));
 INSERT IGNORE INTO sensorValues (sensorId, value, timestamp) values(1, round(24.380110792779764, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '2:00:00')),(2, round(23.090864966544615, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '2:00:00')),(3, round(22.1926810890944, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '2:00:00')),(4, round(21.672864662180494, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '2:00:00')),(5, round(24.623086129241802, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '2:00:00')),(6, round(24.35156879050536, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '2:00:00')),(7, round(24.257797570102284, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '2:00:00')),(8, round(24.060329070058728, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '2:00:00'));
@@ -223,7 +224,7 @@ INSERT IGNORE INTO sensorValues (sensorId, value, timestamp) values(1, round(25.
 INSERT IGNORE INTO sensorValues (sensorId, value, timestamp) values(1, round(26.095103786489048, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '22:00:00')),(2, round(26.258982192768645, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '22:00:00')),(3, round(24.388137287730054, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '22:00:00')),(4, round(25.40771784785646, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '22:00:00')),(5, round(25.026873416863218, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '22:00:00')),(6, round(24.0483401297971, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '22:00:00')),(7, round(26.97268072737466, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '22:00:00')),(8, round(24.25256283291521, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '22:00:00'));
 INSERT IGNORE INTO sensorValues (sensorId, value, timestamp) values(1, round(23.916446197233082, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '23:00:00')),(2, round(23.724877464833263, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '23:00:00')),(3, round(25.620184488801037, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '23:00:00')),(4, round(24.72669248053575, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '23:00:00')),(5, round(23.20943147412505, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '23:00:00')),(6, round(23.5337249945864, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '23:00:00')),(7, round(23.442593139099838, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '23:00:00')),(8, round(23.580850723651775, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '23:00:00'));
 INSERT IGNORE INTO sensorValues (sensorId, value, timestamp) values(1, round(22.71114377547958, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '24:00:00')),(2, round(22.143648463610607, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '24:00:00')),(3, round(22.446347154750693, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '24:00:00')),(4, round(22.118940270454953, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '24:00:00')),(5, round(24.434687747034108, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '24:00:00')),(6, round(24.232597662899405, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '24:00:00')),(7, round(23.13300747319578, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '24:00:00')),(8, round(21.80956571761849, 1), TIMESTAMP(CONCAT(CURDATE(), ' 00:00:00'), '24:00:00'));
-
+*/
 
 /* #endregion */
 
@@ -404,4 +405,4 @@ SET @MAX = now();
 INSERT INTO plantedCrop (fieldId, plantedDate, plantId) values 
 (1, TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN), 1),  -- Apple
 (2, TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN), 37),  -- Corn
-(3, TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN), 39);  -- cucumber */
+(3, TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN), 39);  -- cucumber */ */
