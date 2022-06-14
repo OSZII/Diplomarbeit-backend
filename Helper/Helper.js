@@ -7,6 +7,7 @@ class Helper {
     static USERNAME_ERROR = "Username already exists!";
     static EMAIL_ERROR = "Email already exists!";
     static INVALID_FOREIGNKEY_ERROR = "Foreign key is invalid!";
+    static INVALID_UNIT_ERROR = "Unit is invalid!";
 
     static checkProperties(properties, object) {
       for(let i = 0; i < properties.length; i++) {
@@ -66,4 +67,5 @@ module.exports = {
     USERNAME_ERROR: this.USERNAME_ERROR,
     EMAIL_ERROR: this.EMAIL_ERROR,
     INVALID_FOREIGNKEY_ERROR: this.INVALID_FOREIGNKEY_ERROR,
+    INVALID_UNIT_ERROR: this.INVALID_UNIT_ERROR,
 };

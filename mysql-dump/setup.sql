@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS fields(
         id int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
         name varchar(255) NOT NULL, 
         area int NOT NULL,
-        unit ENUM("square meter", "hectar", "square kilometer", "square feet", "acre") NOT NULL,
+        unit ENUM("square meter", "square kilometer", "kilometer", "km", "square feet", "square foot", "acre", "hectar", "square yard") NOT NULL,
         country varchar(2) NOT NULL,
         federalState varchar(255) NOT NULL,
         postalCode varchar(10) NOT NULL,
