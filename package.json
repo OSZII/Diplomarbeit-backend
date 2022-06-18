@@ -24,19 +24,15 @@
   "dependencies": {
     "axios": "^0.26.0",
     "bcrypt": "^5.0.1",
-    "chalk": "^5.0.1",
     "cli-color": "^2.0.2",
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "fast-csv": "^4.3.6",
     "jsonwebtoken": "^8.5.1",
-    "loadtest": "^5.2.0",
     "mariadb": "^2.5.5",
-    "nodemon": "^2.0.15",
-    "pm2": "^5.2.0"
+    "nodemon": "^2.0.15"
   },
   "devDependencies": {
-    "jest": "^27.5.1",
-    "supertest": "^6.2.3"
+    "jest": "^27.5.1"
   }
 }
