@@ -1,11 +1,8 @@
 const express = require("express");
 const app = express.Router();
-
 const user = require("../Objects/User");
-const {Helper, checkProperties, INVALID_PROPERTIES_ERROR, ID_ERROR, NOTHING_FOUND_ERROR, LENGTH_ERROR} = require("../Helper/Helper");
+const {Helper, checkProperties, ID_ERROR, NOTHING_FOUND_ERROR} = require("../Helper/Helper");
 const handler = require("../Objects/FileHandler");
-// const Userhandler = require("../Handler/Userhandler");
-
 
 const properties = [
   "username",
@@ -117,7 +114,6 @@ app.put("/:id", async (req, res) => {
     if(!checkProperties(properties, userBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return;}
 
     res.status(200).send(await user.update(userBody, id));
-
 })
 // #endregion
 
@@ -133,7 +129,6 @@ app.delete("/:id", async (req, res) => {
     if(userById.length == 0) {res.status(404).send(Helper.NOTHING_FOUND_ERROR); return;}
 
     res.status(200).send(await user.deleteById(id));
-  
 })
 // #endregion
 

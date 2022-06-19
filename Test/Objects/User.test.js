@@ -3,7 +3,6 @@ const user = require("../../Objects/User");
 describe('Get User', () => { 
     test("getAll() und checkt die länge", async () => {
         let returnedUser = await user.getAll();
-        // console.log(returnedUser);
         expect(returnedUser.length > 1 && returnedUser[0].hasOwnProperty("username")).toBeTruthy();
     });
     test("getUserById(2) und schaut ob die ID 2 ist", async () => {
@@ -48,10 +47,10 @@ describe("Update User", () => {
 describe('Delete User', () => {
     test("deleteUserById(7) und schaut beim rückgabewert auf affectedRows und schaut ob 1", async () => {
         let resultCreated = await user.createUser({
-            "username": "TestUser",
+            "username": "TestUser1234",
             "firstname": "Test",
             "lastname": "User",
-            "email": "TestmailUser@gmail.com",
+            "email": "TestmailUser1234@gmail.com",
             "password": "password",
             "role": "user",
             "authToken": "null"

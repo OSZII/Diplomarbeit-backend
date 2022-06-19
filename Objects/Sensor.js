@@ -8,8 +8,6 @@ class Sensor{
     #type;
     #locationOnField;
 
-    // Create
-    //standard
     static async createSensor(sensor){
         // Check first if fieldId exists
         let conn = await pool.getConnection();
@@ -20,17 +18,6 @@ class Sensor{
         return result;
     }
 
-    //standard
-    // static async createMultipleSensors(sensors){
-    //     let results = [];
-    //     for(let i = 0; i < sensors.length; i++){
-    //         results.push(await this.createSensor(sensors[i]));
-    //     }
-    //     return results
-    // }
-
-    // Read
-    //standard
     static async getAll(){
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM sensors;";
@@ -39,7 +26,6 @@ class Sensor{
         return results;
     }
 
-    //standard
     static async getById(id){
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM sensors WHERE id = ?;";
@@ -64,9 +50,7 @@ class Sensor{
         return result;
     }
 
-    // Update
     static async update(sensor, id){
-        // Check first if fieldId Exists
         let conn = await pool.getConnection();
         let sql = "UPDATE sensors SET fieldId = ?, type = ?, locationOnField = ? WHERE id = ?;";
         let result = await conn.query(sql, [sensor.fieldId, sensor.type, sensor.locationOnField, id]);
@@ -74,7 +58,6 @@ class Sensor{
         return result;
     }
 
-    // Delete
     static async deleteById(id){
         let conn = await pool.getConnection();
         let sql = "DELETE FROM sensors WHERE id = ?;";
@@ -90,43 +73,6 @@ class Sensor{
         conn.end();
         return result;
     }
-
-    //#region Getter and Setter
-
-    getId(){
-        return this.#id;
-    }
-
-    setId(id){
-        this.#id = id;
-    }
-
-    getFieldId(){
-        return this.#fieldId;
-    }
-
-    setFieldId(fieldId){
-        // Check first if FieldId exists
-        this.#fieldId = fieldId;
-    }
-
-    getType(){
-        return this.#type;
-    }
-
-    setType(type){
-        this.#type = type;
-    }
-
-    getLocationOnField(){
-        return this.#locationOnField;
-    }
-
-    setLocationOnField(locationOnField){
-        this.#locationOnField = locationOnField;
-    }
-
-    //#endregion
 
 }
 

@@ -20,17 +20,6 @@ class Plants{
         return result;
     }
 
-    //standard
-    static async createMultipleSensors(sensors){
-        // TODO: authentifizieren
-        // TODO: validieren
-        let results = [];
-        for(let i = 0; i < sensors.length; i++){
-            results.push(await this.createSensor(sensors[i]));
-        }
-        return results
-    }
-
     // Read
     //standard
     static async getAll(){

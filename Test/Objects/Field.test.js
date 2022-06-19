@@ -38,34 +38,6 @@ describe("Post Field", () => {
         expect(result.affectedRows).toBe(1);
     });
 
-    test("Erstellt zwei Fields und schaut in den zurückgegebenen Objekten nach, ob die affected rows in summe 2 ergeben, da 2 Fields erstellt werden", async() => {
-        let result = await field.createMultipleFields([{
-                name: "Obertauern 11",
-                area: "50",
-                unit: "square meter",
-                country: "AT",
-                federalState: "Tirol",
-                postalCode: "6020",
-                street: "Olypiastraße 9",
-                latitude: -1,
-                longitude: -1,
-                description: "Feld im Obertauern 11",
-            },
-            {
-                name: "Obertauern 12",
-                area: "50",
-                unit: "square meter",
-                country: "AT",
-                federalState: "Tirol",
-                postalCode: "6020",
-                street: "Olypiastraße 9",
-                latitude: -1,
-                longitude: -1,
-                description: "Feld im Obertauern 12",
-            },
-        ]);
-        expect(result[0].affectedRows + result[1].affectedRows).toBe(2);
-    });
 });
 
 describe("Update Field", () => {

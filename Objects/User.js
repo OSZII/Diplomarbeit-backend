@@ -1,19 +1,8 @@
 // CRUD fieldjs
 const pool = require("../Database/database");
-const Help = require("../Helper/Helper");
 
 class User{
 
-    #id;
-    #username;
-    #firstname;
-    #lastname;
-    #email;
-    #password;
-    #role;
-    #authToken;
-
-    // Create
     static async createUser(user){
         let conn = await pool.getConnection();
         let sql = "INSERT INTO users (username, firstname, lastname, email, password, role, authToken) VALUES (?, ?, ?, ?, ?, ?, ?);";
@@ -22,19 +11,9 @@ class User{
         return result;
     }
 
-    static async createMultipleUsers(users){
-        let results = [];
-        for(let i = 0; i < users.length; i++){
-            results.push(await this.createUser(users[i]));
-        }
-        return results
-    }
-
-    // Read
     static async getAll(){
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM users;";
-        // zu Field Objecten mappen mit ORM
         let results = await conn.query(sql);
         conn.end();
         return results;
@@ -72,16 +51,14 @@ class User{
         return results;
     }
 
-    // Update
-    static async update(user, id){
+    static async update(user){
         let conn = await pool.getConnection();
         let sql = "UPDATE users SET username = ?, firstname = ?, lastname = ?, email = ?, password = ?, role = ?, authToken = ? WHERE id = ?;";
-        let result = await conn.query(sql, [user.username, user.firstname, user.lastname, user.email, user.password, user.role, user.authToken, id]);
+        let result = await conn.query(sql, [user.username, user.firstname, user.lastname, user.email, user.password, user.role, user.authToken, user.id]);
         conn.end();
         return result;
     }
 
-    // Delete
     static async deleteById(id){
         let conn = await pool.getConnection();
         let sql = "DELETE FROM users WHERE id = ?;";

@@ -7,17 +7,13 @@
 const path = require("path")
 const bcrypt = require("bcrypt");
 var cors = require('cors')
-
 const express = require('express');
 const app = express();
-
 const usersObject = require("./Objects/User");
-
 const users = require("./Routes/users");
 const fields = require("./Routes/fields");
 const sensors = require("./Routes/sensors");
 const sensorValues = require("./Routes/sensorValues");
-
 const jwt = require("jsonwebtoken");
 const { default: axios } = require("axios");
 
@@ -25,43 +21,29 @@ const { default: axios } = require("axios");
 
 // Erlaubt es URL encoded Data zu verwenden, weil ansonsten ist req bei post immer undefined
 // Mit dem allein Funktioniert json aber nicht
-app.use(express.urlencoded({ extended: true }));
 // Mit dieser Zeile geht dann auch json
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(express.static("public"))
 // All Routes that should be accesible without a token
 
 app.post("/login", async (req, res) => {
-    console.log("login");
     let username = req.body.username;
     let password = req.body.password;
 
-    if (username == undefined | password == undefined) res.sendStatus(400);
-    else {
-        const loginUser = (await usersObject.getByName(username))[0];
-        if (loginUser == undefined) res.sendStatus(400);
-        else {
-            if (bcrypt.compareSync(password, loginUser.password)) {
-                jwt.sign({ user: loginUser }, "secretkey"/* , {expiresIn: '30s'} */, (err, token) => {
-                    res.json({ token: token })
-                })
-            } else {
-                res.sendStatus(403);
-            }
-        }
-    }
+    if (username == undefined | password == undefined) {res.sendStatus(400); return;}
+    const loginUser = (await usersObject.getByName(username))[0];
+    if (loginUser == undefined) {res.sendStatus(400); return; }
+    if (!bcrypt.compareSync(password, loginUser.password)) {res.sendStatus(403); return; }
+    jwt.sign({ user: loginUser }, "secretkey"/* , {expiresIn: '30s'} */, (err, token) => {
+        res.json({ token: token })
+    })
 })
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/html/index.html"));
 })
-
-// All routesm after this need to be verified
-// app.get("*", verifyToken ,(req, res, next) => {
-//     console.log("GET REQUEST");
-//     next();
-// })
 
 app.all("*", verifyToken);
 
@@ -70,10 +52,10 @@ app.use("/fields", fields);
 app.use("/sensors", sensors);
 app.use("/sensorvalues", sensorValues);
 
-app.post("/", (req, res) => {
-    console.log(req.body);
-    res.send("Ok").status(200);
-})
+// app.post("/", (req, res) => {
+//     console.log(req.body);
+//     res.send("Ok").status(200);
+// })
 
 
 // #region Some routes
@@ -147,31 +129,20 @@ app.delete("*", (req, res) => {
 // #endregion
 
 function verifyToken(req, res, next) {
-    console.log(req.body);
-    console.log(req.headers['authorization']);
     // Get auth header value
     const brearerHeader = req.headers["authorization"];
 
     // Check if bearer is undefined
-    if (typeof brearerHeader !== "undefined") {
+    if (typeof brearerHeader == "undefined") {res.sendStatus(403); return;}
         // Token von bearer trennen
         const bearer = brearerHeader.split(" ");
-
         // Get token
         const bearerToken = bearer[1];
-
         req.token = bearerToken;
-
         jwt.verify(req.token, "secretkey", async (err, authData) => {
-            if (err) res.sendStatus(403);
-            else {
-                console.log("Authorized");
-                next();
-            }
+            if (err) {res.sendStatus(403); return; }
+            next();
         })
-    } else {
-        res.sendStatus(403);
-    }
 }
 
 const PORT = process.env.PORT || 3000;

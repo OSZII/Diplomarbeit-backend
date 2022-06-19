@@ -1,13 +1,7 @@
 const pool = require("../Database/database");
-const Help = require("../Helper/Helper");
 
 class SensorValue {
-  #id;
-  #sensorId;
-  #value;
-  #timestamp;
 
-    // Create
     static async createSensorValue(sensorValue){
         let conn = await pool.getConnection();
         let sql = "INSERT INTO sensorValues (sensorId, value, timestamp) VALUES (?, ?, ?);";
@@ -16,15 +10,6 @@ class SensorValue {
         return result;
     }
 
-    static async createMultipleSensorValues(sensorValues){
-        let results = [];
-        for(let i = 0; i < sensorValues.length; i++){
-            results.push(await this.createSensorValue(sensorValues[i]));
-        }
-        return results
-    }
-
-    // Read
     static async getAll(){
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM sensorValues;";

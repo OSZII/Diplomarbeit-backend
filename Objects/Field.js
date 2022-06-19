@@ -1,11 +1,7 @@
-// CRUD fieldjs
-const validator = require("./Validator");
 const pool = require("../Database/database");
-const Help = require("../Helper/Helper");
 
 class Field{
 
-    // Create
     static async createField(field){
         let conn = await pool.getConnection();
         let sql = "INSERT INTO fields (name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -14,19 +10,9 @@ class Field{
         return result;
     }
 
-    static async createMultipleFields(fields){
-        let results = [];
-        for(let i = 0; i < fields.length; i++){
-            results.push(await this.createField(fields[i]));
-        }
-        return results
-    }
-
-    // Read
     static async getAll(){
         let conn = await pool.getConnection();
         let sql = "SELECT * FROM fields;";
-        // zu Field Objecten mappen mit ORM
         let results = await conn.query(sql);
         conn.end();
         return results;
@@ -42,14 +28,12 @@ class Field{
 
     static async getByName(name){
         let conn = await pool.getConnection();
-        // "%?%" macht hier schwierigkeiten deshalb muss man des mit mysql CONCAT manuell
-        // machen
         let sql = `SELECT * FROM fields WHERE name LIKE CONCAT('%', ?, '%');`;
         let results = await conn.query(sql, [name]);
         conn.end();
         return results;
     }
-    // Update
+
     static async update(field, id){
         let conn = await pool.getConnection();
         let sql = "UPDATE fields SET name = ?, area = ?, unit = ?, country = ?, federalState = ?, postalCode = ?, street = ?, latitude = ?, longitude = ?, description = ? WHERE id = ?;";
@@ -58,7 +42,6 @@ class Field{
         return result;
     }
 
-    // Delete
     static async deleteById(id){
         let conn = await pool.getConnection();
         let sql = "DELETE FROM fields WHERE id = ?;";
@@ -66,7 +49,6 @@ class Field{
         conn.end();
         return result;
     }
-
 }
 
 module.exports = Field

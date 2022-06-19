@@ -4,9 +4,9 @@
   "description": "Diplomarbeit Flower auf Dauer",
   "main": "server.js",
   "scripts": {
-    "test": "restartdb.bat&&ping -n 5 127.0.0.1>nul&&set NODE_ENV=development&&cls&&jest ./Test --verbose",
+    "test": "restartdb.bat&&ping -n 10 127.0.0.1>nul&&set NODE_ENV=development&&cls&&jest ./Test --verbose",
     "start": "set NODE_ENV=production&&node server.js",
-    "dev": "restartdb.bat&&ping -n 2 127.0.0.1>nul&&set NODE_ENV=development&&nodemon server.js"
+    "dev": "restartdb.bat&&ping -n 5 127.0.0.1>nul&&set NODE_ENV=development&&nodemon server.js"
   },
   "repository": {
     "type": "git",

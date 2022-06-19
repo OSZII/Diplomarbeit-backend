@@ -36,14 +36,14 @@ const pool = mariadb.createPool({
 module.exports = {
     getConnection: function () {
         return new Promise(
-            function (resolve, reject) {
-                pool.getConnection().then(
-                    function (connection) {
+            (resolve, reject) => {
+                pool.getConnection()
+                    .then((connection) => {
                         resolve(connection);
-                    }).catch(
-                        function (error) {
-                            reject(error);
-                        });
-        });
-    }
+                    })
+                    .catch((error) => {
+                        reject(error);
+                    });
+            });
+        }
 }
