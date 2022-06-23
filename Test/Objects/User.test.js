@@ -39,8 +39,23 @@ describe("Update User", () => {
         let returnedUser = await user.getByName("klausi");
         returnedUser = returnedUser[0];
         returnedUser.username = "Klausi3";
-        let result = await user.update(returnedUser, returnedUser.id);
+        let result = await user.update(returnedUser);
         expect(result.affectedRows).toBe(1);
+    })
+
+    test("Negativtest Updaten des Users 90000", async () => {
+        let updatedUser = {
+            "id": 90000,
+            "username": "TestUser1238492",
+            "firstname": "Test",
+            "lastname": "User",
+            "email": "jkdnkajsdnjkandfj@gmail.com",
+            "password": "password",
+            "role": "user",
+            "authToken": "null"
+        }
+        let result = await user.update(updatedUser);
+        expect(result.affectedRows).toBe(0);
     })
 })
 

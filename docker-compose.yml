@@ -1,12 +1,12 @@
 version: "3"
 services: 
-  node:
-    build: .
-    container_name: express-api
-    ports:
-      - "80:8000"
-    depends_on: 
-      - mysql
+  # node:
+  #   build: .
+  #   container_name: express-api
+  #   ports:
+  #     - "80:8000"
+  #   depends_on: 
+  #     - mysql
 
   mysql:
     container_name: db_diplomarbeit
