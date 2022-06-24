@@ -30,7 +30,7 @@ app.get("/:id/download", async(req, res) => {
 
         if (id < 0 || isNaN(id)) { res.status(400).send(ID_ERROR); return; }
         let sensorvalues = await sensorValue.getById(id);
-        if (sensorValue.length == 0) { res.status(404).send(NOTHING_FOUND_ERROR); return; }
+        if (sensorvalues.length == 0) { res.status(404).send(NOTHING_FOUND_ERROR); return; }
 
         handler.createAndSendFile("sensorValue_" + id, "csv", sensorvalues, res);
     })

@@ -113,7 +113,8 @@ app.put("/:id", async (req, res) => {
     let userBody = req.body;
     if(!checkProperties(properties, userBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return;}
 
-    res.status(200).send(await user.update(userBody, id));
+    userBody.id = id;
+    res.status(200).send(await user.update(userBody));
 })
 // #endregion
 
