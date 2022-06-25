@@ -2,7 +2,7 @@ const express = require("express");
 const app = express.Router();
 
 const sensorValue = require("../Objects/SensorValue");
-const { Helper, checkProperties, INVALID_PROPERTIES_ERROR, ID_ERROR, NOTHING_FOUND_ERROR } = require("../Helper/Helper");
+const Helper = require("../Helper/Helper");
 const handler = require("../Objects/FileHandler");
 
 const properties = ["sensorId", "value", "timestamp"];
@@ -22,15 +22,15 @@ app.get("/:id", async(req, res) => {
     // validate id
     let id = req.params.id;
     if (id < 0 || isNaN(id)) { res.status(400).send(Helper.ID_ERROR); return; }
-    res.status(200).send(await sensorValue.getById(req.params.id));
+    res.status(200).send(await sensorValue.getById(id));
 })
 
 app.get("/:id/download", async(req, res) => {
         let id = req.params.id;
 
-        if (id < 0 || isNaN(id)) { res.status(400).send(ID_ERROR); return; }
+        if (id < 0 || isNaN(id)) { res.status(400).send(Helper.ID_ERROR); return; }
         let sensorvalues = await sensorValue.getById(id);
-        if (sensorvalues.length == 0) { res.status(404).send(NOTHING_FOUND_ERROR); return; }
+        if (sensorvalues.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return; }
 
         handler.createAndSendFile("sensorValue_" + id, "csv", sensorvalues, res);
     })
@@ -39,7 +39,7 @@ app.get("/:id/download", async(req, res) => {
 // #region POST SensorValues
 app.post("/", async(req, res) => {
         let sensorValueBody = req.body;
-        if (!checkProperties(properties, sensorValueBody)) { res.status(400).send(INVALID_PROPERTIES_ERROR); return; }
+        if (!checkProperties(properties, sensorValueBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return; }
 
         res.send(await sensorValue.createSensorValue(sensorValueBody)).status(200);
     })

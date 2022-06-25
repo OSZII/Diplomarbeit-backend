@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express.Router();
 const user = require("../Objects/User");
-const {Helper, checkProperties, ID_ERROR, NOTHING_FOUND_ERROR} = require("../Helper/Helper");
+const Helper = require("../Helper/Helper");
 const handler = require("../Objects/FileHandler");
 
 const properties = [
@@ -36,7 +36,7 @@ app.get("/:id", async (req, res, next) => {
     let userById = await user.getById(id);
     if(userById.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return;}
 
-    res.status(200).send(await user.getById(req.params.id));
+    res.status(200).send(await user.getById(id));
 })
 
 app.get("/:name", async (req, res) => {
@@ -72,7 +72,7 @@ app.get("/:name/download", async (req, res) => {
     if(name.length < 3) {res.status(400).send(Helper.LENGTH_ERROR); return;}
 
     let foundUsers = await user.getByName(name);
-    if(foundUsers.length == 0) {res.status(404).send(NOTHING_FOUND_ERROR); return;}
+    if(foundUsers.length == 0) {res.status(404).send(Helper.NOTHING_FOUND_ERROR); return;}
 
     handler.createAndSendFile("users_" + name, "csv", foundUsers, res);
 })

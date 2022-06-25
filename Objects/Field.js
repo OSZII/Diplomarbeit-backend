@@ -34,10 +34,10 @@ class Field{
         return results;
     }
 
-    static async update(field, id){
+    static async update(field){
         let conn = await pool.getConnection();
         let sql = "UPDATE fields SET name = ?, area = ?, unit = ?, country = ?, federalState = ?, postalCode = ?, street = ?, latitude = ?, longitude = ?, description = ? WHERE id = ?;";
-        let result = await conn.query(sql, [field.name, field.area, field.unit, field.country, field.federalState, field.postalCode, field.street, field.latitude, field.longitude, field.description, id]);
+        let result = await conn.query(sql, [field.name, field.area, field.unit, field.country, field.federalState, field.postalCode, field.street, field.latitude, field.longitude, field.description, field.id]);
         conn.end();
         return result;
     }

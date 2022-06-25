@@ -3,7 +3,7 @@ const app = express.Router();
 
 const sensor = require("../Objects/Sensor");
 const field = require("../Objects/Field");
-const { Helper, checkProperties, INVALID_PROPERTIES_ERROR, ID_ERROR, NOTHING_FOUND_ERROR} = require("../Helper/Helper");
+const Helper = require("../Helper/Helper");
 const handler = require("../Objects/FileHandler");
 
 let properties = ["fieldId", "type", "locationOnField"];
@@ -33,11 +33,11 @@ app.get("/:id", async (req, res) => {
 app.get("/:id/download", async (req, res) => {
     let id = req.params.id;
 
-    if (id < 0 || isNaN(id)) { res.status(400).send(ID_ERROR); return; }
+    if (id < 0 || isNaN(id)) { res.status(400).send(Helper.ID_ERROR); return; }
 
     // check if id exists
     let sensorById = await sensor.getById(id);
-    if (sensorById.length == 0) { res.status(404).send(NOTHING_FOUND_ERROR); return; }
+    if (sensorById.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return; }
 
     handler.createAndSendFile("sensor_" + id, "csv", sensorById, res);
 });
@@ -74,7 +74,7 @@ app.get("/fields/:id/download", async (req, res) => {
 // #region POST Sensor
 app.post("/", async (req, res) => {
     let sensorBody = req.body;
-    if (!checkProperties(properties, sensorBody)) { res.status(400).send(INVALID_PROPERTIES_ERROR); return; }
+    if (!checkProperties(properties, sensorBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return; }
 
     // check if fieldId exists
     let fieldById = await field.getById(sensorBody.fieldId);
