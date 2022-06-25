@@ -27,7 +27,7 @@ describe("Update Sensor", () => {
         let returnedSensor = await sensor.getById(1);
         returnedSensor = returnedSensor[0];
         returnedSensor.fieldId = 3;
-        let result = await sensor.update(returnedSensor, 1);
+        let result = await sensor.update(returnedSensor);
         expect(result.affectedRows).toBe(1);
     })
 })

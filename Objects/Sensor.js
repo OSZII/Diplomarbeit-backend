@@ -1,12 +1,6 @@
 const pool = require("../Database/database");
 
 class Sensor{
-
-    #id;
-    #fieldId;
-    #type;
-    #locationOnField;
-
     static async createSensor(sensor){
         // Check first if fieldId exists
         let conn = await pool.getConnection();
@@ -49,10 +43,10 @@ class Sensor{
         return result;
     }
 
-    static async update(sensor, id){
+    static async update(sensor){
         let conn = await pool.getConnection();
         let sql = "UPDATE sensors SET fieldId = ?, type = ?, locationOnField = ? WHERE id = ?;";
-        let result = await conn.query(sql, [sensor.fieldId, sensor.type, sensor.locationOnField, id]);
+        let result = await conn.query(sql, [sensor.fieldId, sensor.type, sensor.locationOnField, sensor.id]);
         conn.end();
         return result;
     }
@@ -64,15 +58,6 @@ class Sensor{
         conn.end();
         return result;
     }
-
-    static async deleteAll(){
-        let conn = await pool.getConnection();
-        let sql = "DELETE FROM sensors WHERE id > 3";
-        let result = await conn.query(sql);
-        conn.end();
-        return result;
-    }
-
 }
 
 module.exports = Sensor;

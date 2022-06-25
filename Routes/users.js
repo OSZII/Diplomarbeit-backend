@@ -82,7 +82,7 @@ app.get("/:name/download", async (req, res) => {
 // #region POST User
 app.post("/", async (req, res) => {
     let userBody = req.body;
-    if(!checkProperties(properties, userBody)) {res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return;}
+    if(!Helper.checkProperties(properties, userBody)) {res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return;}
 
     // check if user with username exists
     let userByUsername = await user.getByUsername(userBody.username);
@@ -111,7 +111,7 @@ app.put("/:id", async (req, res) => {
 
     // validate Body
     let userBody = req.body;
-    if(!checkProperties(properties, userBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return;}
+    if(!Helper.checkProperties(properties, userBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return;}
 
     userBody.id = id;
     res.status(200).send(await user.update(userBody));

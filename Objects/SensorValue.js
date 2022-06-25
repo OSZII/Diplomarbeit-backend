@@ -1,7 +1,6 @@
 const pool = require("../Database/database");
 
 class SensorValue {
-
     static async createSensorValue(sensorValue){
         let conn = await pool.getConnection();
         let sql = "INSERT INTO sensorValues (sensorId, value, timestamp) VALUES (?, ?, ?);";
@@ -36,17 +35,19 @@ class SensorValue {
 
     static async getAllByField(){
         let conn = await pool.getConnection();
-        let sql = "SELECT f.id as 'fieldId', s.id as 'sensorId', sv.value, sv.timestamp FROM fields f LEFT JOIN sensors s ON(f.id = s.fieldId) LEFT JOIN sensorValues sv ON (s.id = sv.sensorId)";
+        let sql = `SELECT f.id as 'fieldId', s.id as 'sensorId', sv.value, sv.timestamp 
+        FROM fields f LEFT JOIN sensors s ON(f.id = s.fieldId) 
+        LEFT JOIN sensorValues sv ON (s.id = sv.sensorId)`;
         let results = await conn.query(sql);
         conn.end();
         return results;
     }
 
     // Update
-    static async update(sensorValue, id){
+    static async update(sensorValue){
         let conn = await pool.getConnection();
         let sql = "UPDATE sensorValues SET sensorId = ?, value = ?, timestamp = ? WHERE id = ?;";
-        let result = await conn.query(sql, [sensorValue.sensorId, sensorValue.value, sensorValue.timestamp, id]);
+        let result = await conn.query(sql, [sensorValue.sensorId, sensorValue.value, sensorValue.timestamp, sensorValue.id]);
         conn.end();
         return result;
     }
@@ -67,15 +68,6 @@ class SensorValue {
         conn.end();
         return result;
     }
-
-    static async deleteAll(){
-        let conn = await pool.getConnection();
-        let sql = "DELETE FROM sensorValues WHERE id;";
-        let result = await conn.query(sql);
-        conn.end();
-        return result;
-    }
-
 }
 
 module.exports = SensorValue;

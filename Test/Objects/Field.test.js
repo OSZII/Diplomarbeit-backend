@@ -37,7 +37,6 @@ describe("Post Field", () => {
         });
         expect(result.affectedRows).toBe(1);
     });
-
 });
 
 describe("Update Field", () => {

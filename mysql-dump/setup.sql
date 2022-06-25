@@ -156,9 +156,10 @@ CREATE TABLE IF NOT EXISTS fields(
 
 CREATE INDEX IF NOT EXISTS fieldsIndex ON fields(country, federalState);
 
-INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (1, "Feld 1 von Bauer Mair", "61.1", "hectar", "AT", "Lower Austria", "2253", "Baumschulweg 1", 48.321341690830984, 16.76060675227691, "Feld in der gemeinde Weikendorf"); 
-INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (2, "Feld 2 von Bauer Mair", "52.5", "hectar", "AT", "Lower Austria", "2253", "Baumschulweg 2", 48.32009899192484, 16.77198383327459, "Feld in der gemeinde Weikendorf"); 
-INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values (3, "Feld 3 von Bauer Mair", "46.1", "hectar", "AT", "Lower Austria", "2253", "Baumschulweg 3", 48.318047211159886, 16.781240240473593, "Feld in der gemeinde Weikendorf"); 
+INSERT IGNORE INTO fields (id, name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) values 
+(1, "Feld 1 von Bauer Mair", "61.1", "hectar", "AT", "Lower Austria", "2253", "Baumschulweg 1", 48.321341690830984, 16.76060675227691, "Feld in der gemeinde Weikendorf"),
+(2, "Feld 2 von Bauer Mair", "52.5", "hectar", "AT", "Lower Austria", "2253", "Baumschulweg 2", 48.32009899192484, 16.77198383327459, "Feld in der gemeinde Weikendorf"),
+(3, "Feld 3 von Bauer Mair", "46.1", "hectar", "AT", "Lower Austria", "2253", "Baumschulweg 3", 48.318047211159886, 16.781240240473593, "Feld in der gemeinde Weikendorf"); 
 
 /* #endregion */
 -- SENSORS
@@ -174,15 +175,10 @@ CREATE TABLE IF NOT EXISTS sensors(
 CREATE INDEX IF NOT EXISTS sensorIndex ON sensors(fieldId, type, locationOnField);
 
 INSERT IGNORE INTO sensors (id, fieldId, type, locationOnField) values 
-/* id, fieldId, type locationOnField  */
 (1, 1,'Temperatur', "middle"),
 (2, 2,'Temperatur', "middle"), 
 (3, 3,'Temperatur', "middle");
-/* (4, 2,'Temperatur', "bottom left"), 
-(5, 2,'Temperatur', "bottom right"), 
-(6, 2,'Temperatur', "middle"), 
-(7, 3,'Temperatur',  "top left"), 
-(8, 3,'Temperatur', "middle");  */
+
 
 /* #endregion */
 

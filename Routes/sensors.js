@@ -74,7 +74,7 @@ app.get("/fields/:id/download", async (req, res) => {
 // #region POST Sensor
 app.post("/", async (req, res) => {
     let sensorBody = req.body;
-    if (!checkProperties(properties, sensorBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return; }
+    if (!Helper.checkProperties(properties, sensorBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return; }
 
     // check if fieldId exists
     let fieldById = await field.getById(sensorBody.fieldId);
@@ -101,9 +101,10 @@ app.put("/:id", async (req, res) => {
     if (sensorById.length == 0) { res.status(404).send(Helper.NOTHING_FOUND_ERROR); return; }
 
     // validate Body
-    if (!checkProperties(properties, sensorBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return; }
+    if (!Helper.checkProperties(properties, sensorBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return; }
 
-    res.status(200).send(await sensor.update(sensorBody, id));
+    sensorBody.id = id;
+    res.status(200).send(await sensor.update(sensorBody));
 });
 // #endregion
 

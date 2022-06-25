@@ -30,12 +30,10 @@ class FileHandler{
       
     static async writeToCSV(data, fileName) {
       const ws = fs.createWriteStream(fileName);
-
       fastcsv.write(data, { headers: true }).on("finish", function() {
           console.log("Write to CSV successfully!");
         }).pipe(ws);
     }
-
 }
 
 module.exports = FileHandler;

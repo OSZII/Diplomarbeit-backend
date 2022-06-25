@@ -98,7 +98,7 @@ app.get("/:name/download", async (req, res) => {
 app.post("/", async (req, res) => {
     let fieldBody = req.body;
     
-    if (!checkProperties(properties, fieldBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return; }
+    if (!Helper.checkProperties(properties, fieldBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return; }
 
     // check if unit is valid
     if(!areaUnits.includes(fieldBody.unit)) { res.status(400).send(Helper.INVALID_UNIT_ERROR); return; }
@@ -120,7 +120,7 @@ app.put("/:id", async (req, res) => {
 
     // validate Body
     let fieldBody = req.body;
-    if (!checkProperties(properties, fieldBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return; }
+    if (!Helper.checkProperties(properties, fieldBody)) { res.status(400).send(Helper.INVALID_PROPERTIES_ERROR); return; }
 
     // check if unit is valid
     if(!areaUnits.includes(fieldBody.unit)) { res.status(400).send(Helper.INVALID_UNIT_ERROR); return; }
