@@ -2,9 +2,7 @@ const pool = require("../Database/database");
 
 class Sensor{
     static async createSensor(sensor){
-        // Check first if fieldId exists
         let conn = await pool.getConnection();
-        // console.log(sensor)
         let sql = "INSERT INTO sensors (fieldId, type, locationOnField) VALUES (?, ?, ?);";
         let result = await conn.query(sql, [sensor.fieldId, sensor.type, sensor.locationOnField]);
         conn.end();

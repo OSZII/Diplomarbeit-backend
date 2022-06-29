@@ -4,8 +4,10 @@ class Field{
 
     static async createField(field){
         let conn = await pool.getConnection();
-        let sql = "INSERT INTO fields (name, area, unit, country, federalState, postalCode, street, latitude, longitude, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        let result = await conn.query(sql, [field.name, field.area, field.unit, field.country, field.federalState, field.postalCode, field.street, field.latitude, field.longitude, field.description]);
+        let sql = `INSERT INTO fields (name, area, unit, country, federalState, postalCode, 
+            street, latitude, longitude, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        let result = await conn.query(sql, [field.name, field.area, field.unit, field.country, 
+            field.federalState, field.postalCode, field.street, field.latitude, field.longitude, field.description]);
         conn.end();
         return result;
     }
@@ -36,8 +38,11 @@ class Field{
 
     static async update(field){
         let conn = await pool.getConnection();
-        let sql = "UPDATE fields SET name = ?, area = ?, unit = ?, country = ?, federalState = ?, postalCode = ?, street = ?, latitude = ?, longitude = ?, description = ? WHERE id = ?;";
-        let result = await conn.query(sql, [field.name, field.area, field.unit, field.country, field.federalState, field.postalCode, field.street, field.latitude, field.longitude, field.description, field.id]);
+        let sql = `UPDATE fields SET name = ?, area = ?, unit = ?, country = ?, federalState = ?, 
+        postalCode = ?, street = ?, latitude = ?, longitude = ?, description = ? WHERE id = ?`;
+        let result = await conn.query(sql, [field.name, field.area, field.unit, field.country, 
+            field.federalState, field.postalCode, field.street, field.latitude, field.longitude, 
+            field.description, field.id]);
         conn.end();
         return result;
     }
