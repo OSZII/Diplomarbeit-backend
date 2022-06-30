@@ -14,7 +14,7 @@ describe("Get Field", () => {
         expect(returnedField[0].id).toBe(3);
     });
 
-    test("getByName('teil') Checkt ob er den Field mit dem namen oszi findet", async() => {
+    test("getByName('Feld 1') Checkt ob ein Feld mit dem Namen Feld 1 gefunden wird", async() => {
         let searchString = "Feld 1";
         let returnedField = await field.getByName(searchString);
         expect(returnedField[0].name.includes(searchString)).toBeTruthy();
@@ -44,7 +44,7 @@ describe("Update Field", () => {
         let returnedField = await field.getById(1);
         returnedField = returnedField[0];
         returnedField.name = "Truefelland";
-        let result = await field.update(returnedField, 1);
+        let result = await field.update(returnedField);
         expect(result.affectedRows).toBe(1);
     });
 });

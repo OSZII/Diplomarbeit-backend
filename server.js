@@ -10,12 +10,8 @@ var cors = require('cors')
 const express = require('express');
 const app = express();
 const usersObject = require("./Objects/User");
-const users = require("./Routes/users");
-const fields = require("./Routes/fields");
-const sensors = require("./Routes/sensors");
-const sensorValues = require("./Routes/sensorValues");
 const jwt = require("jsonwebtoken");
-const { default: axios } = require("axios");
+// const { default: axios } = require("axios");
 
 // console.log(connection.state)
 
@@ -34,7 +30,7 @@ app.post("/login", async (req, res) => {
 
     if (username == undefined | password == undefined) {res.sendStatus(400); return;}
     const loginUser = (await usersObject.getByName(username))[0];
-    if (loginUser == undefined) {res.sendStatus(400); return; }
+    if (loginUser == undefined) {res.sendStatus(404); return; }
     if (!bcrypt.compareSync(password, loginUser.password)) {res.sendStatus(403); return; }
     jwt.sign({ user: loginUser }, "secretkey"/* , {expiresIn: '30s'} */, (err, token) => {
         res.json({ token: token })
@@ -47,10 +43,11 @@ app.get("/", (req, res) => {
 
 app.all("*", verifyToken);
 
-app.use("/users", users);
-app.use("/fields", fields);
-app.use("/sensors", sensors);
-app.use("/sensorvalues", sensorValues);
+app.use("/users", require("./Routes/users"));
+app.use("/fields", require("./Routes/fields"));
+app.use("/sensors", require("./Routes/sensors"));
+app.use("/sensorvalues", require("./Routes/sensorValues"));
+
 
 // app.post("/", (req, res) => {
 //     console.log(req.body);
@@ -59,56 +56,55 @@ app.use("/sensorvalues", sensorValues);
 
 
 // #region Some routes
-app.get("/weatherforecast", verifyToken, (req, res) => {
-    jwt.verify(req.token, "secretkey", async (err, authData) => {
-        if (err) res.sendStatus(403);
-        else {
-            // hier kommt der code hinein
-            // console.log(req.headers.latitude)
-            // console.log(req.headers.longitude)
-            let weatherApiKey = process.env.Openweather_API_KEY;
-            axios({
-                method: "GET",
-                url: `https://api.openweathermap.org/data/2.5/onecall?lat=${req.headers.latitude}&lon=${req.headers.longitude}&exclude=current,minutely,alerts,hourly&appid=${process.env.Openweather_API_KEY}&units=metric`,
-            }).then((response) => {
-                // console.log("ok")
-                // console.log(response)
-                // res.json(response).status(200);
-                res.send(response.data)
-                // console.log("not ok")
-            }).catch((error) => {
-                console.log(error)
-                console.log("Fehlermeldung")
-            });
-        }
-    })
-})
+// app.get("/weatherforecast", verifyToken, (req, res) => {
+//     jwt.verify(req.token, "secretkey", async (err, authData) => {
+//         if (err) res.sendStatus(403);
+//         else {
+//             // hier kommt der code hinein
+//             // console.log(req.headers.latitude)
+//             // console.log(req.headers.longitude)
+//             let weatherApiKey = process.env.Openweather_API_KEY;
+//             axios({
+//                 method: "GET",
+//                 url: `https://api.openweathermap.org/data/2.5/onecall?lat=${req.headers.latitude}&lon=${req.headers.longitude}&exclude=current,minutely,alerts,hourly&appid=${process.env.Openweather_API_KEY}&units=metric`,
+//             }).then((response) => {
+//                 // console.log("ok")
+//                 // console.log(response)
+//                 // res.json(response).status(200);
+//                 res.send(response.data)
+//                 // console.log("not ok")
+//             }).catch((error) => {
+//                 console.log(error)
+//                 console.log("Fehlermeldung")
+//             });
+//         }
+//     })
+// })
 
-app.get("/countrynames", verifyToken, (req, res) => {
-    jwt.verify(req.token, "secretkey", async (err, authData) => {
-        if (err) res.sendStatus(403);
-        else {
+// app.get("/countrynames", verifyToken, (req, res) => {
+//     jwt.verify(req.token, "secretkey", async (err, authData) => {
+//         if (err) res.sendStatus(403);
+//         else {
 
-        }
-    })
-})
+//         }
+//     })
+// })
 
-app.post("/hashpassword", (req, res) => {
-    let password = req.body.password;
+// app.post("/hashpassword", (req, res) => {
+//     let password = req.body.password;
 
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, (err, hash) => {
-            res.json({ hash: hash })
-        })
-    })
+//     bcrypt.genSalt(10, (err, salt) => {
+//         bcrypt.hash(password, salt, (err, hash) => {
+//             res.json({ hash: hash })
+//         })
+//     })
+// })
 
-})
-
-app.post("/", (req, res) => {
-    // console.log(req.body);
-    console.log(req.socket.remoteAddress)
-    res.send("GOT A POST REQUEST!");
-})
+// app.post("/", (req, res) => {
+//     // console.log(req.body);
+//     console.log(req.socket.remoteAddress)
+//     res.send("GOT A POST REQUEST!");
+// })
 
 app.get('*', function (req, res) {
     res.status(404).send('No such route found???');
