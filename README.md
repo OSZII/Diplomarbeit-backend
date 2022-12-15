@@ -1,9 +1,20 @@
-# Durchlese GUIDE
-Am besten startet man im server.js file
-Dort wird alles gestartet und importet
+# Diplomarbeit Backend rework with Prisma
 
-Danach in einen Blick in den Ordner Routes dort befinden sich die unterschiedlichen Routen für user, sensor, field, sensorValue
+IMPORTANT: Die Branch DIPLOMARBEIT-ABSCHLUSS wird NICHT verändert, diese Branch soll auf ewig den Abschlusszustand der ursprünglichen Diplomarbeit enthalten!
 
-danach die DAOs im Object Directory
+In dieser Branch kommt ein Rework der Diplomarbeit zustande. 
+Startzustand for rework, database mariaDB, mit Docker und mariadb connector
 
-und dann eventuell noch im Ordner Database die .sql Datei und die Database.js Datei
+Dies ist rework nummer 1. Soll das neu erlernte Wissen präsentieren.
+Folgender Plan:
+Alles nach typescript migrieren!
+Datenbankverwaltung mit ORM library Prisma!
+Validierung mit Zod!
+Dies ist alles was in dieser Branch gemacht werden soll! Weitere Reworks sollen danach folgen und auf dieser Aufbauend sein!
+
+TODO:
+1. Migrate all FROM JS -> TS
+2. ADD PRISMA WITH ZOD
+3. CLEANUP
+
+* Alle Schritte dokumentieren! 
