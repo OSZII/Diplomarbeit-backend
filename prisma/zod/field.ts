@@ -16,7 +16,7 @@ z.instanceof(Decimal)
   .transform((value) => new Decimal(value));
 
 export const FieldModel = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   name: z.string(),
   area: z.number().int(),
   unit: z.nativeEnum(AreaUnit),
