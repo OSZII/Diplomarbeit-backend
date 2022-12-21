@@ -41,6 +41,30 @@ In Objects/Field.ts stehengeblieben. Jetzt zuerst herausfinden wie ich das ganze
   * dev mit mit watch für file changes startet man mit: `npm run start:dev`
 
 Auch `swagger` installieren für api dokumentation mit `npm i @nestjs/swagger`
+`main.ts` configured with swagger
+```typescript
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  const config = new DocumentBuilder()
+    .setTitle('Flower auf Dauer Backend')
+    .setDescription(
+      'Backend in NestJS and Prisma Diploma Thesis for Flower Auf Dauer',
+    )
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
+  await app.listen(3000);
+}
+bootstrap();
+```
 
 Also Objects doch umsonst gemacht de types gibts von Prisma in `@prisma/client` 
 
@@ -66,3 +90,6 @@ Ok hier mal vorgang beschreiben wie die `sensors`-Route implementiert wird:
       3. Unter den anderen ist es `@ApiOkResponse({ type: SensorEntity })` und hier gibt es noch die Option bei zum Beispiel getAll() die eigenschaft `isArray: true` hinzuzufügen.
    4. Im `sensors.module.ts` File muss man nichts tun
    5. `sensors.service.ts` prisma client importieren und dann überall mit prisma.field.**** die methoden einfüllen
+   6. Danach sollte alles klappen, falls eine Route nicht hinzugefügt wird und nicht auffindbar ist, dann `yarn build` und nochmals starten mit `yarn run start:dev`
+
+TODO: error handling in `**/services.ts` files implementieren

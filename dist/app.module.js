@@ -13,11 +13,12 @@ const app_service_1 = require("./app.service");
 const fields_module_1 = require("./fields/fields.module");
 const users_module_1 = require("./users/users.module");
 const sensors_module_1 = require("./sensors/sensors.module");
+const sensorvalues_module_1 = require("./sensorvalues/sensorvalues.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [fields_module_1.FieldsModule, users_module_1.UsersModule, sensors_module_1.SensorsModule],
+        imports: [fields_module_1.FieldsModule, users_module_1.UsersModule, sensors_module_1.SensorsModule, sensorvalues_module_1.SensorvaluesModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
