@@ -19,6 +19,7 @@ TODO:
 
 * Alle Schritte dokumentieren! 
 
+* Prisma hat nen ganz coolen editor für database. Man startet den mit: `npx prisma studio`
 
 * npm i
 * npm audit fix
@@ -37,3 +38,31 @@ In Objects/Field.ts stehengeblieben. Jetzt zuerst herausfinden wie ich das ganze
   * Nest mit `sudo npm i -g @nestjs/cli` installieren
   * Danach mit `nest new .` im aktuellen projekt hinzufügen die ganzen config files
   * erstellt `/src` und `/test`
+  * dev mit mit watch für file changes startet man mit: `npm run start:dev`
+
+Auch `swagger` installieren für api dokumentation mit `npm i @nestjs/swagger`
+
+Also Objects doch umsonst gemacht de types gibts von Prisma in `@prisma/client` 
+
+Ok hier mal vorgang beschreiben wie die `sensors`-Route implementiert wird:
+1. Zuerste `nest g resource sensors`
+   1. Optionsauswahl:
+   2. `What transport layer do you use? REST API`
+   3. `Would you like to generate CRUD entry points? Yes`
+2. Dies erstellt im Ordner `src` einen neuen Ordner namens `sensors` als `src/sensors`
+   1. Dieser Ordner enthält einen Ordner namens `dto` DTO steht für `Data Transfer Object`
+      1. In diesem Ordner befinden sich 2 dateien einemal `update-sensor.dto.ts` & `create-sensor.dto.ts`
+         1. im create-sensor.dto.ts File:
+            1. Hier verwende ich wieder implements um die ganzen Eigenschaften zu generieren, entferne danach aber wieder die id und implements
+            2. Danach füge ich über jeder Eigenschaft `@ApiProperty()` hinzu und validierungsfelder wie @IsNotEmpty, @IsString, @IsLatitude, etc...
+         2. Im updateSensor nichts machen
+   2. Dann gibt es einen Ordner namens `entities`. Dieser enthält eine Klasse namens `Sensor`. 
+      1. Diese müssen wir in SensorEntity umbenenen und wir implementieren den von Prisma erstellten typ Sensor mithilfe von `implements`.
+      2. Also `export class Sensor {}` -> `export class SensorEntity implements Sensor {}`
+      3. Danach wird `SensorEntity` rot unterwellt. In VSCode mit `Strg + .` drauf gehen und autocomplete verwenden um die Objekteigenschaften zu implementieren. In diesem Fall `id: string; type: SensorType; fieldId: string;` Nun wird für die Dokumentation Swagger support hinzugefügt und zwar wird über jedem Feld `@ApiProperty()` hinzugefügt. Damit wird in der Doku localhost:3000/api unter schemas die Felder dokumentiert.
+   3. `sensors.controller.ts` ist die Controller Datei. Diese führt je nach eingeheder Request eine function der `sensors.service.ts` Datei aus. 
+      1. Ganz Oben unter @Controller('sensors'), @ApiTags('sensors') einfügen, damit dies die Überschrift bei swagger ist.
+      2. Unter @Post() und @Patch() den folgenden Tag hinzufügen: `@ApiCreatedResponse({ type: SensorEntity })` 
+      3. Unter den anderen ist es `@ApiOkResponse({ type: SensorEntity })` und hier gibt es noch die Option bei zum Beispiel getAll() die eigenschaft `isArray: true` hinzuzufügen.
+   4. Im `sensors.module.ts` File muss man nichts tun
+   5. `sensors.service.ts` prisma client importieren und dann überall mit prisma.field.**** die methoden einfüllen
