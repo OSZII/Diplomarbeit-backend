@@ -1,3 +1,17 @@
+import express, { Express, Request, Response } from "express";
+import { fieldRoute } from "./Routes/fieldRoute";
+// import bcrypt from "bcrypt";
+
+const app: Express = express();
+const port = 3000;
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello");
+});
+
+app.listen(port, () => {
+  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
+});
 // // Database
 // // Mit dieser Methode muss man keinen Namespace verwenden
 // // also anstatt database.connection kann man hier ganz einfach connection verwenden
@@ -24,18 +38,32 @@
 // app.use(express.static("public"))
 // // All Routes that should be accesible without a token
 
-// app.post("/login", async (req, res) => {
-//     let username = req.body.username;
-//     let password = req.body.password;
+// app.post("/login", async (req: Request, res: Response) => {
+//   let username: string = req.body.username;
+//   let password: string = req.body.password;
 
-//     if (username == undefined | password == undefined) {res.sendStatus(400); return;}
-//     const loginUser = (await usersObject.getByName(username))[0];
-//     if (loginUser == undefined) {res.sendStatus(404); return; }
-//     if (!bcrypt.compareSync(password, loginUser.password)) {res.sendStatus(403); return; }
-//     jwt.sign({ user: loginUser }, "secretkey"/* , {expiresIn: '30s'} */, (err, token) => {
-//         res.json({ token: token })
-//     })
-// })
+//   if (username == undefined || password == undefined) {
+//     res.sendStatus(400);
+//     return;
+//   }
+
+//   const loginUser = (await usersObject.getByName(username))[0];
+//   if (loginUser == undefined) {
+//     res.sendStatus(404);
+//     return;
+//   }
+//   if (!bcrypt.compareSync(password, loginUser.password)) {
+//     res.sendStatus(403);
+//     return;
+//   }
+//   jwt.sign(
+//     { user: loginUser },
+//     "secretkey" /* , {expiresIn: '30s'} */,
+//     (err, token) => {
+//       res.json({ token: token });
+//     }
+//   );
+// });
 
 // app.get("/", (req, res) => {
 //     res.sendFile(path.join(__dirname, "/public/html/index.html"));
@@ -44,7 +72,7 @@
 // app.all("*", verifyToken);
 
 // app.use("/users", require("./Routes/users"));
-// app.use("/fields", require("./Routes/fields"));
+app.use("/fields", fieldRoute);
 // app.use("/sensors", require("./Routes/sensors"));
 // app.use("/sensorvalues", require("./Routes/sensorValues"));
 
@@ -69,7 +97,7 @@
 // function verifyToken(req, res, next) {
 //     // Get auth header value
 //     const brearerHeader = req.headers["authorization"];
-    
+
 //     // Check if bearer is undefined
 //     if (typeof brearerHeader == "undefined") {res.sendStatus(403); return;}
 //         // Token von bearer trennen

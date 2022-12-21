@@ -8,7 +8,7 @@ import {
 } from "./index";
 
 export const SensorModel = z.object({
-  id: z.string(),
+  id: z.string().nullish(),
   type: z.nativeEnum(SensorType),
   fieldId: z.string(),
 });

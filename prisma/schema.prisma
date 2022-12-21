@@ -35,10 +35,10 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-// enum Role {
-//     BASIC
-//     ADMIN
-// }
+enum Role {
+    BASIC
+    ADMIN
+}
 
 enum AreaUnit {
     sqm
@@ -58,15 +58,16 @@ enum SensorType {
     precipitation
 }
 
-// model User {
-//     id        String  @id @default(uuid())
-//     firstName String
-//     lastName  String
-//     email     String  @unique
-//     password  String
-//     role      Role    @default(BASIC)
-//     fields    Field[]
-// }
+model User {
+    id        String  @id @default(uuid())
+    username  String
+    firstName String
+    lastName  String
+    email     String  @unique
+    password  String
+    role      Role    @default(BASIC)
+    fields    Field[]
+}
 
 model Field {
     id          String   @id @default(uuid())
@@ -79,12 +80,14 @@ model Field {
     // fieldOwner   User     @relation(fields: [fieldOwnerId], references: [id])
     // fieldOwnerId String
     sensors     Sensor[]
+    User        User?    @relation(fields: [userId], references: [id])
+    userId      String?
 }
 
 model Sensor {
     id           String        @id @default(uuid())
     type         SensorType
-    Field        Field         @relation(fields: [fieldId], references: [id])
+    field        Field         @relation(fields: [fieldId], references: [id])
     fieldId      String
     sensorValues SensorValue[]
 }
