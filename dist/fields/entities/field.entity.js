@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FieldEntity = void 0;
-const client_1 = require("@prisma/client");
 const runtime_1 = require("@prisma/client/runtime");
 const swagger_1 = require("@nestjs/swagger");
 class FieldEntity {

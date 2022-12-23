@@ -93,3 +93,6 @@ Ok hier mal vorgang beschreiben wie die `sensors`-Route implementiert wird:
    6. Danach sollte alles klappen, falls eine Route nicht hinzugefügt wird und nicht auffindbar ist, dann `yarn build` und nochmals starten mit `yarn run start:dev`
 
 TODO: error handling in `**/services.ts` files implementieren
+TODO: bei sensor und sensorValue überprüfen, ob das Feld bzw der Sensor existiert sprich
+bei sensor die fieldId muss existieren ansonsten NOT_FOUND_ERROR
+bei sensorValue die sensorId muss existieren ansonsten NOT_FOUND_ERROR

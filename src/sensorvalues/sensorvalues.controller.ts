@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { SensorvaluesService } from './sensorvalues.service';
 import { CreateSensorvalueDto } from './dto/create-sensorvalue.dto';
@@ -32,8 +33,12 @@ export class SensorvaluesController {
 
   @Get(':id')
   @ApiOkResponse({ type: SensorvalueEntity })
-  findOne(@Param('id') id: string) {
-    return this.sensorvaluesService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const sensorvalue = await this.sensorvaluesService.findOne(id);
+    if (!sensorvalue) {
+      throw new NotFoundException(`Sensorvalue with ${id} does not exist.`);
+    }
+    return sensorvalue;
   }
 
   @Patch(':id')

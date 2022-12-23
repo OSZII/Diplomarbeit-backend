@@ -1,4 +1,4 @@
-import { AreaUnit, Field } from '@prisma/client';
+import { Field } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -10,7 +10,7 @@ export class FieldEntity implements Field {
   @ApiProperty()
   area: number;
   @ApiProperty()
-  unit: AreaUnit;
+  unit: string;
   @ApiProperty()
   latitude: Decimal;
   @ApiProperty()

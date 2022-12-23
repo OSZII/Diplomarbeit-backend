@@ -29,8 +29,12 @@ let SensorvaluesController = class SensorvaluesController {
     findAll() {
         return this.sensorvaluesService.findAll();
     }
-    findOne(id) {
-        return this.sensorvaluesService.findOne(id);
+    async findOne(id) {
+        const sensorvalue = await this.sensorvaluesService.findOne(id);
+        if (!sensorvalue) {
+            throw new common_1.NotFoundException(`Sensorvalue with ${id} does not exist.`);
+        }
+        return sensorvalue;
     }
     update(id, updateSensorvalueDto) {
         return this.sensorvaluesService.update(id, updateSensorvalueDto);
@@ -60,7 +64,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], SensorvaluesController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),

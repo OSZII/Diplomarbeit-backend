@@ -1,6 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiTags } from '@nestjs/swagger';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 @Controller()
 @ApiTags('Flower Auf Dauer backend')

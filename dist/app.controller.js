@@ -13,6 +13,8 @@ exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
 const app_service_1 = require("./app.service");
 const swagger_1 = require("@nestjs/swagger");
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;

@@ -1,10 +1,10 @@
-import { AreaUnit, Field } from '@prisma/client';
+import { Field } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime';
 export declare class FieldEntity implements Field {
     id: string;
     name: string;
     area: number;
-    unit: AreaUnit;
+    unit: string;
     latitude: Decimal;
     longitude: Decimal;
     description: string;

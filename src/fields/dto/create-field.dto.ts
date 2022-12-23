@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Prisma, AreaUnit } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import {
   IsLatitude,
   IsLongitude,
@@ -23,7 +23,7 @@ export class CreateFieldDto {
 
   @IsNotEmpty()
   @ApiProperty()
-  unit: AreaUnit;
+  unit: string;
 
   @IsNumber()
   @IsNotEmpty()

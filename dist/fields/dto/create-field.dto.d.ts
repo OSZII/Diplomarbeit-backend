@@ -1,8 +1,8 @@
-import { Prisma, AreaUnit } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 export declare class CreateFieldDto {
     name: string;
     area: number;
-    unit: AreaUnit;
+    unit: string;
     latitude: Prisma.Decimal;
     longitude: Prisma.Decimal;
     description: string;
