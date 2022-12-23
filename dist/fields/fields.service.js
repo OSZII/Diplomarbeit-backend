@@ -20,6 +20,9 @@ let FieldsService = class FieldsService {
     findOne(id) {
         return prisma.field.findFirst({ where: { id } });
     }
+    findUserById(id) {
+        return prisma.user.findFirst({ where: { id } });
+    }
     update(id, updateFieldDto) {
         return prisma.field.update({ where: { id }, data: updateFieldDto });
     }

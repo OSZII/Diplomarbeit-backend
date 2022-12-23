@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateFieldDto } from './dto/create-field.dto';
 import { UpdateFieldDto } from './dto/update-field.dto';
 import { PrismaClient } from '@prisma/client';
+import { UsersService } from 'src/users/users.service';
 const prisma = new PrismaClient();
 
 @Injectable()
@@ -16,6 +17,10 @@ export class FieldsService {
 
   findOne(id: string) {
     return prisma.field.findFirst({ where: { id } });
+  }
+
+  findUserById(id: string) {
+    return prisma.user.findFirst({ where: { id } });
   }
 
   update(id: string, updateFieldDto: UpdateFieldDto) {

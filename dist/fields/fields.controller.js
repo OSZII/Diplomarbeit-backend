@@ -45,12 +45,9 @@ let FieldsController = class FieldsController {
                     issues[i].path[0] +
                     '');
             }
-            throw new common_1.HttpException({
-                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
-                response: messages,
-            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+            throw new common_1.HttpException({ statusCode: common_1.HttpStatus.NOT_ACCEPTABLE, response: messages }, common_1.HttpStatus.NOT_ACCEPTABLE);
         }
-        let user = await this.fieldsService.findOne(createFieldDto.userId);
+        let user = await this.fieldsService.findUserById(createFieldDto.userId);
         if (!user)
             throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
         return await this.fieldsService.create(createFieldDto);
@@ -59,6 +56,13 @@ let FieldsController = class FieldsController {
         return this.fieldsService.findAll();
     }
     async findOne(id) {
+        let validation = zod_1.z.string().length(36).safeParse(id);
+        if (validation.success == false) {
+            throw new common_1.HttpException({
+                response: validation.error.issues,
+                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
         const field = await this.fieldsService.findOne(id);
         if (!field) {
             throw new common_1.NotFoundException(`Field with ${id} does not exist.`);

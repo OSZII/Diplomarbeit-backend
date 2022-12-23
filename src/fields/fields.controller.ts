@@ -49,17 +49,15 @@ export class FieldsController {
             '',
         );
       }
+
       throw new HttpException(
-        {
-          statusCode: HttpStatus.NOT_ACCEPTABLE,
-          response: messages,
-        },
+        { statusCode: HttpStatus.NOT_ACCEPTABLE, response: messages },
         HttpStatus.NOT_ACCEPTABLE,
       );
     }
-    // implement check for userId
-    let user = await this.fieldsService.findOne(createFieldDto.userId);
 
+    // implement check for userId
+    let user = await this.fieldsService.findUserById(createFieldDto.userId);
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 
     return await this.fieldsService.create(createFieldDto);
@@ -74,6 +72,19 @@ export class FieldsController {
   @Get(':id')
   @ApiOkResponse({ type: FieldEntity })
   async findOne(@Param('id') id: string) {
+    let validation = z.string().length(36).safeParse(id);
+
+    // if not uuid return don't even ask the database
+    if (validation.success == false) {
+      throw new HttpException(
+        {
+          response: validation.error.issues,
+          statusCode: HttpStatus.NOT_ACCEPTABLE,
+        },
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+    }
+
     const field = await this.fieldsService.findOne(id);
     if (!field) {
       throw new NotFoundException(`Field with ${id} does not exist.`);

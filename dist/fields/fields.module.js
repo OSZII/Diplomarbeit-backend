@@ -15,7 +15,7 @@ let FieldsModule = class FieldsModule {
 FieldsModule = __decorate([
     (0, common_1.Module)({
         controllers: [fields_controller_1.FieldsController],
-        providers: [fields_service_1.FieldsService]
+        providers: [fields_service_1.FieldsService],
     })
 ], FieldsModule);
 exports.FieldsModule = FieldsModule;
