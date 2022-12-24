@@ -11,7 +11,10 @@ async function bootstrap() {
         .setDescription('Backend in NestJS and Prisma Diploma Thesis for Flower Auf Dauer')
         .setVersion('1.0')
         .build();
-    app.useGlobalPipes(new common_1.ValidationPipe());
+    app.useGlobalPipes(new common_1.ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+    }));
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api', app, document);
     await app.listen(3000);

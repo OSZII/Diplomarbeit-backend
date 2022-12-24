@@ -9,6 +9,7 @@ import {
   NotFoundException,
   HttpStatus,
   HttpException,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -114,19 +115,14 @@ export class UsersController {
 
   @Delete(':id')
   @ApiOkResponse({ type: UserEntity })
-  remove(@Param('id') id: string) {
-    // #region validate if id == uuid()
-    let validation = z.string().length(36).safeParse(id);
-
-    // if not uuid don't even ask the database
-    if (validation.success == false) {
-      throw new HttpException(
-        {
-          response: validation.error.issues,
-          statusCode: HttpStatus.NOT_ACCEPTABLE,
-        },
-        HttpStatus.NOT_ACCEPTABLE,
-      );
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    // #region check if user with id exists
+    let user = await this.usersService.findOne(id);
+    if (!user) {
+      throw new NotFoundException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'User with id: ' + id + ' not found!',
+      });
     }
     // #endregion
 

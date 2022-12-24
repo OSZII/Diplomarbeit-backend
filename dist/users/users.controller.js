@@ -75,13 +75,13 @@ let UsersController = class UsersController {
         }
         return this.usersService.update(id, updateUserDto);
     }
-    remove(id) {
-        let validation = zod_1.z.string().length(36).safeParse(id);
-        if (validation.success == false) {
-            throw new common_1.HttpException({
-                response: validation.error.issues,
-                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
-            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+    async remove(id) {
+        let user = await this.usersService.findOne(id);
+        if (!user) {
+            throw new common_1.NotFoundException({
+                statusCode: common_1.HttpStatus.NOT_FOUND,
+                message: 'User with id: ' + id + ' not found!',
+            });
         }
         return this.usersService.remove(id);
     }
@@ -121,10 +121,10 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOkResponse)({ type: user_entity_1.UserEntity }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], UsersController.prototype, "remove", null);
 UsersController = __decorate([
     (0, common_1.Controller)('users'),

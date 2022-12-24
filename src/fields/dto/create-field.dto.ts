@@ -1,14 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import {
+  IsEnum,
   IsLatitude,
   IsLongitude,
   IsNotEmpty,
   IsNumber,
   IsString,
+  IsUUID,
   Length,
   MinLength,
 } from 'class-validator';
+
+enum unit {
+  'sqm',
+  'sqk',
+  'hectar',
+  'ar',
+  'acre',
+}
 
 export class CreateFieldDto {
   @IsString()
@@ -23,6 +33,7 @@ export class CreateFieldDto {
   area: number;
 
   @IsNotEmpty()
+  @IsEnum(unit)
   @ApiProperty()
   unit: string;
 
@@ -43,9 +54,7 @@ export class CreateFieldDto {
   @ApiProperty()
   description: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsUUID()
   @ApiProperty()
-  @Length(36)
   userId: string;
 }

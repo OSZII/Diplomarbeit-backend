@@ -9,6 +9,7 @@ import {
   NotFoundException,
   HttpStatus,
   HttpException,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { SensorvaluesService } from './sensorvalues.service';
 import { CreateSensorvalueDto } from './dto/create-sensorvalue.dto';
@@ -137,19 +138,14 @@ export class SensorvaluesController {
 
   @Delete(':id')
   @ApiOkResponse({ type: SensorvalueEntity })
-  remove(@Param('id') id: string) {
-    // #region validate if id == uuid()
-    let validation = z.string().length(36).safeParse(id);
-
-    // if not uuid don't even ask the database
-    if (validation.success == false) {
-      throw new HttpException(
-        {
-          response: validation.error.issues,
-          statusCode: HttpStatus.NOT_ACCEPTABLE,
-        },
-        HttpStatus.NOT_ACCEPTABLE,
-      );
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    // #region check if sensorValue with id exists
+    let sensorValue = await this.sensorvaluesService.findOne(id);
+    if (!sensorValue) {
+      throw new NotFoundException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'SensorValue with id: ' + id + ' not found!',
+      });
     }
     // #endregion
 

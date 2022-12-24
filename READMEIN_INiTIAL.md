@@ -97,3 +97,7 @@ TODO: bei sensor und sensorValue überprüfen, ob das Feld bzw der Sensor existi
 bei sensor die fieldId muss existieren ansonsten NOT_FOUND_ERROR
 bei sensorValue die sensorId muss existieren ansonsten NOT_FOUND_ERROR
 TODO: Errorvalidation: checken was passiert wenn man bei PATCH einen parameter übergibt, den es nicht gibt, beispiel sensor hat 2 werte type und fieldId. Was passiert wenn ich { "dogname": "herman" } oder sowas übergebe
+
+# validierung
+https://docs.nestjs.com/techniques/validation
+Validierung wird glaub ich doch mit class-validator und class-transformer umgesetzt grad noch am testen

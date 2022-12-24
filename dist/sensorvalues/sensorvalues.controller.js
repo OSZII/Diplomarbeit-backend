@@ -85,13 +85,13 @@ let SensorvaluesController = class SensorvaluesController {
         }
         return this.sensorvaluesService.update(id, updateSensorvalueDto);
     }
-    remove(id) {
-        let validation = zod_1.z.string().length(36).safeParse(id);
-        if (validation.success == false) {
-            throw new common_1.HttpException({
-                response: validation.error.issues,
-                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
-            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+    async remove(id) {
+        let sensorValue = await this.sensorvaluesService.findOne(id);
+        if (!sensorValue) {
+            throw new common_1.NotFoundException({
+                statusCode: common_1.HttpStatus.NOT_FOUND,
+                message: 'SensorValue with id: ' + id + ' not found!',
+            });
         }
         return this.sensorvaluesService.remove(id);
     }
@@ -131,10 +131,10 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOkResponse)({ type: sensorvalue_entity_1.SensorvalueEntity }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], SensorvaluesController.prototype, "remove", null);
 SensorvaluesController = __decorate([
     (0, common_1.Controller)('sensorvalues'),

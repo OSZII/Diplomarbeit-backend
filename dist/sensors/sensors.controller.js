@@ -29,26 +29,6 @@ let SensorsController = class SensorsController {
         this.sensorsService = sensorsService;
     }
     async create(createSensorDto) {
-        let validation = zod_1.z.string().length(36).safeParse(createSensorDto.fieldId);
-        if (validation.success == false) {
-            throw new common_1.HttpException({
-                response: validation.error.issues,
-                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
-            }, common_1.HttpStatus.NOT_ACCEPTABLE);
-        }
-        let messages = [];
-        let validation2 = SensorZodObject.safeParse(createSensorDto);
-        if (validation2.success == false) {
-            let issues = validation2.error.issues;
-            for (let i = 0; i < issues.length; i++) {
-                messages.push('' +
-                    issues[i].message +
-                    ' Error on property:' +
-                    issues[i].path[0] +
-                    '');
-            }
-            throw new common_1.HttpException({ statusCode: common_1.HttpStatus.NOT_ACCEPTABLE, response: messages }, common_1.HttpStatus.NOT_ACCEPTABLE);
-        }
         let field = await this.sensorsService.findFieldById(createSensorDto.fieldId);
         if (!field)
             throw new common_1.HttpException('Sensor not found', common_1.HttpStatus.NOT_FOUND);
@@ -58,13 +38,6 @@ let SensorsController = class SensorsController {
         return this.sensorsService.findAll();
     }
     async findOne(id) {
-        let validation = zod_1.z.string().length(36).safeParse(id);
-        if (validation.success == false) {
-            throw new common_1.HttpException({
-                response: validation.error.issues,
-                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
-            }, common_1.HttpStatus.NOT_ACCEPTABLE);
-        }
         const sensor = await this.sensorsService.findOne(id);
         if (!sensor) {
             throw new common_1.NotFoundException(`Sensor with ${id} does not exist.`);
@@ -72,22 +45,15 @@ let SensorsController = class SensorsController {
         return sensor;
     }
     update(id, updateSensorDto) {
-        let validation = zod_1.z.string().length(36).safeParse(id);
-        if (validation.success == false) {
-            throw new common_1.HttpException({
-                response: validation.error.issues,
-                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
-            }, common_1.HttpStatus.NOT_ACCEPTABLE);
-        }
         return this.sensorsService.update(id, updateSensorDto);
     }
-    remove(id) {
-        let validation = zod_1.z.string().length(36).safeParse(id);
-        if (validation.success == false) {
-            throw new common_1.HttpException({
-                response: validation.error.issues,
-                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
-            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+    async remove(id) {
+        let sensor = await this.sensorsService.findOne(id);
+        if (!sensor) {
+            throw new common_1.NotFoundException({
+                statusCode: common_1.HttpStatus.NOT_FOUND,
+                message: 'Sensor with id: ' + id + ' not found!',
+            });
         }
         return this.sensorsService.remove(id);
     }
@@ -110,7 +76,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOkResponse)({ type: sensor_entity_1.SensorEntity }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
@@ -118,7 +84,7 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, swagger_1.ApiCreatedResponse)({ type: sensor_entity_1.SensorEntity }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_sensor_dto_1.UpdateSensorDto]),
@@ -127,10 +93,10 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOkResponse)({ type: sensor_entity_1.SensorEntity }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], SensorsController.prototype, "remove", null);
 SensorsController = __decorate([
     (0, common_1.Controller)('sensors'),

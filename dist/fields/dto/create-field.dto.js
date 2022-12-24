@@ -13,6 +13,14 @@ exports.CreateFieldDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const client_1 = require("@prisma/client");
 const class_validator_1 = require("class-validator");
+var unit;
+(function (unit) {
+    unit[unit["sqm"] = 0] = "sqm";
+    unit[unit["sqk"] = 1] = "sqk";
+    unit[unit["hectar"] = 2] = "hectar";
+    unit[unit["ar"] = 3] = "ar";
+    unit[unit["acre"] = 4] = "acre";
+})(unit || (unit = {}));
 class CreateFieldDto {
 }
 __decorate([
@@ -30,6 +38,7 @@ __decorate([
 ], CreateFieldDto.prototype, "area", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsEnum)(unit),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], CreateFieldDto.prototype, "unit", void 0);
@@ -54,10 +63,8 @@ __decorate([
     __metadata("design:type", String)
 ], CreateFieldDto.prototype, "description", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsUUID)(),
     (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.Length)(36),
     __metadata("design:type", String)
 ], CreateFieldDto.prototype, "userId", void 0);
 exports.CreateFieldDto = CreateFieldDto;

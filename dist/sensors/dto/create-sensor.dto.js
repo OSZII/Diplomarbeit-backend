@@ -12,18 +12,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateSensorDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+var SensorType;
+(function (SensorType) {
+    SensorType[SensorType["humidity"] = 0] = "humidity";
+    SensorType[SensorType["temperature"] = 1] = "temperature";
+    SensorType[SensorType["light"] = 2] = "light";
+    SensorType[SensorType["carbon_dioxide"] = 3] = "carbon_dioxide";
+    SensorType[SensorType["soil_moisture"] = 4] = "soil_moisture";
+    SensorType[SensorType["soil_ph"] = 5] = "soil_ph";
+    SensorType[SensorType["wind_speed_direction"] = 6] = "wind_speed_direction";
+    SensorType[SensorType["precipitation"] = 7] = "precipitation";
+})(SensorType || (SensorType = {}));
 class CreateSensorDto {
 }
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
     (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsEnum)(SensorType),
     __metadata("design:type", String)
 ], CreateSensorDto.prototype, "type", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
     (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.Length)(36),
+    (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
 ], CreateSensorDto.prototype, "fieldId", void 0);
 exports.CreateSensorDto = CreateSensorDto;

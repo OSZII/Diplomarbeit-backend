@@ -8,5 +8,5 @@ export declare class UsersController {
     findAll(): import(".prisma/client").PrismaPromise<import(".prisma/client").User[]>;
     findOne(id: string): Promise<import(".prisma/client").User>;
     update(id: string, updateUserDto: UpdateUserDto): import(".prisma/client").Prisma.Prisma__UserClient<import(".prisma/client").User, never>;
-    remove(id: string): import(".prisma/client").Prisma.Prisma__UserClient<import(".prisma/client").User, never>;
+    remove(id: string): Promise<import(".prisma/client").User>;
 }
