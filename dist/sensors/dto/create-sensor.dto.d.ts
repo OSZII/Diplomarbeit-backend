@@ -1,5 +1,4 @@
-import { SensorType } from '@prisma/client';
 export declare class CreateSensorDto {
-    type: SensorType;
+    type: string;
     fieldId: string;
 }

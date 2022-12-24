@@ -6,6 +6,9 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class SensorsService {
+  findFieldById(id: any) {
+    return prisma.field.findFirst({ where: { id } });
+  }
   create(createSensorDto: CreateSensorDto) {
     return prisma.sensor.create({ data: createSensorDto });
   }

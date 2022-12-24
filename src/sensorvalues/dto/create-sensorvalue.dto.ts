@@ -1,13 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SensorValue } from '@prisma/client';
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsString, Length } from 'class-validator';
 
-export class CreateSensorvalueDto implements SensorValue {
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty()
-  id: string;
-
+export class CreateSensorvalueDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
@@ -21,5 +15,6 @@ export class CreateSensorvalueDto implements SensorValue {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
+  @Length(36)
   sensorId: string;
 }

@@ -34,10 +34,17 @@ let FieldsController = class FieldsController {
         this.fieldsService = fieldsService;
     }
     async create(createFieldDto) {
-        let messages = [];
-        let validation = FieldZodObject.safeParse(createFieldDto);
+        let validation = zod_1.z.string().length(36).safeParse(createFieldDto.userId);
         if (validation.success == false) {
-            let issues = validation.error.issues;
+            throw new common_1.HttpException({
+                response: validation.error.issues,
+                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
+        let messages = [];
+        let validation2 = FieldZodObject.safeParse(createFieldDto);
+        if (validation2.success == false) {
+            let issues = validation2.error.issues;
             for (let i = 0; i < issues.length; i++) {
                 messages.push('' +
                     issues[i].message +
@@ -69,10 +76,58 @@ let FieldsController = class FieldsController {
         }
         return field;
     }
-    update(id, updateFieldDto) {
+    async update(id, updateFieldDto) {
+        let validation = zod_1.z.string().length(36).safeParse(id);
+        if (validation.success == false) {
+            throw new common_1.HttpException({
+                response: validation.error.issues,
+                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
+        let validation2 = FieldZodObject.partial()
+            .strict()
+            .safeParse(updateFieldDto);
+        if (validation2.success == false) {
+            let issues = validation2.error.issues;
+            throw new common_1.BadRequestException({
+                statusCode: common_1.HttpStatus.BAD_REQUEST,
+                code: issues[0].code,
+                keys: issues.keys,
+                message: issues[0].message,
+            });
+        }
+        if (Object.keys(updateFieldDto).length == 0) {
+            throw new common_1.BadRequestException({
+                statusCode: common_1.HttpStatus.BAD_REQUEST,
+                message: "Object can't be empty!",
+            });
+        }
+        if (updateFieldDto.userId) {
+            let user = await this.fieldsService.findUserById(updateFieldDto.userId);
+            if (!user) {
+                throw new common_1.NotFoundException({
+                    statusCode: common_1.HttpStatus.NOT_FOUND,
+                    message: 'User with id: ' + updateFieldDto.userId + ' not found!',
+                });
+            }
+        }
         return this.fieldsService.update(id, updateFieldDto);
     }
-    remove(id) {
+    async remove(id) {
+        let validation = zod_1.z.string().length(36).safeParse(id);
+        if (validation.success == false) {
+            throw new common_1.HttpException({
+                response: validation.error.issues,
+                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
+        let field = await this.fieldsService.findOne(id);
+        if (!field) {
+            throw new common_1.NotFoundException({
+                statusCode: common_1.HttpStatus.NOT_FOUND,
+                message: 'Field with id: ' + id + ' not found!',
+            });
+        }
         return this.fieldsService.remove(id);
     }
 };
@@ -106,7 +161,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_field_dto_1.UpdateFieldDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], FieldsController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
@@ -114,7 +169,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], FieldsController.prototype, "remove", null);
 FieldsController = __decorate([
     (0, common_1.Controller)('fields'),

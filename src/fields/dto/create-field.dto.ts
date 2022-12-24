@@ -6,6 +6,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsString,
+  Length,
   MinLength,
 } from 'class-validator';
 
@@ -45,5 +46,6 @@ export class CreateFieldDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
+  @Length(36)
   userId: string;
 }

@@ -79,7 +79,7 @@ model Field {
 
 model Sensor {
     id           String        @id @default(uuid())
-    type         SensorType
+    type         String
     field        Field         @relation(fields: [fieldId], references: [id])
     fieldId      String
     sensorValues SensorValue[]

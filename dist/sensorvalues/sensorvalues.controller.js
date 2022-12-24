@@ -19,17 +19,56 @@ const create_sensorvalue_dto_1 = require("./dto/create-sensorvalue.dto");
 const update_sensorvalue_dto_1 = require("./dto/update-sensorvalue.dto");
 const swagger_1 = require("@nestjs/swagger");
 const sensorvalue_entity_1 = require("./entities/sensorvalue.entity");
+const zod_1 = require("zod");
+const SensorValueZodObject = zod_1.z.object({
+    value: zod_1.z.string(),
+    timeStamp: zod_1.z.string(),
+    sensorId: zod_1.z.string().length(36),
+});
 let SensorvaluesController = class SensorvaluesController {
     constructor(sensorvaluesService) {
         this.sensorvaluesService = sensorvaluesService;
     }
-    create(createSensorvalueDto) {
+    async create(createSensorvalueDto) {
+        let validation = zod_1.z
+            .string()
+            .length(36)
+            .safeParse(createSensorvalueDto.sensorId);
+        if (validation.success == false) {
+            throw new common_1.HttpException({
+                response: validation.error.issues,
+                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
+        let messages = [];
+        let validation2 = SensorValueZodObject.safeParse(createSensorvalueDto);
+        if (validation2.success == false) {
+            let issues = validation2.error.issues;
+            for (let i = 0; i < issues.length; i++) {
+                messages.push('' +
+                    issues[i].message +
+                    ' Error on property:' +
+                    issues[i].path[0] +
+                    '');
+            }
+            throw new common_1.HttpException({ statusCode: common_1.HttpStatus.NOT_ACCEPTABLE, response: messages }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
+        let user = await this.sensorvaluesService.findSensorById(createSensorvalueDto.sensorId);
+        if (!user)
+            throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
         return this.sensorvaluesService.create(createSensorvalueDto);
     }
     findAll() {
         return this.sensorvaluesService.findAll();
     }
     async findOne(id) {
+        let validation = zod_1.z.string().length(36).safeParse(id);
+        if (validation.success == false) {
+            throw new common_1.HttpException({
+                response: validation.error.issues,
+                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
         const sensorvalue = await this.sensorvaluesService.findOne(id);
         if (!sensorvalue) {
             throw new common_1.NotFoundException(`Sensorvalue with ${id} does not exist.`);
@@ -37,9 +76,23 @@ let SensorvaluesController = class SensorvaluesController {
         return sensorvalue;
     }
     update(id, updateSensorvalueDto) {
+        let validation = zod_1.z.string().length(36).safeParse(id);
+        if (validation.success == false) {
+            throw new common_1.HttpException({
+                response: validation.error.issues,
+                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
         return this.sensorvaluesService.update(id, updateSensorvalueDto);
     }
     remove(id) {
+        let validation = zod_1.z.string().length(36).safeParse(id);
+        if (validation.success == false) {
+            throw new common_1.HttpException({
+                response: validation.error.issues,
+                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
         return this.sensorvaluesService.remove(id);
     }
 };
@@ -49,7 +102,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_sensorvalue_dto_1.CreateSensorvalueDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], SensorvaluesController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),

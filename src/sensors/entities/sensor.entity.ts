@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Sensor, SensorType } from '@prisma/client';
+import { Sensor } from '@prisma/client';
 
 export class SensorEntity implements Sensor {
   @ApiProperty()
   id: string;
   @ApiProperty()
-  type: SensorType;
+  type: string;
   @ApiProperty()
   fieldId: string;
 }

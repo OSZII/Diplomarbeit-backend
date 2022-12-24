@@ -11,6 +11,9 @@ const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 let SensorsService = class SensorsService {
+    findFieldById(id) {
+        return prisma.field.findFirst({ where: { id } });
+    }
     create(createSensorDto) {
         return prisma.sensor.create({ data: createSensorDto });
     }

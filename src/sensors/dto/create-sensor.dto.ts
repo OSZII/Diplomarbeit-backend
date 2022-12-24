@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SensorType } from '@prisma/client';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class CreateSensorDto {
   @IsNotEmpty()
   @ApiProperty()
-  type: SensorType;
+  type: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
+  @Length(36)
   fieldId: string;
 }

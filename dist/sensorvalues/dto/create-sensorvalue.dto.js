@@ -19,12 +19,6 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
-], CreateSensorvalueDto.prototype, "id", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
-    (0, swagger_1.ApiProperty)(),
-    __metadata("design:type", String)
 ], CreateSensorvalueDto.prototype, "value", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
@@ -36,6 +30,7 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.Length)(36),
     __metadata("design:type", String)
 ], CreateSensorvalueDto.prototype, "sensorId", void 0);
 exports.CreateSensorvalueDto = CreateSensorvalueDto;

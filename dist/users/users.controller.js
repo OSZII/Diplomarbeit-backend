@@ -19,17 +19,46 @@ const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const swagger_1 = require("@nestjs/swagger");
 const user_entity_1 = require("./entities/user.entity");
+const zod_1 = require("zod");
+const UserZodObject = zod_1.z.object({
+    username: zod_1.z.string(),
+    firstName: zod_1.z.string(),
+    lastName: zod_1.z.string(),
+    email: zod_1.z.string(),
+    password: zod_1.z.string(),
+    role: zod_1.z.string(),
+});
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
-    create(createUserDto) {
+    async create(createUserDto) {
+        let messages = [];
+        let validation = UserZodObject.safeParse(createUserDto);
+        if (validation.success == false) {
+            let issues = validation.error.issues;
+            for (let i = 0; i < issues.length; i++) {
+                messages.push('' +
+                    issues[i].message +
+                    ' Error on property:' +
+                    issues[i].path[0] +
+                    '');
+            }
+            throw new common_1.HttpException({ statusCode: common_1.HttpStatus.NOT_ACCEPTABLE, response: messages }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
         return this.usersService.create(createUserDto);
     }
     findAll() {
         return this.usersService.findAll();
     }
     async findOne(id) {
+        let validation = zod_1.z.string().length(36).safeParse(id);
+        if (validation.success == false) {
+            throw new common_1.HttpException({
+                response: validation.error.issues,
+                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
         const user = await this.usersService.findOne(id);
         if (!user) {
             throw new common_1.NotFoundException(`User with ${id} does not exist.`);
@@ -37,9 +66,23 @@ let UsersController = class UsersController {
         return user;
     }
     update(id, updateUserDto) {
+        let validation = zod_1.z.string().length(36).safeParse(id);
+        if (validation.success == false) {
+            throw new common_1.HttpException({
+                response: validation.error.issues,
+                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
         return this.usersService.update(id, updateUserDto);
     }
     remove(id) {
+        let validation = zod_1.z.string().length(36).safeParse(id);
+        if (validation.success == false) {
+            throw new common_1.HttpException({
+                response: validation.error.issues,
+                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        }
         return this.usersService.remove(id);
     }
 };
@@ -49,7 +92,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], UsersController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),

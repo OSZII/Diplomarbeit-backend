@@ -57,6 +57,7 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.Length)(36),
     __metadata("design:type", String)
 ], CreateFieldDto.prototype, "userId", void 0);
 exports.CreateFieldDto = CreateFieldDto;

@@ -1,6 +1,4 @@
-import { SensorValue } from '@prisma/client';
-export declare class CreateSensorvalueDto implements SensorValue {
-    id: string;
+export declare class CreateSensorvalueDto {
     value: string;
     timeStamp: Date;
     sensorId: string;
