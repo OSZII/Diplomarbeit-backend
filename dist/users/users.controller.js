@@ -19,59 +19,69 @@ const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const swagger_1 = require("@nestjs/swagger");
 const user_entity_1 = require("./entities/user.entity");
-const zod_1 = require("zod");
-const UserZodObject = zod_1.z.object({
-    username: zod_1.z.string(),
-    firstName: zod_1.z.string(),
-    lastName: zod_1.z.string(),
-    email: zod_1.z.string(),
-    password: zod_1.z.string(),
-    role: zod_1.z.string(),
-});
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
     async create(createUserDto) {
-        let messages = [];
-        let validation = UserZodObject.safeParse(createUserDto);
-        if (validation.success == false) {
-            let issues = validation.error.issues;
-            for (let i = 0; i < issues.length; i++) {
-                messages.push('' +
-                    issues[i].message +
-                    ' Error on property:' +
-                    issues[i].path[0] +
-                    '');
-            }
-            throw new common_1.HttpException({ statusCode: common_1.HttpStatus.NOT_ACCEPTABLE, response: messages }, common_1.HttpStatus.NOT_ACCEPTABLE);
+        let userByEmail = await this.usersService.findByEmail(createUserDto.email);
+        let userByUsername = await this.usersService.findByUsername(createUserDto.username);
+        if (userByEmail) {
+            throw new common_1.BadRequestException({
+                statusCode: common_1.HttpStatus.BAD_REQUEST,
+                message: 'User with email: ' + createUserDto.email + ' already exists!',
+            });
+        }
+        if (userByUsername) {
+            throw new common_1.BadRequestException({
+                statusCode: common_1.HttpStatus.BAD_REQUEST,
+                message: 'User with username: ' + createUserDto.username + ' already exists!',
+            });
         }
         return this.usersService.create(createUserDto);
     }
     findAll() {
         return this.usersService.findAll();
     }
+    findAllDetailed() {
+        return this.usersService.findAllDetailed();
+    }
+    async getCount() {
+        return {
+            count: await this.usersService.getCount(),
+        };
+    }
     async findOne(id) {
-        let validation = zod_1.z.string().length(36).safeParse(id);
-        if (validation.success == false) {
-            throw new common_1.HttpException({
-                response: validation.error.issues,
-                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
-            }, common_1.HttpStatus.NOT_ACCEPTABLE);
-        }
         const user = await this.usersService.findOne(id);
         if (!user) {
             throw new common_1.NotFoundException(`User with ${id} does not exist.`);
         }
         return user;
     }
-    update(id, updateUserDto) {
-        let validation = zod_1.z.string().length(36).safeParse(id);
-        if (validation.success == false) {
-            throw new common_1.HttpException({
-                response: validation.error.issues,
-                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
-            }, common_1.HttpStatus.NOT_ACCEPTABLE);
+    async update(id, updateUserDto) {
+        const user = await this.usersService.findOne(id);
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ${id} does not exist.`);
+        }
+        if (updateUserDto.email) {
+            let userByEmail = await this.usersService.findByEmail(updateUserDto.email);
+            if (userByEmail) {
+                throw new common_1.BadRequestException({
+                    statusCode: common_1.HttpStatus.BAD_REQUEST,
+                    message: 'User with email: ' + updateUserDto.email + ' already exists!',
+                });
+            }
+        }
+        if (updateUserDto.username) {
+            let userByUsername = await this.usersService.findByUsername(updateUserDto.username);
+            if (userByUsername) {
+                throw new common_1.BadRequestException({
+                    statusCode: common_1.HttpStatus.BAD_REQUEST,
+                    message: 'User with username: ' +
+                        updateUserDto.username +
+                        ' already exists!',
+                });
+            }
         }
         return this.usersService.update(id, updateUserDto);
     }
@@ -102,9 +112,23 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findAll", null);
 __decorate([
+    (0, common_1.Get)('/detailed'),
+    (0, swagger_1.ApiOkResponse)({ type: user_entity_1.UserEntity, isArray: true }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "findAllDetailed", null);
+__decorate([
+    (0, common_1.Get)('/count'),
+    (0, swagger_1.ApiOkResponse)({ type: Number }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getCount", null);
+__decorate([
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOkResponse)({ type: user_entity_1.UserEntity }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
@@ -112,11 +136,11 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, swagger_1.ApiCreatedResponse)({ type: user_entity_1.UserEntity }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),

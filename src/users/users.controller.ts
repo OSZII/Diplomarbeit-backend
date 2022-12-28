@@ -10,22 +10,13 @@ import {
   HttpStatus,
   HttpException,
   ParseUUIDPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
-import { z } from 'zod';
-
-const UserZodObject = z.object({
-  username: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string(),
-  password: z.string(),
-  role: z.string(),
-});
 
 @Controller('users')
 @ApiTags('users')
@@ -35,26 +26,24 @@ export class UsersController {
   @Post()
   @ApiCreatedResponse({ type: UserEntity })
   async create(@Body() createUserDto: CreateUserDto) {
-    // #region validate createUserObject
-    let messages: string[] = [];
-
-    let validation = UserZodObject.safeParse(createUserDto);
-    if (validation.success == false) {
-      let issues = validation.error.issues;
-      for (let i = 0; i < issues.length; i++) {
-        messages.push(
-          '' +
-            issues[i].message +
-            ' Error on property:' +
-            issues[i].path[0] +
-            '',
-        );
-      }
-
-      throw new HttpException(
-        { statusCode: HttpStatus.NOT_ACCEPTABLE, response: messages },
-        HttpStatus.NOT_ACCEPTABLE,
-      );
+    // #region check if user with email or username already exists
+    // validate if unique email and or username
+    let userByEmail = await this.usersService.findByEmail(createUserDto.email);
+    let userByUsername = await this.usersService.findByUsername(
+      createUserDto.username,
+    );
+    if (userByEmail) {
+      throw new BadRequestException({
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'User with email: ' + createUserDto.email + ' already exists!',
+      });
+    }
+    if (userByUsername) {
+      throw new BadRequestException({
+        statusCode: HttpStatus.BAD_REQUEST,
+        message:
+          'User with username: ' + createUserDto.username + ' already exists!',
+      });
     }
     // #endregion
 
@@ -66,47 +55,73 @@ export class UsersController {
   findAll() {
     return this.usersService.findAll();
   }
+  @Get('/detailed')
+  @ApiOkResponse({ type: UserEntity, isArray: true })
+  findAllDetailed() {
+    return this.usersService.findAllDetailed();
+  }
+
+  @Get('/count')
+  @ApiOkResponse({ type: Number })
+  async getCount() {
+    return {
+      count: await this.usersService.getCount(),
+    };
+  }
 
   @Get(':id')
   @ApiOkResponse({ type: UserEntity })
-  async findOne(@Param('id') id: string) {
-    // #region validate if id == uuid()
-    let validation = z.string().length(36).safeParse(id);
-
-    // if not uuid don't even ask the database
-    if (validation.success == false) {
-      throw new HttpException(
-        {
-          response: validation.error.issues,
-          statusCode: HttpStatus.NOT_ACCEPTABLE,
-        },
-        HttpStatus.NOT_ACCEPTABLE,
-      );
-    }
-    // #endregion
-
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    // #region check if user exists
     const user = await this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException(`User with ${id} does not exist.`);
     }
+    // #endregion
     return user;
   }
 
   @Patch(':id')
   @ApiCreatedResponse({ type: UserEntity })
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    // #region validate if id == uuid()
-    let validation = z.string().length(36).safeParse(id);
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    // #region check if user exists
+    const user = await this.usersService.findOne(id);
+    if (!user) {
+      throw new NotFoundException(`User with ${id} does not exist.`);
+    }
+    // #endregion
 
-    // if not uuid don't even ask the database
-    if (validation.success == false) {
-      throw new HttpException(
-        {
-          response: validation.error.issues,
-          statusCode: HttpStatus.NOT_ACCEPTABLE,
-        },
-        HttpStatus.NOT_ACCEPTABLE,
+    // #region check if user with email or username already exists
+    // validate if unique email and or username
+
+    if (updateUserDto.email) {
+      let userByEmail = await this.usersService.findByEmail(
+        updateUserDto.email,
       );
+      if (userByEmail) {
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message:
+            'User with email: ' + updateUserDto.email + ' already exists!',
+        });
+      }
+    }
+    if (updateUserDto.username) {
+      let userByUsername = await this.usersService.findByUsername(
+        updateUserDto.username,
+      );
+      if (userByUsername) {
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message:
+            'User with username: ' +
+            updateUserDto.username +
+            ' already exists!',
+        });
+      }
     }
     // #endregion
 

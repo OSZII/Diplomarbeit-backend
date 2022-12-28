@@ -11,6 +11,32 @@ const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 let FieldsService = class FieldsService {
+    findAllDetailed() {
+        return prisma.field.findMany({
+            select: {
+                id: true,
+                name: true,
+                area: true,
+                unit: true,
+                latitude: true,
+                longitude: true,
+                description: true,
+                sensors: {
+                    select: {
+                        id: true,
+                        type: true,
+                        sensorValues: {
+                            select: {
+                                id: true,
+                                value: true,
+                                timeStamp: true,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    }
     create(createFieldDto) {
         return prisma.field.create({ data: createFieldDto });
     }

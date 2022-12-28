@@ -11,14 +11,34 @@ const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 let UsersService = class UsersService {
+    findAllDetailed() {
+        return prisma.user.findMany({
+            include: {
+                fields: {
+                    include: {
+                        sensors: true,
+                    },
+                },
+            },
+        });
+    }
     create(createUserDto) {
         return prisma.user.create({ data: createUserDto });
+    }
+    getCount() {
+        return prisma.user.count();
     }
     findAll() {
         return prisma.user.findMany();
     }
     findOne(id) {
         return prisma.user.findFirst({ where: { id } });
+    }
+    findByEmail(email) {
+        return prisma.user.findUnique({ where: { email } });
+    }
+    findByUsername(username) {
+        return prisma.user.findUnique({ where: { username } });
     }
     update(id, updateUserDto) {
         return prisma.user.update({ where: { id }, data: updateUserDto });

@@ -88,6 +88,11 @@ export class FieldsController {
   findAll() {
     return this.fieldsService.findAll();
   }
+  @Get('/detailed')
+  @ApiOkResponse({ type: FieldEntity, isArray: true })
+  findAllDetailed() {
+    return this.fieldsService.findAllDetailed();
+  }
 
   @Get(':id')
   @ApiOkResponse({ type: FieldEntity })

@@ -21,8 +21,8 @@ __decorate([
     __metadata("design:type", String)
 ], CreateSensorvalueDto.prototype, "value", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsDate)(),
+    (0, class_validator_1.IsDateString)(),
+    (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Date)
 ], CreateSensorvalueDto.prototype, "timeStamp", void 0);

@@ -42,6 +42,9 @@ let FieldsController = class FieldsController {
     findAll() {
         return this.fieldsService.findAll();
     }
+    findAllDetailed() {
+        return this.fieldsService.findAllDetailed();
+    }
     async findOne(id) {
         const field = await this.fieldsService.findOne(id);
         if (!field) {
@@ -87,6 +90,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], FieldsController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('/detailed'),
+    (0, swagger_1.ApiOkResponse)({ type: field_entity_1.FieldEntity, isArray: true }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], FieldsController.prototype, "findAllDetailed", null);
 __decorate([
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOkResponse)({ type: field_entity_1.FieldEntity }),

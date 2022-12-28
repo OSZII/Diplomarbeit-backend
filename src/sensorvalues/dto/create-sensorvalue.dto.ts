@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsString, IsUUID, Length } from 'class-validator';
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Length,
+} from 'class-validator';
 
 export class CreateSensorvalueDto {
   @IsNotEmpty()
@@ -7,8 +14,8 @@ export class CreateSensorvalueDto {
   @ApiProperty()
   value: string;
 
-  @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
+  @IsOptional()
   @ApiProperty()
   timeStamp: Date;
 

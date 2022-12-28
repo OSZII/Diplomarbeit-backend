@@ -32,46 +32,6 @@ export class SensorvaluesController {
   @Post()
   @ApiCreatedResponse({ type: SensorvalueEntity })
   async create(@Body() createSensorvalueDto: CreateSensorvalueDto) {
-    // #region validate if id == uuid()
-    let validation = z
-      .string()
-      .length(36)
-      .safeParse(createSensorvalueDto.sensorId);
-    // if not uuid don't even ask the database
-    if (validation.success == false) {
-      throw new HttpException(
-        {
-          response: validation.error.issues,
-          statusCode: HttpStatus.NOT_ACCEPTABLE,
-        },
-        HttpStatus.NOT_ACCEPTABLE,
-      );
-    }
-    // #endregion
-
-    // #region validate createFieldObject
-    let messages: string[] = [];
-
-    let validation2 = SensorValueZodObject.safeParse(createSensorvalueDto);
-    if (validation2.success == false) {
-      let issues = validation2.error.issues;
-      for (let i = 0; i < issues.length; i++) {
-        messages.push(
-          '' +
-            issues[i].message +
-            ' Error on property:' +
-            issues[i].path[0] +
-            '',
-        );
-      }
-
-      throw new HttpException(
-        { statusCode: HttpStatus.NOT_ACCEPTABLE, response: messages },
-        HttpStatus.NOT_ACCEPTABLE,
-      );
-    }
-    // #endregion
-
     // #region check sensorId if sensor exists
     let user = await this.sensorvaluesService.findSensorById(
       createSensorvalueDto.sensorId,
@@ -115,24 +75,9 @@ export class SensorvaluesController {
   @Patch(':id')
   @ApiCreatedResponse({ type: SensorvalueEntity })
   update(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateSensorvalueDto: UpdateSensorvalueDto,
   ) {
-    // #region validate if id == uuid()
-    let validation = z.string().length(36).safeParse(id);
-
-    // if not uuid don't even ask the database
-    if (validation.success == false) {
-      throw new HttpException(
-        {
-          response: validation.error.issues,
-          statusCode: HttpStatus.NOT_ACCEPTABLE,
-        },
-        HttpStatus.NOT_ACCEPTABLE,
-      );
-    }
-    // #endregion
-
     return this.sensorvaluesService.update(id, updateSensorvalueDto);
   }
 
