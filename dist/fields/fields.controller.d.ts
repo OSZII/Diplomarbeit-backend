@@ -7,16 +7,16 @@ export declare class FieldsController {
     create(createFieldDto: CreateFieldDto): Promise<import(".prisma/client").Field>;
     findAll(): import(".prisma/client").PrismaPromise<import(".prisma/client").Field[]>;
     findAllDetailed(): import(".prisma/client").PrismaPromise<{
+        description: string;
         id: string;
         name: string;
         area: number;
         unit: string;
         latitude: import("@prisma/client/runtime").Decimal;
         longitude: import("@prisma/client/runtime").Decimal;
-        description: string;
         sensors: {
-            id: string;
             type: string;
+            id: string;
             sensorValues: {
                 id: string;
                 value: string;
@@ -24,6 +24,12 @@ export declare class FieldsController {
             }[];
         }[];
     }[]>;
+    getUnits(): {
+        units: string[];
+    };
+    getCount(): Promise<{
+        count: number;
+    }>;
     findOne(id: string): Promise<import(".prisma/client").Field>;
     update(id: string, updateFieldDto: UpdateFieldDto): Promise<import(".prisma/client").Field>;
     remove(id: string): Promise<import(".prisma/client").Field>;

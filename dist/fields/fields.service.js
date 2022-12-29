@@ -8,9 +8,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FieldsService = void 0;
 const common_1 = require("@nestjs/common");
+const create_field_dto_1 = require("./dto/create-field.dto");
 const client_1 = require("@prisma/client");
+const class_validator_1 = require("class-validator");
 const prisma = new client_1.PrismaClient();
 let FieldsService = class FieldsService {
+    getUnits() {
+        let unitsArr = [];
+        for (let i = 0; i < Object.values(create_field_dto_1.unit).length; i++) {
+            if (!(0, class_validator_1.isNumber)(Object.values(create_field_dto_1.unit)[i]))
+                unitsArr.push(Object.values(create_field_dto_1.unit)[i]);
+        }
+        return {
+            units: unitsArr,
+        };
+    }
     findAllDetailed() {
         return prisma.field.findMany({
             select: {
@@ -36,6 +48,9 @@ let FieldsService = class FieldsService {
                 },
             },
         });
+    }
+    getCount() {
+        return prisma.field.count();
     }
     create(createFieldDto) {
         return prisma.field.create({ data: createFieldDto });

@@ -101,3 +101,7 @@ TODO: Errorvalidation: checken was passiert wenn man bei PATCH einen parameter Ã
 # validierung
 https://docs.nestjs.com/techniques/validation
 Validierung wird glaub ich doch mit class-validator und class-transformer umgesetzt grad noch am testen
+
+adding `id: string;` to every `create-<object>.dto.ts` file with @IsUUID() and @IsOptionl()
+I do this because let's say database got deleted and now i need to insert the backup via the api, then I also need to be able to pass
+everything with the id. So that the userId on the field object for example still is the same 

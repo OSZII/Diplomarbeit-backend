@@ -1,12 +1,46 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreateFieldDto } from './dto/create-field.dto';
+import { Injectable } from '@nestjs/common';
+import { CreateFieldDto, unit } from './dto/create-field.dto';
 import { UpdateFieldDto } from './dto/update-field.dto';
 import { PrismaClient } from '@prisma/client';
-import { UsersService } from 'src/users/users.service';
+import { isNumber } from 'class-validator';
 const prisma = new PrismaClient();
 
 @Injectable()
 export class FieldsService {
+  getUnits() {
+    // Doing some magic to go from this:
+    //     "units": [
+    //         "sqm",
+    //         "sqk",
+    //         "hectar",
+    //         "ar",
+    //         "acre",
+    //         0,
+    //         1,
+    //         2,
+    //         3,
+    //         4
+    //     ]
+    // ```
+    // to this:
+    // "units": [
+    //     "sqm",
+    //     "sqk",
+    //     "hectar",
+    //     "ar",
+    //     "acre"
+    // ]
+
+    let unitsArr: string[] = [];
+    for (let i = 0; i < Object.values(unit).length; i++) {
+      if (!isNumber(Object.values(unit)[i]))
+        unitsArr.push(Object.values(unit)[i] as string);
+    }
+    return {
+      units: unitsArr,
+    };
+  }
+
   findAllDetailed() {
     return prisma.field.findMany({
       select: {
@@ -33,6 +67,11 @@ export class FieldsService {
       },
     });
   }
+
+  getCount() {
+    return prisma.field.count();
+  }
+
   create(createFieldDto: CreateFieldDto) {
     return prisma.field.create({ data: createFieldDto });
   }

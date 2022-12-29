@@ -17,17 +17,6 @@ import { CreateFieldDto } from './dto/create-field.dto';
 import { UpdateFieldDto } from './dto/update-field.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { FieldEntity } from './entities/field.entity';
-import { z } from 'zod';
-
-const FieldZodObject = z.object({
-  name: z.string(),
-  area: z.number(),
-  unit: z.enum(['sqm', 'sqkm', 'hectar', 'ar', 'acre']),
-  latitude: z.number(),
-  longitude: z.number(),
-  description: z.string(),
-  userId: z.string().length(36),
-});
 
 @Controller('fields')
 @ApiTags('fields')
@@ -37,47 +26,24 @@ export class FieldsController {
   @Post()
   @ApiCreatedResponse({ type: FieldEntity })
   async create(@Body() createFieldDto: CreateFieldDto) {
-    // // #region validate if id == uuid()
-    // let validation = z.string().length(36).safeParse(createFieldDto.userId);
-    // // if not uuid don't even ask the database
-    // if (validation.success == false) {
-    //   throw new HttpException(
-    //     {
-    //       response: validation.error.issues,
-    //       statusCode: HttpStatus.NOT_ACCEPTABLE,
-    //     },
-    //     HttpStatus.NOT_ACCEPTABLE,
-    //   );
-    // }
-    // // #endregion
+    // #region if id is given check if field with id already exsists
+    if (createFieldDto.id) {
+      let fieldById = await this.fieldsService.findOne(createFieldDto.id);
+      if (fieldById) {
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'User with id: ' + createFieldDto.id + ' already exists!',
+        });
+      }
+    }
+    // #endregion
 
-    // // #region validate createFieldObject
-    // let messages: string[] = [];
-
-    // let validation2 = FieldZodObject.safeParse(createFieldDto);
-    // if (validation2.success == false) {
-    //   let issues = validation2.error.issues;
-    //   for (let i = 0; i < issues.length; i++) {
-    //     messages.push(
-    //       '' +
-    //         issues[i].message +
-    //         ' Error on property:' +
-    //         issues[i].path[0] +
-    //         '',
-    //     );
-    //   }
-
-    //   throw new HttpException(
-    //     { statusCode: HttpStatus.NOT_ACCEPTABLE, response: messages },
-    //     HttpStatus.NOT_ACCEPTABLE,
-    //   );
-    // }
-    // // #endregion
-
-    // des brauch ich glaub ich
-    // #region check userId if user exists
+    // #region check if user with userId exists
     let user = await this.fieldsService.findUserById(createFieldDto.userId);
-    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    if (!user)
+      throw new NotFoundException(
+        `No user with userId: ${createFieldDto.userId}`,
+      );
     // #endregion
 
     return await this.fieldsService.create(createFieldDto);
@@ -93,13 +59,25 @@ export class FieldsController {
   findAllDetailed() {
     return this.fieldsService.findAllDetailed();
   }
+  @Get('/units')
+  @ApiOkResponse({ type: FieldEntity, isArray: true })
+  getUnits() {
+    return this.fieldsService.getUnits();
+  }
+  @Get('/count')
+  @ApiOkResponse({ type: FieldEntity, isArray: true })
+  async getCount() {
+    return {
+      count: await this.fieldsService.getCount(),
+    };
+  }
 
   @Get(':id')
   @ApiOkResponse({ type: FieldEntity })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const field = await this.fieldsService.findOne(id);
     if (!field) {
-      throw new NotFoundException(`Field with ${id} does not exist.`);
+      throw new NotFoundException(`Field with id: ${id} does not exist!`);
     }
     return field;
   }

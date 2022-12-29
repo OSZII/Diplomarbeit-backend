@@ -26,8 +26,19 @@ export class UsersController {
   @Post()
   @ApiCreatedResponse({ type: UserEntity })
   async create(@Body() createUserDto: CreateUserDto) {
+    // #region if id is given check if user with id already exsists
+    if (createUserDto.id) {
+      let userById = await this.usersService.findOne(createUserDto.id);
+      if (userById) {
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'User with id: ' + createUserDto.id + ' already exists!',
+        });
+      }
+    }
+    // #endregion
+
     // #region check if user with email or username already exists
-    // validate if unique email and or username
     let userByEmail = await this.usersService.findByEmail(createUserDto.email);
     let userByUsername = await this.usersService.findByUsername(
       createUserDto.username,
@@ -94,9 +105,7 @@ export class UsersController {
     }
     // #endregion
 
-    // #region check if user with email or username already exists
-    // validate if unique email and or username
-
+    // #region check if username or email given if user with this username or email already exists
     if (updateUserDto.email) {
       let userByEmail = await this.usersService.findByEmail(
         updateUserDto.email,

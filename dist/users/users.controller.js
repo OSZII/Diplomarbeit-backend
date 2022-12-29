@@ -24,6 +24,15 @@ let UsersController = class UsersController {
         this.usersService = usersService;
     }
     async create(createUserDto) {
+        if (createUserDto.id) {
+            let userById = await this.usersService.findOne(createUserDto.id);
+            if (userById) {
+                throw new common_1.BadRequestException({
+                    statusCode: common_1.HttpStatus.BAD_REQUEST,
+                    message: 'User with id: ' + createUserDto.id + ' already exists!',
+                });
+            }
+        }
         let userByEmail = await this.usersService.findByEmail(createUserDto.email);
         let userByUsername = await this.usersService.findByUsername(createUserDto.username);
         if (userByEmail) {

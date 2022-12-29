@@ -6,24 +6,29 @@ import {
   IsLongitude,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   IsUUID,
   Length,
   MinLength,
 } from 'class-validator';
 
-enum unit {
-  'sqm',
-  'sqk',
-  'hectar',
-  'ar',
-  'acre',
+export enum unit {
+  sqm,
+  sqk,
+  hectar,
+  ar,
+  acre,
 }
 
 export class CreateFieldDto {
+  @IsOptional()
+  @IsUUID()
+  @ApiProperty()
+  id: string;
+
   @IsString()
   @IsNotEmpty()
-  @MinLength(5)
   @ApiProperty()
   name: string;
 
@@ -37,20 +42,18 @@ export class CreateFieldDto {
   @ApiProperty()
   unit: string;
 
-  @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   @IsLatitude()
   @ApiProperty()
   latitude: Prisma.Decimal;
 
-  @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   @IsLongitude()
   @ApiProperty()
   longitude: Prisma.Decimal;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   @ApiProperty()
   description: string;
 

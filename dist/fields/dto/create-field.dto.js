@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateFieldDto = void 0;
+exports.CreateFieldDto = exports.unit = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const client_1 = require("@prisma/client");
 const class_validator_1 = require("class-validator");
@@ -20,13 +20,18 @@ var unit;
     unit[unit["hectar"] = 2] = "hectar";
     unit[unit["ar"] = 3] = "ar";
     unit[unit["acre"] = 4] = "acre";
-})(unit || (unit = {}));
+})(unit = exports.unit || (exports.unit = {}));
 class CreateFieldDto {
 }
 __decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsUUID)(),
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], CreateFieldDto.prototype, "id", void 0);
+__decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.MinLength)(5),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], CreateFieldDto.prototype, "name", void 0);
@@ -43,22 +48,20 @@ __decorate([
     __metadata("design:type", String)
 ], CreateFieldDto.prototype, "unit", void 0);
 __decorate([
-    (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsLatitude)(),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", client_1.Prisma.Decimal)
 ], CreateFieldDto.prototype, "latitude", void 0);
 __decorate([
-    (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsLongitude)(),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", client_1.Prisma.Decimal)
 ], CreateFieldDto.prototype, "longitude", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], CreateFieldDto.prototype, "description", void 0);

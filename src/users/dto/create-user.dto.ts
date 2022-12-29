@@ -3,7 +3,9 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsString,
+  IsUUID,
   MinLength,
 } from 'class-validator';
 
@@ -12,6 +14,11 @@ enum UserRoles {
   'ADMIN',
 }
 export class CreateUserDto {
+  @IsOptional()
+  @IsUUID()
+  @ApiProperty()
+  id: string;
+
   @IsString()
   @IsNotEmpty()
   @MinLength(5)

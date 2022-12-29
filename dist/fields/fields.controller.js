@@ -19,24 +19,23 @@ const create_field_dto_1 = require("./dto/create-field.dto");
 const update_field_dto_1 = require("./dto/update-field.dto");
 const swagger_1 = require("@nestjs/swagger");
 const field_entity_1 = require("./entities/field.entity");
-const zod_1 = require("zod");
-const FieldZodObject = zod_1.z.object({
-    name: zod_1.z.string(),
-    area: zod_1.z.number(),
-    unit: zod_1.z.enum(['sqm', 'sqkm', 'hectar', 'ar', 'acre']),
-    latitude: zod_1.z.number(),
-    longitude: zod_1.z.number(),
-    description: zod_1.z.string(),
-    userId: zod_1.z.string().length(36),
-});
 let FieldsController = class FieldsController {
     constructor(fieldsService) {
         this.fieldsService = fieldsService;
     }
     async create(createFieldDto) {
+        if (createFieldDto.id) {
+            let fieldById = await this.fieldsService.findOne(createFieldDto.id);
+            if (fieldById) {
+                throw new common_1.BadRequestException({
+                    statusCode: common_1.HttpStatus.BAD_REQUEST,
+                    message: 'User with id: ' + createFieldDto.id + ' already exists!',
+                });
+            }
+        }
         let user = await this.fieldsService.findUserById(createFieldDto.userId);
         if (!user)
-            throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
+            throw new common_1.NotFoundException(`No user with userId: ${createFieldDto.userId}`);
         return await this.fieldsService.create(createFieldDto);
     }
     findAll() {
@@ -45,10 +44,18 @@ let FieldsController = class FieldsController {
     findAllDetailed() {
         return this.fieldsService.findAllDetailed();
     }
+    getUnits() {
+        return this.fieldsService.getUnits();
+    }
+    async getCount() {
+        return {
+            count: await this.fieldsService.getCount(),
+        };
+    }
     async findOne(id) {
         const field = await this.fieldsService.findOne(id);
         if (!field) {
-            throw new common_1.NotFoundException(`Field with ${id} does not exist.`);
+            throw new common_1.NotFoundException(`Field with id: ${id} does not exist!`);
         }
         return field;
     }
@@ -97,6 +104,20 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], FieldsController.prototype, "findAllDetailed", null);
+__decorate([
+    (0, common_1.Get)('/units'),
+    (0, swagger_1.ApiOkResponse)({ type: field_entity_1.FieldEntity, isArray: true }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], FieldsController.prototype, "getUnits", null);
+__decorate([
+    (0, common_1.Get)('/count'),
+    (0, swagger_1.ApiOkResponse)({ type: field_entity_1.FieldEntity, isArray: true }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], FieldsController.prototype, "getCount", null);
 __decorate([
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOkResponse)({ type: field_entity_1.FieldEntity }),
