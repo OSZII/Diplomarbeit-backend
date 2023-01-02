@@ -3,13 +3,16 @@ import { AppService } from './app.service';
 import { ApiTags } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
+import { LocalAuthGuard } from './auth/local-auth.guard';
 const prisma = new PrismaClient();
 
 @Controller()
 @ApiTags('Flower Auf Dauer backend')
 export class AppController {
   constructor(private readonly appService: AppService) {}
-  @UseGuards(AuthGuard('local'))
+  //   removing magic string local
+  //   @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async loging(@Request() req) {
     return req.user;
