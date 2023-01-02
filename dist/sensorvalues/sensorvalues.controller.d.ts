@@ -6,7 +6,8 @@ export declare class SensorvaluesController {
     constructor(sensorvaluesService: SensorvaluesService);
     create(createSensorvalueDto: CreateSensorvalueDto): Promise<import(".prisma/client").SensorValue>;
     findAll(): import(".prisma/client").PrismaPromise<import(".prisma/client").SensorValue[]>;
+    findSensorValueBySensorId(id: string): Promise<import(".prisma/client").SensorValue[]>;
     findOne(id: string): Promise<import(".prisma/client").SensorValue>;
-    update(id: string, updateSensorvalueDto: UpdateSensorvalueDto): import(".prisma/client").Prisma.Prisma__SensorValueClient<import(".prisma/client").SensorValue, never>;
+    update(id: string, updateSensorvalueDto: UpdateSensorvalueDto): Promise<import(".prisma/client").SensorValue>;
     remove(id: string): Promise<import(".prisma/client").SensorValue>;
 }

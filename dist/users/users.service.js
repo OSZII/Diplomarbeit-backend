@@ -11,6 +11,13 @@ const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 let UsersService = class UsersService {
+    findOneByUsername(username) {
+        return prisma.user.findUnique({
+            where: {
+                username: username,
+            },
+        });
+    }
     findAllDetailed() {
         return prisma.user.findMany({
             include: {

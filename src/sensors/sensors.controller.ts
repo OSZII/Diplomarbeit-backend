@@ -10,18 +10,13 @@ import {
   HttpException,
   HttpStatus,
   ParseUUIDPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { SensorsService } from './sensors.service';
 import { CreateSensorDto } from './dto/create-sensor.dto';
 import { UpdateSensorDto } from './dto/update-sensor.dto';
 import { ApiCreatedResponse, ApiTags, ApiOkResponse } from '@nestjs/swagger';
 import { SensorEntity } from './entities/sensor.entity';
-import { z } from 'zod';
-
-const SensorZodObject = z.object({
-  type: z.string(),
-  fieldId: z.string().length(36),
-});
 
 @Controller('sensors')
 @ApiTags('sensors')
@@ -31,12 +26,26 @@ export class SensorsController {
   @Post()
   @ApiCreatedResponse({ type: SensorEntity })
   async create(@Body() createSensorDto: CreateSensorDto) {
-    // #region check fieldId if field exists
+    // #region if id is given check if sensor with id already exsists
+    if (createSensorDto.id) {
+      let sensorById = await this.sensorsService.findOne(createSensorDto.id);
+      if (sensorById) {
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Sensor with id: ' + createSensorDto.id + ' already exists!',
+        });
+      }
+    }
+    // #endregion
+
+    // #region check if field with fieldId exists
     let field = await this.sensorsService.findFieldById(
       createSensorDto.fieldId,
     );
     if (!field)
-      throw new HttpException('Sensor not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException(
+        `No field with fieldId: ${createSensorDto.fieldId}`,
+      );
     // #endregion
 
     return this.sensorsService.create(createSensorDto);
@@ -46,6 +55,23 @@ export class SensorsController {
   @ApiOkResponse({ type: SensorEntity, isArray: true })
   findAll() {
     return this.sensorsService.findAll();
+  }
+  @Get('/detailed')
+  @ApiOkResponse({ type: SensorEntity, isArray: true })
+  findAllDetailed() {
+    return this.sensorsService.findAllDetailed();
+  }
+  @Get('/sensortypes')
+  @ApiOkResponse({ type: SensorEntity, isArray: true })
+  getAllSensortypes() {
+    return this.sensorsService.getSensorTypes();
+  }
+  @Get('/count')
+  @ApiOkResponse({ type: SensorEntity, isArray: true })
+  async getSensorCount() {
+    return {
+      count: await this.sensorsService.getCount(),
+    };
   }
 
   @Get(':id')
@@ -60,10 +86,24 @@ export class SensorsController {
 
   @Patch(':id')
   @ApiCreatedResponse({ type: SensorEntity })
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateSensorDto: UpdateSensorDto,
   ) {
+    // #region if fieldId given, then check if the field exists
+    if (updateSensorDto.fieldId) {
+      let field = await this.sensorsService.findFieldById(
+        updateSensorDto.fieldId,
+      );
+      if (!field) {
+        throw new NotFoundException({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'Field with id: ' + updateSensorDto.fieldId + ' not found!',
+        });
+      }
+    }
+    // #endregion
+
     return this.sensorsService.update(id, updateSensorDto);
   }
 

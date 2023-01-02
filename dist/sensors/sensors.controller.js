@@ -19,23 +19,38 @@ const create_sensor_dto_1 = require("./dto/create-sensor.dto");
 const update_sensor_dto_1 = require("./dto/update-sensor.dto");
 const swagger_1 = require("@nestjs/swagger");
 const sensor_entity_1 = require("./entities/sensor.entity");
-const zod_1 = require("zod");
-const SensorZodObject = zod_1.z.object({
-    type: zod_1.z.string(),
-    fieldId: zod_1.z.string().length(36),
-});
 let SensorsController = class SensorsController {
     constructor(sensorsService) {
         this.sensorsService = sensorsService;
     }
     async create(createSensorDto) {
+        if (createSensorDto.id) {
+            let sensorById = await this.sensorsService.findOne(createSensorDto.id);
+            if (sensorById) {
+                throw new common_1.BadRequestException({
+                    statusCode: common_1.HttpStatus.BAD_REQUEST,
+                    message: 'Sensor with id: ' + createSensorDto.id + ' already exists!',
+                });
+            }
+        }
         let field = await this.sensorsService.findFieldById(createSensorDto.fieldId);
         if (!field)
-            throw new common_1.HttpException('Sensor not found', common_1.HttpStatus.NOT_FOUND);
+            throw new common_1.NotFoundException(`No field with fieldId: ${createSensorDto.fieldId}`);
         return this.sensorsService.create(createSensorDto);
     }
     findAll() {
         return this.sensorsService.findAll();
+    }
+    findAllDetailed() {
+        return this.sensorsService.findAllDetailed();
+    }
+    getAllSensortypes() {
+        return this.sensorsService.getSensorTypes();
+    }
+    async getSensorCount() {
+        return {
+            count: await this.sensorsService.getCount(),
+        };
     }
     async findOne(id) {
         const sensor = await this.sensorsService.findOne(id);
@@ -44,7 +59,16 @@ let SensorsController = class SensorsController {
         }
         return sensor;
     }
-    update(id, updateSensorDto) {
+    async update(id, updateSensorDto) {
+        if (updateSensorDto.fieldId) {
+            let field = await this.sensorsService.findFieldById(updateSensorDto.fieldId);
+            if (!field) {
+                throw new common_1.NotFoundException({
+                    statusCode: common_1.HttpStatus.NOT_FOUND,
+                    message: 'Field with id: ' + updateSensorDto.fieldId + ' not found!',
+                });
+            }
+        }
         return this.sensorsService.update(id, updateSensorDto);
     }
     async remove(id) {
@@ -74,6 +98,27 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SensorsController.prototype, "findAll", null);
 __decorate([
+    (0, common_1.Get)('/detailed'),
+    (0, swagger_1.ApiOkResponse)({ type: sensor_entity_1.SensorEntity, isArray: true }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], SensorsController.prototype, "findAllDetailed", null);
+__decorate([
+    (0, common_1.Get)('/sensortypes'),
+    (0, swagger_1.ApiOkResponse)({ type: sensor_entity_1.SensorEntity, isArray: true }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], SensorsController.prototype, "getAllSensortypes", null);
+__decorate([
+    (0, common_1.Get)('/count'),
+    (0, swagger_1.ApiOkResponse)({ type: sensor_entity_1.SensorEntity, isArray: true }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], SensorsController.prototype, "getSensorCount", null);
+__decorate([
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOkResponse)({ type: sensor_entity_1.SensorEntity }),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
@@ -88,7 +133,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_sensor_dto_1.UpdateSensorDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], SensorsController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),

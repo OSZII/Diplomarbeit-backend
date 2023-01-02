@@ -15,6 +15,12 @@ const class_validator_1 = require("class-validator");
 class CreateSensorvalueDto {
 }
 __decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsUUID)(),
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], CreateSensorvalueDto.prototype, "id", void 0);
+__decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     (0, swagger_1.ApiProperty)(),

@@ -19,6 +19,7 @@ const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const swagger_1 = require("@nestjs/swagger");
 const user_entity_1 = require("./entities/user.entity");
+const bcrypt_1 = require("bcrypt");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -47,6 +48,7 @@ let UsersController = class UsersController {
                 message: 'User with username: ' + createUserDto.username + ' already exists!',
             });
         }
+        createUserDto.password = (0, bcrypt_1.hashSync)(createUserDto.password, 10);
         return this.usersService.create(createUserDto);
     }
     findAll() {

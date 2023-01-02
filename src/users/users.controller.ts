@@ -17,6 +17,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
+import { hashSync } from 'bcrypt';
 
 @Controller('users')
 @ApiTags('users')
@@ -57,6 +58,9 @@ export class UsersController {
       });
     }
     // #endregion
+
+    // hash userpassword hashSync(..., 10) auto generates salt and hashes the password
+    createUserDto.password = hashSync(createUserDto.password, 10);
 
     return this.usersService.create(createUserDto);
   }

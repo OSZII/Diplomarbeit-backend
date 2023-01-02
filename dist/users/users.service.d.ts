@@ -1,6 +1,7 @@
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 export declare class UsersService {
+    findOneByUsername(username: string): import(".prisma/client").Prisma.Prisma__UserClient<import(".prisma/client").User, never>;
     findAllDetailed(): import(".prisma/client").PrismaPromise<(import(".prisma/client").User & {
         fields: (import(".prisma/client").Field & {
             sensors: import(".prisma/client").Sensor[];

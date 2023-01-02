@@ -7,16 +7,16 @@ export declare class FieldsController {
     create(createFieldDto: CreateFieldDto): Promise<import(".prisma/client").Field>;
     findAll(): import(".prisma/client").PrismaPromise<import(".prisma/client").Field[]>;
     findAllDetailed(): import(".prisma/client").PrismaPromise<{
-        description: string;
         id: string;
         name: string;
         area: number;
         unit: string;
         latitude: import("@prisma/client/runtime").Decimal;
         longitude: import("@prisma/client/runtime").Decimal;
+        description: string;
         sensors: {
-            type: string;
             id: string;
+            type: string;
             sensorValues: {
                 id: string;
                 value: string;

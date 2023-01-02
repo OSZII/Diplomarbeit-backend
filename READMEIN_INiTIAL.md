@@ -105,3 +105,12 @@ Validierung wird glaub ich doch mit class-validator und class-transformer umgese
 adding `id: string;` to every `create-<object>.dto.ts` file with @IsUUID() and @IsOptionl()
 I do this because let's say database got deleted and now i need to insert the backup via the api, then I also need to be able to pass
 everything with the id. So that the userId on the field object for example still is the same 
+
+Jetzt fehlt nur noch die authentifizierung mit jwt!
+
+# authentification
+`https://docs.nestjs.com/security/authentication`
+
+
+
+Danach wärs das fürs erste vom backend. Da nit alzu weit voraus geplant wurde. Die aktuellen Anforderung sind erfüllt! Im nächsten Schritt wird diese Branch mit der main gemerged und dann eine neue erstellt, die sich um das frontend kümmert

@@ -6,6 +6,13 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class UsersService {
+  findOneByUsername(username: string) {
+    return prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+  }
   findAllDetailed() {
     return prisma.user.findMany({
       include: {

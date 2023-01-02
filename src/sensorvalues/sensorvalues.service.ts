@@ -6,6 +6,9 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class SensorvaluesService {
+  sensorValuesBySensorId(id: string) {
+    return prisma.sensorValue.findMany({ where: { sensorId: id } });
+  }
   findSensorById(id: string) {
     return prisma.sensor.findFirst({ where: { id } });
   }

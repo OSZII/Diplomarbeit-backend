@@ -30,29 +30,45 @@ let SensorvaluesController = class SensorvaluesController {
         this.sensorvaluesService = sensorvaluesService;
     }
     async create(createSensorvalueDto) {
-        let user = await this.sensorvaluesService.findSensorById(createSensorvalueDto.sensorId);
-        if (!user)
-            throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
+        if (createSensorvalueDto.id) {
+            let sensorValueById = await this.sensorvaluesService.findOne(createSensorvalueDto.id);
+            if (sensorValueById) {
+                throw new common_1.BadRequestException({
+                    statusCode: common_1.HttpStatus.BAD_REQUEST,
+                    message: 'Sensorvalue with id: ' +
+                        createSensorvalueDto.id +
+                        ' already exists!',
+                });
+            }
+        }
+        let sensorValue = await this.sensorvaluesService.findSensorById(createSensorvalueDto.sensorId);
+        if (!sensorValue)
+            throw new common_1.NotFoundException(`No Sensor with sensorId: ${createSensorvalueDto.sensorId}`);
         return this.sensorvaluesService.create(createSensorvalueDto);
     }
     findAll() {
         return this.sensorvaluesService.findAll();
     }
+    async findSensorValueBySensorId(id) {
+        return this.sensorvaluesService.sensorValuesBySensorId(id);
+    }
     async findOne(id) {
-        let validation = zod_1.z.string().length(36).safeParse(id);
-        if (validation.success == false) {
-            throw new common_1.HttpException({
-                response: validation.error.issues,
-                statusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
-            }, common_1.HttpStatus.NOT_ACCEPTABLE);
-        }
         const sensorvalue = await this.sensorvaluesService.findOne(id);
         if (!sensorvalue) {
             throw new common_1.NotFoundException(`Sensorvalue with ${id} does not exist.`);
         }
         return sensorvalue;
     }
-    update(id, updateSensorvalueDto) {
+    async update(id, updateSensorvalueDto) {
+        if (updateSensorvalueDto.sensorId) {
+            let user = await this.sensorvaluesService.findSensorById(updateSensorvalueDto.sensorId);
+            if (!user) {
+                throw new common_1.NotFoundException({
+                    statusCode: common_1.HttpStatus.NOT_FOUND,
+                    message: 'Sensor with id: ' + updateSensorvalueDto.sensorId + ' not found!',
+                });
+            }
+        }
         return this.sensorvaluesService.update(id, updateSensorvalueDto);
     }
     async remove(id) {
@@ -82,9 +98,17 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SensorvaluesController.prototype, "findAll", null);
 __decorate([
+    (0, common_1.Get)('/sensor/:id'),
+    (0, swagger_1.ApiOkResponse)({ type: sensorvalue_entity_1.SensorvalueEntity, isArray: true }),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], SensorvaluesController.prototype, "findSensorValueBySensorId", null);
+__decorate([
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOkResponse)({ type: sensorvalue_entity_1.SensorvalueEntity }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
@@ -96,7 +120,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_sensorvalue_dto_1.UpdateSensorvalueDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], SensorvaluesController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),

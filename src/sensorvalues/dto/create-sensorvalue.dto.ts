@@ -5,10 +5,14 @@ import {
   IsOptional,
   IsString,
   IsUUID,
-  Length,
 } from 'class-validator';
 
 export class CreateSensorvalueDto {
+  @IsOptional()
+  @IsUUID()
+  @ApiProperty()
+  id: string;
+
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
