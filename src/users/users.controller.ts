@@ -11,6 +11,7 @@ import {
   HttpException,
   ParseUUIDPipe,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,7 +19,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { hashSync } from 'bcrypt';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+// @UseGuards(JwtAuthGuard)
 @Controller('users')
 @ApiTags('users')
 export class UsersController {
@@ -64,7 +67,6 @@ export class UsersController {
 
     return this.usersService.create(createUserDto);
   }
-
   @Get()
   @ApiOkResponse({ type: UserEntity, isArray: true })
   findAll() {

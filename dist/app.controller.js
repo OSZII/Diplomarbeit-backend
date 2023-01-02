@@ -14,17 +14,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
-const app_service_1 = require("./app.service");
 const swagger_1 = require("@nestjs/swagger");
 const client_1 = require("@prisma/client");
 const local_auth_guard_1 = require("./auth/local-auth.guard");
+const auth_service_1 = require("./auth/auth.service");
 const prisma = new client_1.PrismaClient();
 let AppController = class AppController {
-    constructor(appService) {
-        this.appService = appService;
+    constructor(authService) {
+        this.authService = authService;
     }
-    async loging(req) {
-        return req.user;
+    async login(req) {
+        return this.authService.login(req.user);
     }
 };
 __decorate([
@@ -34,11 +34,11 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], AppController.prototype, "loging", null);
+], AppController.prototype, "login", null);
 AppController = __decorate([
     (0, common_1.Controller)(),
     (0, swagger_1.ApiTags)('Flower Auf Dauer backend'),
-    __metadata("design:paramtypes", [app_service_1.AppService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AppController);
 exports.AppController = AppController;
 //# sourceMappingURL=app.controller.js.map
