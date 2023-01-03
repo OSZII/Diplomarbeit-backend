@@ -18,7 +18,9 @@ const swagger_1 = require("@nestjs/swagger");
 const client_1 = require("@prisma/client");
 const local_auth_guard_1 = require("./auth/local-auth.guard");
 const auth_service_1 = require("./auth/auth.service");
+const public_decorator_1 = require("./public.decorator");
 const prisma = new client_1.PrismaClient();
+const AllowUnauthorizedRequest = () => (0, common_1.SetMetadata)('allowUnauthorizedRequest', true);
 let AppController = class AppController {
     constructor(authService) {
         this.authService = authService;
@@ -29,6 +31,7 @@ let AppController = class AppController {
 };
 __decorate([
     (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
+    (0, public_decorator_1.Public)(),
     (0, common_1.Post)('auth/login'),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
@@ -36,6 +39,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "login", null);
 AppController = __decorate([
+    AllowUnauthorizedRequest(),
     (0, common_1.Controller)(),
     (0, swagger_1.ApiTags)('Flower Auf Dauer backend'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

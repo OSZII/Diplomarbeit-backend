@@ -18,7 +18,8 @@ async function bootstrap() {
     }));
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api', app, document);
-    app.useGlobalGuards(new jwt_auth_guard_1.JwtAuthGuard());
+    const reflector = app.get(core_1.Reflector);
+    app.useGlobalGuards(new jwt_auth_guard_1.JwtAuthGuard(reflector));
     await app.listen(3000);
 }
 bootstrap();
