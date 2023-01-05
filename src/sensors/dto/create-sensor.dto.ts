@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsUUID } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export enum SensorType {
   'humidity',
@@ -21,6 +27,11 @@ export class CreateSensorDto {
   @ApiProperty()
   @IsEnum(SensorType)
   type: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 
   @ApiProperty()
   @IsUUID()

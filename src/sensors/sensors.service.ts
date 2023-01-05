@@ -33,6 +33,7 @@ export class SensorsService {
     return prisma.sensor.findMany({
       select: {
         fieldId: true,
+        name: true,
         type: true,
         sensorValues: {
           select: {
