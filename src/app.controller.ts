@@ -34,7 +34,6 @@ export class AppController {
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
-
   //   EXAMPLE: for how to make an exception for a route
   //   import { SetMetadata } from '@nestjs/common';
   //   // Convienience Function

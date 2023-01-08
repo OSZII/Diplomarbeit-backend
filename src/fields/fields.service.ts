@@ -44,6 +44,12 @@ export class FieldsService {
   findAllDetailed() {
     return prisma.field.findMany({
       select: {
+        User: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
         id: true,
         name: true,
         area: true,
@@ -55,13 +61,7 @@ export class FieldsService {
           select: {
             id: true,
             type: true,
-            sensorValues: {
-              select: {
-                id: true,
-                value: true,
-                timeStamp: true,
-              },
-            },
+            name: true,
           },
         },
       },

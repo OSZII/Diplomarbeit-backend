@@ -69,6 +69,11 @@ export class SensorvaluesController {
   findAll() {
     return this.sensorvaluesService.findAll();
   }
+  @Get('/detailed')
+  @ApiOkResponse({ type: SensorvalueEntity, isArray: true })
+  findAllDetailed() {
+    return this.sensorvaluesService.findAllDetailed();
+  }
 
   @Get('/sensor/:id')
   @ApiOkResponse({ type: SensorvalueEntity, isArray: true })

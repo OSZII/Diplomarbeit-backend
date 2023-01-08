@@ -32,7 +32,18 @@ export class SensorsService {
   findAllDetailed() {
     return prisma.sensor.findMany({
       select: {
-        fieldId: true,
+        field: {
+          select: {
+            id: true,
+            User: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+        id: true,
         name: true,
         type: true,
         sensorValues: {

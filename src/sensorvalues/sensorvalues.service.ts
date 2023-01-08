@@ -6,6 +6,26 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class SensorvaluesService {
+  findAllDetailed() {
+    return prisma.sensorValue.findMany({
+      select: {
+        Sensor: {
+          select: {
+            field: {
+              select: {
+                id: true,
+                userId: true,
+              },
+            },
+          },
+        },
+        timeStamp: true,
+        value: true,
+        sensorId: true,
+      },
+      take: 100, // limits to 100 TODO: implement pagination with a paramter or somethin like that
+    });
+  }
   sensorValuesBySensorId(id: string) {
     return prisma.sensorValue.findMany({ where: { sensorId: id } });
   }
